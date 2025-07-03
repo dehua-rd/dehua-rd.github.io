@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua-blog</title><link>https://dehua-rd.github.io</link><description>hvm--</description><copyright>dehua-blog</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Wed, 02 Jul 2025 15:28:40 +0000</lastBuildDate><managingEditor>dehua-blog</managingEditor><ttl>60</ttl><webMaster>dehua-blog</webMaster><item><title>galera</title><link>https://dehua-rd.github.io/post/galera.html</link><description># Galera HVM
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua-blog</title><link>https://dehua-rd.github.io</link><description>hvm--</description><copyright>dehua-blog</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Thu, 03 Jul 2025 00:37:06 +0000</lastBuildDate><managingEditor>dehua-blog</managingEditor><ttl>60</ttl><webMaster>dehua-blog</webMaster><item><title>galera</title><link>https://dehua-rd.github.io/post/galera.html</link><description># Galera HVM
 
-&gt; 日期：2025-07-02 ｜ 作者：dehua ｜ 标签：HVM, Galera, 数据库安全
+&gt; 日期：2025-07-02 ｜ 作者：dehua ｜ 标签：第一个wp博客，有什么改进的可以留下评论
 
 ---
 
