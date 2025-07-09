@@ -1,5 +1,28 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Tue, 08 Jul 2025 16:35:16 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>shell相关</title><link>https://dehua-rd.github.io/post/shell-xiang-guan.html</link><description>## 交互shell
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Wed, 09 Jul 2025 21:29:40 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>ximai</title><link>https://dehua-rd.github.io/post/ximai.html</link><description># Hackmyvm ximai靶机
+
+
+`port=$(nmap -T4 --min-rate=1000 -p- 192.168.250.66 | awk '/^[0-9]/ {print $1}' | cut -d'/' -f1 | paste -sd,) &amp;&amp; nmap -sV -p $port $ip`
+
+&gt;Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-09 10:04 EDT
+Nmap scan report for 192.168.250.66
+Host is up (0.00061s latency).
+PORT     STATE SERVICE    VERSION
+22/tcp   open  ssh        OpenSSH 8.4p1 Debian 5+deb11u3 (protocol 2.0)
+25/tcp   open  tcpwrapped
+80/tcp   open  http       Apache httpd 2.4.62 ((Debian))
+110/tcp  open  tcpwrapped
+3306/tcp open  mysql      MariaDB 10.3.23 or earlier (unauthorized)
+8000/tcp open  http       Apache httpd 2.4.62 ((Debian))
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+&gt;Nmap done: 1 IP address (1 host up) scanned in 17.74 seconds
+
+先看两个http端口，80端口没东西扫描一下目录
+有一个reminder.php页面有提示
+
+
+username字段有mysql报错，但是用sqlmap没有爆出东西。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/ximai.html</guid><pubDate>Wed, 09 Jul 2025 21:29:10 +0000</pubDate></item><item><title>shell相关</title><link>https://dehua-rd.github.io/post/shell-xiang-guan.html</link><description>## 交互shell
 `rlwrap -cAr nc -lvnp 1234`
 &gt;rlwrap: 为命令行提供 readline 功能（历史记录、行编辑等）
 &gt;-c: 启用命令完成
