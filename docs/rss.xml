@@ -1,5 +1,89 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Mon, 21 Jul 2025 16:55:46 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>密码利用相关笔记</title><link>https://dehua-rd.github.io/post/mi-ma-li-yong-xiang-guan-bi-ji.html</link><description># 加解密
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Mon, 21 Jul 2025 18:01:17 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>vulnhub-w1r3s</title><link>https://dehua-rd.github.io/post/vulnhub-w1r3s.html</link><description># &lt;font color='red'&gt;靶机信息&lt;/font&gt;
+W1R3S是vulnhub中的一台中等难度的靶机
+# &lt;font color='red'&gt;初始侦察&lt;/font&gt;
+## &lt;font color='yellow'&gt;靶机扫描&lt;/font&gt;
+```
+sudo nmap -sT -p- --min-rate 1000 $ip -oA tcpScan
+sudo nmap -sU -p- --min-rate 10000 $ip -oA udpScan
+```
+tcp和udp可以扫描两遍以防止失误
+
+```
+┌──(root㉿kali)-[/home/…/writeup/vulnhub/W1r3s1.0.1/nmap_scan]
+└─# grep open tcpScan.nmap | awk -F'/' '{print $1}' | paste -sd, 
+21,22,80,3306
+```
+`ports=$(grep open tcpScan.nmap | awk -F'/' '{print $1}' | paste -sd,)`
+格式化端口方便后续使用
+
+`sudo nmap -sCV -O -sT -p$ports $ip -oA detail`
+对上述扫描open的端口进行最详细的一次扫描并保存结果
+
+```
+# Nmap 7.95 scan initiated Mon Jul 21 10:50:28 2025 as: /usr/lib/nmap/nmap -sCV -sT -O -p21,22,80,3306 -oA detail 192.168.218.189
+Nmap scan report for 192.168.218.189
+Host is up (0.00051s latency).
+
+PORT     STATE SERVICE VERSION
+21/tcp   open  ftp     vsftpd 2.0.8 or later
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| drwxr-xr-x    2 ftp      ftp          4096 Jan 23  2018 content
+| drwxr-xr-x    2 ftp      ftp          4096 Jan 23  2018 docs
+|_drwxr-xr-x    2 ftp      ftp          4096 Jan 28  2018 new-employees
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to ::ffff:192.168.218.148
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was 3
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+22/tcp   open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.4 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 07:e3:5a:5c:c8:18:65:b0:5f:6e:f7:75:c7:7e:11:e0 (RSA)
+|   256 03:ab:9a:ed:0c:9b:32:26:44:13:ad:b0:b0:96:c3:1e (ECDSA)
+|_  256 3d:6d:d2:4b:46:e8:c9:a3:49:e0:93:56:22:2e:e3:54 (ED25519)
+80/tcp   open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Apache2 Ubuntu Default Page: It works
+3306/tcp open  mysql   MySQL (unauthorized)
+MAC Address: 00:0C:29:AA:7F:FC (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Linux 3.10 - 4.11 (97%), Linux 3.2 - 4.14 (97%), Linux 5.1 - 5.15 (97%), Linux 3.13 - 4.4 (91%), Linux 3.8 - 3.16 (91%), Linux 4.10 (91%), Linux 4.4 (91%), OpenWrt 19.07 (Linux 4.14) (91%), Linux 2.6.32 (91%), Linux 2.6.32 - 3.13 (91%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 1 hop
+Service Info: Host: W1R3S.inc; OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Mon Jul 21 10:50:48 2025 -- 1 IP address (1 host up) scanned in 20.49 seconds
+                                                                                              
+```
+同时也可以使用参数--script=vuln进行漏洞扫描，不多展示
+
+# 信息利用
+## ftp枚举
+```
+┌──(root㉿kali)-[/home/…/writeup/vulnhub/W1r3s1.0.1/ftp]
+└─# ftp $ip            
+Connected to 192.168.218.189.
+220 Welcome to W1R3S.inc FTP service.
+Name (192.168.218.189:kali): anonymous
+331 Please specify the password.
+Password: 
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; binary
+200 Switching to Binary mode.
+ftp&gt; 
+``` 
+直接使用匿名尝试连接登录，成功登录记得使用二进制传输模式，防止get可执行文件时放生错误，使用prompt关闭交互，使用mget，下载多个文件，将ftp中的所有文件get下来。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/vulnhub-w1r3s.html</guid><pubDate>Mon, 21 Jul 2025 18:00:53 +0000</pubDate></item><item><title>密码利用相关笔记</title><link>https://dehua-rd.github.io/post/mi-ma-li-yong-xiang-guan-bi-ji.html</link><description># 加解密
 
 ## openssl
 openssl是一个强大的加密工具包，支持多种加密、解密、摘要、证书生成等操作，广泛用于安全测试、渗透测试和开发中。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/mi-ma-li-yong-xiang-guan-bi-ji.html</guid><pubDate>Mon, 21 Jul 2025 16:55:21 +0000</pubDate></item><item><title>ximai</title><link>https://dehua-rd.github.io/post/ximai.html</link><description># Hackmyvm ximai靶机
