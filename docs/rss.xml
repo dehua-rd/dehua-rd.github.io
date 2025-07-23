@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Wed, 23 Jul 2025 15:37:11 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>jarbas</title><link>https://dehua-rd.github.io/post/jarbas.html</link><description># 靶机信息
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Wed, 23 Jul 2025 16:02:53 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>jarbas</title><link>https://dehua-rd.github.io/post/jarbas.html</link><description># 靶机信息
 jarbas是vulnhub中的一台简单类型的渗透测试靶机
 
 # 初始信息探测
@@ -189,7 +189,119 @@ Task Completed
 
 以防万一都扫一下
 
-只扫出来一个access.html页面看一下，好像是三组凭证，密码加密，尝试解密，我使用的[解密网站](https://hashes.com/en/decrypt/hash)，感觉还行，三个密码都破解了。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/jarbas.html</guid><pubDate>Wed, 23 Jul 2025 12:58:03 +0000</pubDate></item><item><title>vulnhub-w1r3s</title><link>https://dehua-rd.github.io/post/vulnhub-w1r3s.html</link><description># &lt;font color='red'&gt;靶机信息&lt;/font&gt;
+只扫出来一个access.html页面看一下，好像是三组凭证，密码加密，尝试解密，我使用的[解密网站](https://hashes.com/en/decrypt/hash)，感觉还行，三个密码都破解了。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/jarbas.html</guid><pubDate>Wed, 23 Jul 2025 12:58:03 +0000</pubDate></item><item><title>hackadmic-RTB1</title><link>https://dehua-rd.github.io/post/hackadmic-RTB1.html</link><description># 靶机信息
+hackadmic-RTB1是vulnhub平台发布的一个难度初级的渗透测试靶机
+# 初始信息收集
+## 靶机端口扫描
+tcp端口扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/hackadmic_rTB1]
+└─$ sudo nmap -sT -p- --min-rate 10000 192.168.218.190 -oA ./nmapScan/default
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-22 08:23 EDT
+Nmap scan report for 192.168.218.190
+Host is up (0.00040s latency).
+Not shown: 65520 filtered tcp ports (no-response), 13 filtered tcp ports (host-unreach)
+PORT   STATE  SERVICE
+22/tcp closed ssh
+80/tcp open   http
+MAC Address: 00:0C:29:01:8A:4D (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 13.40 seconds
+
+```
+udp端口扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/hackadmic_rTB1]
+└─$ sudo nmap -sU -p- --min-rate 10000 192.168.218.190 -oA nmapScan/udpPort 
+[sudo] kali 的密码：
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-22 08:23 EDT
+Warning: 192.168.218.190 giving up on port because retransmission cap hit (10).
+Nmap scan report for 192.168.218.190
+Host is up (0.00087s latency).
+All 65535 scanned ports on 192.168.218.190 are in ignored states.
+Not shown: 65470 open|filtered udp ports (no-response), 65 filtered udp ports (host-prohibited)
+MAC Address: 00:0C:29:01:8A:4D (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 72.91 seconds
+
+```
+
+详细端口服务扫描
+```
+┌──(kali㉿kali)-[~/…/writeup/vulnhub/hackadmic_rTB1/nmapScan]
+└─$ cat detail.nmap 
+# Nmap 7.95 scan initiated Tue Jul 22 08:31:51 2025 as: /usr/lib/nmap/nmap -sCV -p22,80 -O -oA nmapScan/detail 192.168.218.190
+Nmap scan report for 192.168.218.190
+Host is up (0.00032s latency).
+
+PORT   STATE  SERVICE VERSION
+22/tcp closed ssh
+80/tcp open   http    Apache httpd 2.2.15 ((Fedora))
+|_http-server-header: Apache/2.2.15 (Fedora)
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-title: Hackademic.RTB1  
+MAC Address: 00:0C:29:01:8A:4D (VMware)
+Device type: general purpose|media device|router|webcam|WAP
+Running (JUST GUESSING): Linux 2.6.X|3.X|5.X (98%), LG embedded (92%), MikroTik RouterOS 7.X (91%), Tandberg embedded (91%), Infomir embedded (91%)
+OS CPE: cpe:/o:linux:linux_kernel:2.6 cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:5.10 cpe:/o:mikrotik:routeros:7 cpe:/o:linux:linux_kernel:5.6.3 cpe:/h:infomir:mag-250 cpe:/o:linux:linux_kernel:2.6.32
+Aggressive OS guesses: Linux 2.6.22 - 2.6.36 (98%), Linux 2.6.23 - 2.6.38 (94%), Linux 2.6.31 - 2.6.35 (94%), Linux 2.6.32 - 2.6.39 (93%), LG Bp430 Blu-ray Player (92%), Linux 2.6.32 (92%), Linux 2.6.22 (92%), Linux 2.6.32 - 3.13 (91%), OpenWrt 22.03 (Linux 5.10) (91%), MikroTik RouterOS 7.2 - 7.5 (Linux 5.6.3) (91%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 1 hop
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Tue Jul 22 08:32:06 2025 -- 1 IP address (1 host up) scanned in 15.01 seconds
+
+```
+同时可以使用漏洞脚本扫描一下
+```
+┌──(kali㉿kali)-[~/…/writeup/vulnhub/hackadmic_rTB1/nmapScan]                                                                                                                 08:35:21 [4/82]
+└─$ sudo nmap -sC --script=vuln -p22,80 192.168.218.190 -oA vuln                                                                                                                             
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-22 08:32 EDT                                                                                                                              
+Nmap scan report for 192.168.218.190                                                                                                                                                         
+Host is up (0.00025s latency).                                                                                                                                                               
+
+PORT   STATE  SERVICE                                                                         
+22/tcp closed ssh                                                                             
+80/tcp open   http                                                                            
+| http-slowloris-check:                                                                       
+|   VULNERABLE:                                                                               
+|   Slowloris DOS attack                                                                      
+|     State: LIKELY VULNERABLE                                                                
+|     IDs:  CVE:CVE-2007-6750                                                                 
+|       Slowloris tries to keep many connections to the target web server open and hold                                                                                                      
+|       them open as long as possible.  It accomplishes this by opening connections to                                                                                                       
+|       the target web server and sending a partial request. By doing so, it starves                                                                                                         
+|       the http server's resources causing Denial Of Service.                                                                                                                               
+|                                                                                             
+|     Disclosure date: 2009-09-17                                                             
+|     References:                                                                             
+|       http://ha.ckers.org/slowloris/                                                        
+|_      https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6750                                                                                                                         
+|_http-dombased-xss: Couldn't find any DOM based XSS.                                                                                                                                        
+|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.                                                                                                                             
+|_http-csrf: Couldn't find any CSRF vulnerabilities.                                                                                                                                         
+|_http-trace: TRACE is enabled                                                                
+| http-vuln-cve2011-3192:                                                                     
+|   VULNERABLE:                                                                               
+|   Apache byterange filter DoS                                                               
+|     State: VULNERABLE                                                                       
+|     IDs:  BID:49303  CVE:CVE-2011-3192                                                      
+|       The Apache web server is vulnerable to a denial of service attack when numerous                                                                                                      
+|       overlapping byte ranges are requested.                                                
+|     Disclosure date: 2011-08-19                                                             
+|     References:                                                                             
+|       https://www.tenable.com/plugins/nessus/55976                                                                                                                                         
+|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2011-3192                                                                                                                         
+|       https://seclists.org/fulldisclosure/2011/Aug/175                                                                                                                                     
+|_      https://www.securityfocus.com/bid/49303                                               
+| http-enum:                                                                                  
+|_  /icons/: Potentially interesting folder w/ directory listing                                                                                                                             
+MAC Address: 00:0C:29:01:8A:4D (VMware)                                                       
+
+Nmap done: 1 IP address (1 host up) scanned in 146.21 seconds  
+```
+借本扫描结束，只扫描到两个端口，ssh是close状态，漏洞脚本扫描都是dos攻击，没什么用，开始手工枚举信息。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/hackadmic-RTB1.html</guid><pubDate>Tue, 22 Jul 2025 17:37:55 +0000</pubDate></item><item><title>vulnhub-w1r3s</title><link>https://dehua-rd.github.io/post/vulnhub-w1r3s.html</link><description># &lt;font color='red'&gt;靶机信息&lt;/font&gt;
 W1R3S是vulnhub中的一台中等难度的靶机
 # &lt;font color='red'&gt;初始侦察&lt;/font&gt;
 ## &lt;font color='yellow'&gt;靶机扫描&lt;/font&gt;
