@@ -1,8 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Wed, 23 Jul 2025 12:58:30 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>jarbas</title><link>https://dehua-rd.github.io/post/jarbas.html</link><description># 靶机信息
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Wed, 23 Jul 2025 15:31:44 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>jarbas</title><link>https://dehua-rd.github.io/post/jarbas.html</link><description># 靶机信息
 jarbas是vulnhub中的一台简单类型的渗透测试靶机
 
 # 初始信息探测
+
 
 ## nmap扫描
 ```
@@ -120,7 +121,75 @@ Nmap done: 1 IP address (1 host up) scanned in 39.98 seconds
 ```
 
 ## WEB枚举
-。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/jarbas.html</guid><pubDate>Wed, 23 Jul 2025 12:58:03 +0000</pubDate></item><item><title>vulnhub-w1r3s</title><link>https://dehua-rd.github.io/post/vulnhub-w1r3s.html</link><description># &lt;font color='red'&gt;靶机信息&lt;/font&gt;
+先看80端口，nmap的漏洞扫描可以扫出来了可能的漏洞，目录扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/jarbas]
+└─$ gobuster dir -u http://192.168.218.191 -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x php,html,txt
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://192.168.218.191
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Extensions:              php,html,txt
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/index.html           (Status: 200) [Size: 32808]
+/access.html          (Status: 200) [Size: 359]
+/index.html           (Status: 200) [Size: 32808]
+Progress: 224656 / 224660 (100.00%)
+===============================================================
+Finished
+===============================================================
+
+
+
+┌──(kali㉿kali)-[~]                                                                                                                                                                                 
+└─$ dirsearch -u http://192.168.218.191 -e php,html,txt                                                                                                                                             
+/usr/lib/python3/dist-packages/dirsearch/dirsearch.py:23: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html                    
+  from pkg_resources import DistributionNotFound, VersionConflict                                                                                                                                   
+                                                                                                                                                                                                    
+  _|. _ _  _  _  _ _|_    v0.4.3                                                                                                                                                                    
+ (_||| _) (/_(_|| (_| )                                                                                                                                                                             
+                                                                                                                                                                                                    
+Extensions: php, html, txt | HTTP method: GET | Threads: 25 | Wordlist size: 10403                                                                                                                  
+                                                                                                                                                                                                    
+Output File: /home/kali/reports/http_192.168.218.191/_25-07-23_09-09-28.txt                                                                                                                         
+                                                                                                                                                                                                    
+Target: http://192.168.218.191/                                                                                                                                                                     
+                                                                                                                                                                                                    
+[09:09:28] Starting:                                                                                                                                                                                
+[09:09:29] 403 -  213B  - /.ht_wsr.txt                                                                                                                                                              
+[09:09:29] 403 -  216B  - /.htaccess.bak1                                                                                                                                                           
+[09:09:29] 403 -  216B  - /.htaccess.orig                                                                                                                                                           
+[09:09:29] 403 -  216B  - /.htaccess.save                                                                                                                                                           
+[09:09:29] 403 -  218B  - /.htaccess.sample                                                                                                                                                         
+[09:09:29] 403 -  217B  - /.htaccess_extra                                                                                                                                                          
+[09:09:29] 403 -  214B  - /.htaccess_sc                                                                                                                                                             
+[09:09:29] 403 -  216B  - /.htaccess_orig                                                                                                                                                           
+[09:09:29] 403 -  214B  - /.htaccessBAK                                                                                                                                                             
+[09:09:29] 403 -  214B  - /.htaccessOLD                                                                                                                                                             
+[09:09:29] 403 -  215B  - /.htaccessOLD2                                                                                                                                                            
+[09:09:29] 403 -  206B  - /.htm                   
+[09:09:29] 403 -  207B  - /.html                  
+[09:09:29] 403 -  216B  - /.htpasswd_test         
+[09:09:29] 403 -  212B  - /.htpasswds
+[09:09:29] 403 -  213B  - /.httr-oauth
+[09:09:31] 200 -  359B  - /access.html            
+[09:09:36] 403 -  210B  - /cgi-bin/               
+                                                  
+Task Completed
+
+```
+以防万一都扫一下
+
+只扫出来一个access.html页面看一下，好像是三组凭证，密码加密，尝试解密，我使用的[解密网站](https://hashes.com/en/decrypt/hash)，感觉还行，三个密码都破解了。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/jarbas.html</guid><pubDate>Wed, 23 Jul 2025 12:58:03 +0000</pubDate></item><item><title>vulnhub-w1r3s</title><link>https://dehua-rd.github.io/post/vulnhub-w1r3s.html</link><description># &lt;font color='red'&gt;靶机信息&lt;/font&gt;
 W1R3S是vulnhub中的一台中等难度的靶机
 # &lt;font color='red'&gt;初始侦察&lt;/font&gt;
 ## &lt;font color='yellow'&gt;靶机扫描&lt;/font&gt;
