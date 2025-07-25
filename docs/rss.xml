@@ -1,5 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Thu, 24 Jul 2025 19:09:55 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>Prime_Series_Level-1</title><link>https://dehua-rd.github.io/post/Prime_Series_Level-1.html</link><description># 靶机信息
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Fri, 25 Jul 2025 16:02:30 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>holynix</title><link>https://dehua-rd.github.io/post/holynix.html</link><description># 靶机信息
+holynix是vulnhub中的一台简单难度的渗透测试靶机
+
+# 初始枚举
+## 端口扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/holynix]
+└─$ nmap -sT -p- --min-rate  1000 192.168.218.192 -oA nmapScan/ports
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-25 09:13 EDT
+Nmap scan report for 192.168.218.192
+Host is up (0.0011s latency).
+Not shown: 65534 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+80/tcp open  http
+MAC Address: 00:0C:29:BC:05:DE (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 1.54 seconds
+```
+只扫出来一个80端口，利用向量很少，那就应该很简单了。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/holynix.html</guid><pubDate>Fri, 25 Jul 2025 16:02:03 +0000</pubDate></item><item><title>Prime_Series_Level-1</title><link>https://dehua-rd.github.io/post/Prime_Series_Level-1.html</link><description># 靶机信息
 Prime_Series_Level-1是vulnhub中的一台困难难度的靶机
 ## 初始信息枚举
 
