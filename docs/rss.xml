@@ -1,5 +1,85 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Mon, 28 Jul 2025 16:11:16 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>Tr0ll</title><link>https://dehua-rd.github.io/post/Tr0ll.html</link><description># 靶机信息
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Mon, 28 Jul 2025 21:00:44 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>billu</title><link>https://dehua-rd.github.io/post/billu.html</link><description># 靶机信息
+billu是vulnhub中的一台简单难度的渗透测试靶机
+
+# 初始信息枚举
+tcp端口扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/billu]
+└─$ sudo nmap -sT -sV -p22,80 -O 192.168.218.195 -oA nmapScan/detail
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-28 12:47 EDT
+Nmap scan report for 192.168.218.195
+Host is up (0.00055s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 5.9p1 Debian 5ubuntu1.4 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.2.22 ((Ubuntu))
+MAC Address: 00:0C:29:21:56:B7 (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Linux 3.2 - 4.14 (98%), Linux 3.8 - 3.16 (98%), Linux 3.10 - 4.11 (94%), Linux 3.13 - 4.4 (94%), Linux 3.13 (94%), Linux 3.13 - 3.16 (94%), OpenWrt Chaos Calmer 15.05 (Linux 3.18) or Designated Driver (Linux 4.1 or 4.4) (94%), Linux 4.10 (94%), Android 5.0 - 6.0.1 (Linux 3.4) (94%), Android 8 - 9 (Linux 3.18 - 4.4) (94%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 9.85 seconds
+```
+udp没有端口开放
+漏洞扫描没有扫出来什么信息
+
+# web枚举
+目录扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/billu]
+└─$ gobuster dir -u http://192.168.218.195 -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x html,php,txt
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://192.168.218.195
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Extensions:              html,php,txt
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/images               (Status: 301) [Size: 319] [--&gt; http://192.168.218.195/images/]
+/test                 (Status: 200) [Size: 72]
+/test.php             (Status: 200) [Size: 72]
+/add                  (Status: 200) [Size: 307]
+/add.php              (Status: 200) [Size: 307]
+/c.php                (Status: 200) [Size: 1]
+/c                    (Status: 200) [Size: 1]
+/index.php            (Status: 200) [Size: 3267]
+/index                (Status: 200) [Size: 3267]
+/panel.php            (Status: 302) [Size: 2469] [--&gt; index.php]
+/panel                (Status: 302) [Size: 2469] [--&gt; index.php]
+/show                 (Status: 200) [Size: 1]
+/show.php             (Status: 200) [Size: 1]
+/in                   (Status: 200) [Size: 47531]
+/in.php               (Status: 200) [Size: 47535]
+/uploaded_images      (Status: 301) [Size: 328] [--&gt; http://192.168.218.195/uploaded_images/]
+/server-status        (Status: 403) [Size: 296]
+/head                 (Status: 200) [Size: 2793]
+/head.php             (Status: 200) [Size: 2793]
+/phpmy                (Status: 301) [Size: 318] [--&gt; http://192.168.218.195/phpmy/]
+/index.php            (Status: 200) [Size: 3267]
+/index                (Status: 200) [Size: 3267]
+Progress: 224656 / 224660 (100.00%)
+===============================================================
+Finished
+===============================================================
+```
+有很多目录可以访问，全部curl下来
+```
+┌──(kali㉿kali)-[~/…/writeup/vulnhub/billu/web]                                                                                                                                                     
+└─$ for dir in $(cat dir | awk -F '\(' '{print $1}' | tr -d '/' );do curl http://192.168.218.195/$dir &gt; $dir ;done 
+```
+先看主页，明确是sql注入，手注加sqlmap都没注入进去。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/billu.html</guid><pubDate>Mon, 28 Jul 2025 21:00:15 +0000</pubDate></item><item><title>Tr0ll</title><link>https://dehua-rd.github.io/post/Tr0ll.html</link><description># 靶机信息
 Tr0ll是vulnhub中的一台简单类型的渗透测试靶机
 
 # 靶机初始枚举

