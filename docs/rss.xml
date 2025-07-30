@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Wed, 30 Jul 2025 17:13:41 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>CTF5</title><link>https://dehua-rd.github.io/post/CTF5.html</link><description># 靶机信息
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Wed, 30 Jul 2025 19:37:06 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>KioptrixVM3</title><link>https://dehua-rd.github.io/post/KioptrixVM3.html</link><description># 靶机信息
+KioptrixVM3是vulnhub中的一台简单难度的渗透测试靶机
+
+# 靶机初始枚举
+
+只开放了两个端口，攻击面很小，对信息收集的要求没那么高。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/KioptrixVM3.html</guid><pubDate>Wed, 30 Jul 2025 19:36:39 +0000</pubDate></item><item><title>CTF5</title><link>https://dehua-rd.github.io/post/CTF5.html</link><description># 靶机信息
 CTF5是vulnhub中的一台简单难度的渗透测试靶机
 
 # 靶机初始枚举
