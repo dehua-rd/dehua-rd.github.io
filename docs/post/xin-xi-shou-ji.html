@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/154585050?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# 所有环节的入口
+信息收集在无论是漏洞挖掘还是渗透测试中都有着举足轻重的地位，一个好的信息收集可以让你少走许多弯路，能够更好的定向突破。">
+<meta property="og:title" content="信息收集">
+<meta property="og:description" content="# 所有环节的入口
+信息收集在无论是漏洞挖掘还是渗透测试中都有着举足轻重的地位，一个好的信息收集可以让你少走许多弯路，能够更好的定向突破。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dehua-rd.github.io/post/xin-xi-shou-ji.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/154585050?v=4">
+<title>信息收集</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">信息收集</h1>
+<div class="title-right">
+    <a href="https://dehua-rd.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/dehua-rd/dehua-rd.github.io/issues/17" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>所有环节的入口</h1>
+<p>信息收集在无论是漏洞挖掘还是渗透测试中都有着举足轻重的地位，一个好的信息收集可以让你少走许多弯路，能够更好的定向突破。</p>
+<h1>网络入口</h1>
+<ol>
+<li>网络拓扑信息：外网出口</li>
+<li>IP信息：C段</li>
+<li>APP程序</li>
+<li>后台系统</li>
+<li>网络边界设备等等</li>
+</ol>
+<h1>域名信息</h1>
+<h2>Whois</h2>
+<p><a href="https://www.whois.com/" rel="nofollow">Whois</a> 可以查询域名是否被注册，以及注册域名的详细信息的数据库，其中可能会存在一些有用的信息，例如域名所有人、域名注册商、邮箱等。</p>
+<h2>搜索引擎搜索</h2>
+<p>搜索引擎通常会记录域名信息，可以通过 site: domain 的语法来查询。google等等。</p>
+<h2>第三方查询</h2>
+<p>网络中有相当多的第三方应用提供了子域的查询功能，例如：</p>
+<ol>
+<li><a href="https://dnsdumpster.com/" rel="nofollow">DNSDumpster</a>（进行目标域名的DNS记录枚举，收集子域名信息，发现目标的IP地址和相关DNS服务器）</li>
+<li><a href="https://www.virustotal.com/" rel="nofollow">Virustotal</a>（扫描文件、URL是否含有恶意代码，查询域名/IP是否被安全厂商标记为恶意，进行威胁情报分析，收集与目标相关的安全事件和关联信息）</li>
+<li><a href="https://crt.sh/" rel="nofollow">CrtSearch</a> （查询某个域名所有被公开签发的SSL/TLS证书，枚举子域名和关联域名（证书中通常会包含多域名信息），帮助发现隐藏的子域和子系统）</li>
+<li><a href="https://www.threatminer.org/" rel="nofollow">ThreatMiner</a> （通过域名、IP、文件哈希、URL等查询威胁相关数据，收集APT活动、恶意基础设施、攻击者工具等信息，帮助安全研究人员进行关联分析）</li>
+</ol>
+<h2>网站信息利用</h2>
+<p>网站中有相当多的信息，网站本身、各项安全策略、设置等都可能暴露出一些信息。</p>
+<p>网站本身的交互通常不囿于单个域名，会和其他子域交互。对于这种情况，可以通过爬取网站，收集站点中的其他子域信息。这些信息通常出现在JavaScript文件、资源文件链接等位置。</p>
+<p>网站的安全策略如跨域策略、CSP规则等通常也包含相关域名的信息。有时候多个域名为了方便会使用同一个SSL/TLS证书，因此有时可通过证书来获取相关域名信息。</p>
+<h2>域传送漏洞</h2>
+<p>DNS域传送 (zone transfer) 指的是冗余备份服务器使用来自主服务器的数据刷新自己的域 (zone) 数据库。这是为了防止主服务器因意外不可用时影响到整个域名的解析。</p>
+<p>一般来说，域传送操作应该只允许可信的备用DNS服务器发起，但是如果错误配置了授权，那么任意用户都可以获得整个DNS服务器的域名信息。这种错误授权被称作是DNS域传送漏洞。</p>
+<h2>Passive DNS</h2>
+<p>Passive DNS被动的从递归域名服务器记录来自不同域名服务器的响应，形成数据库。利用Passive DNS数据库可以知道域名曾绑定过哪些IP，IP曾关联到哪些域名，域名最早/最近出现的时间，为测试提供较大的帮助。Virustotal、passivetotal、CIRCL等网站都提供了Passive DNS数据库的查询。</p>
+<h2>泛解析</h2>
+<p>泛解析是把 *.example.com 的所有A记录都解析到某个IP 地址上，在子域名枚举时需要处理这种情况以防生成大量无效的记录。</p>
+<h2>重要记录</h2>
+<h3>CNAME</h3>
+<p>CNAME即Canonical name，又称alias，将域名指向另一个域名。其中可能包含其他关联业务的信息。很多网站使用的CDN加速功能利用了该记录。</p>
+<h3>MX记录</h3>
+<p>MX记录即Mail Exchanger，记录了发送电子邮件时域名对应的服务器地址。可以用来寻找SMTP服务器信息。</p>
+<h3>NS记录</h3>
+<p>NS (Name Server) 记录是域名服务器的记录，用来指定域名由哪个DNS服务器来进行解析。</p>
+<h3>SPF记录</h3>
+<p>SPF (Sender Policy Framework) 是为了防止垃圾邮件而提出来的一种DNS记录类型，是一种TXT类型的记录，用于登记某个域名拥有的用来外发邮件的所有IP地址。通过SPF记录可以获取相关的IP信息，常用命令为 <code class="notranslate">dig example.com txt</code> 。</p>
+<h2>CDN</h2>
+<h3>CDN验证</h3>
+<p>可通过多地ping的方式确定目标是否使用了CDN，常用的网站有 <code class="notranslate">http://ping.chinaz.com/</code> <code class="notranslate">https://asm.ca.com/en/ping.php</code> 等。</p>
+<h3>域名查找</h3>
+<p>使用了CDN的域名的父域或者子域名不一定使用了CDN，可以通过这种方式去查找对应的IP。</p>
+<h3>历史记录查找</h3>
+<p>CDN可能是在网站上线一段时间后才上线的，可以通过查找域名解析记录的方式去查找真实IP。</p>
+<h3>邮件信息</h3>
+<p>通过社会工程学的方式进行邮件沟通，从邮件头中获取IP地址，IP地址可能是网站的真实IP或者是目标的出口IP。</p>
+<h1>端口信息</h1>
+<p><a href="">常见端口及其脆弱点</a></p>
+<h1>站点信息</h1>
+<ol>
+<li>判断网站操作系统<br>
+1.Linux大小写敏感<br>
+2.Windows大小写不敏感</li>
+<li>扫描敏感文件<br>
+1. robots.txt<br>
+2. crossdomain.xml<br>
+3. sitemap.xml<br>
+4. xx.tar.gz<br>
+5. xx.bak</li>
+<li>确定网站采用的语言</li>
+<li>前端框架 (如jQuery / BootStrap / Vue / React / Angular等)</li>
+<li>中间服务器<br>
+1. 如 Apache / Nginx / IIS 等<br>
+2. 查看header中的信息<br>
+3. 根据报错信息判断<br>
+4. 根据默认页面判断</li>
+<li>Web容器服务器 (如Tomcat / Jboss / Weblogic等)</li>
+<li>后端框架<br>
+1. 根据Cookie判断<br>
+2. 根据CSS / 图片等资源的hash值判断<br>
+3. 根据URL路由判断,如wp-admin<br>
+4. 根据网页中的关键字判断<br>
+5. 根据响应头中的X-Powered-By</li>
+<li>CDN信息 (常见的有Cloudflare、yunjiasu)</li>
+<li>探测有没有WAF，如果有，什么类型的</li>
+<li>扫描敏感目录，看是否存在信息泄漏</li>
+</ol>
+<h1>搜索引擎利用</h1>
+<p>恰当地使用搜索引擎（Google/Bing/Yahoo/Baidu等）可以获取目标站点的较多信息。</p>
+<h2>搜索引擎处理流程</h2>
+<h3>数据预处理</h3>
+<ol>
+<li>长度截断</li>
+<li>大小写转化</li>
+<li>去标点符号</li>
+<li>简繁转换</li>
+<li>数字归一化，中文数字、阿拉伯数字、罗马字</li>
+<li>同义词改写</li>
+<li>拼音改写</li>
+</ol>
+<h3>处理</h3>
+<ol>
+<li>分词</li>
+<li>关键词抽取</li>
+<li>非法信息过滤</li>
+</ol>
+<h2>搜索技巧</h2>
+<p><code class="notranslate">site:www.hao123.com</code><br>
+返回此目标站点被搜索引擎抓取收录的所有内容</p>
+<p><code class="notranslate">site:www.hao123.com keyword</code><br>
+返回此目标站点被搜索引擎抓取收录的包含此关键词的所有页面<br>
+此处可以将关键词设定为网站后台，管理后台，密码修改，密码找回等</p>
+<p><code class="notranslate">site:www.hao123.com inurl:admin.php</code><br>
+返回目标站点的地址中包含admin.php的所有页面，可以使用admin.php/manage.php或者其他关键词来寻找关键功能页面</p>
+<p><code class="notranslate">link:www.hao123.com</code><br>
+返回所有包含目标站点链接的页面，其中包括其开发人员的个人博客，开发日志，或者开放这个站点的第三方公司，合作伙伴等</p>
+<p><code class="notranslate">related:www.hao123.com</code><br>
+返回所有与目标站点”相似”的页面，可能会包含一些通用程序的信息等</p>
+<p><code class="notranslate">intitle:"500 Internal Server Error" "server at"</code><br>
+搜索出错的页面</p>
+<p><code class="notranslate">inurl:"nph-proxy.cgi" "Start browsing"</code><br>
+查找代理服务器<br>
+除了以上的关键字，还有allintile / allinurl / allintext / inanchor / intext / filetype / info / numberange / cache等。</p>
+<h2>3.5.2.1. 通配符</h2>
+<p>* 代表某一个单词<br>
+OR 或者 | 代表逻辑或<br>
+单词前跟 + 表强制查询<br>
+单词前跟 - 表排除对应关键字<br>
+<strong>"</strong> 强调关键字</p>
+<h2>Github</h2>
+<p>在Github中，可能会存在源码泄露、AccessKey泄露、密码、服务器配置泄露等情况，常见的搜索技巧有：</p>
+<pre lang="@example.com" data-meta="password/pass/pwd/secret/credentials/token" class="notranslate"><code class="notranslate">@example.com username/user/key/login/ftp/
+@example.com config/ftp/smtp/pop
+@example.com security_credentials/connetionstring
+```@example.com JDBC/ssh2_auth_password/send_keys
+</code></pre></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://dehua-rd.github.io">dehua</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","dehua-rd/dehua-rd.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+
+
+</script>
+
+
+</html>

