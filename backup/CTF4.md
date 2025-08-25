@@ -2,7 +2,7 @@
 CTF4是vulnhub中的一台简单类型的渗透测试靶机。
 
 # 信息收集
-`
+```
 # Nmap 7.95 scan initiated Fri Aug 22 04:40:12 2025 as: /usr/lib/nmap/nmap --privileged -sCV --min-rate 10000 -p22,25,80 -oA nmapScan/tcports 192.168.218.205
 Nmap scan report for 192.168.218.205 (192.168.218.205)
 Host is up (0.00030s latency).
@@ -22,12 +22,12 @@ PORT   STATE SERVICE VERSION
 |_http-title:  Prof. Ehks 
 MAC Address: 00:0C:29:62:1B:0C (VMware)
 Service Info: Host: ctf4.sas.upenn.edu; OS: Unix
-`
+```
 有三个tcp端口开放
 
 
 # web初始枚举
-`
+```
 /images               (Status: 301) [Size: 318] [--> http://192.168.218.205/images/]
 /admin                (Status: 301) [Size: 317] [--> http://192.168.218.205/admin/]
 /inc                  (Status: 301) [Size: 315] [--> http://192.168.218.205/inc/]
@@ -40,7 +40,7 @@ Service Info: Host: ctf4.sas.upenn.edu; OS: Unix
 /conf                 (Status: 500) [Size: 618]
 /restricted           (Status: 401) [Size: 481]
 /robots.txt           (Status: 200) [Size: 104]
-`
+```
 目录扫描的结果
 
 然后一个功能一个功能查看
