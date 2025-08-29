@@ -516,7 +516,7 @@ Finished
 }
 </code></pre>
 <p>搜索发现这个加密需要本地的 key4.db（密钥数据库）配合解密。我利用到这个<a href="https://github.com/unode/firefox_decrypt">工具</a>来解密。<br>
-看了说明，将 ** .mozilla<strong>这个目录直接全部打包，然后使用ssh的scp拿到kali上放到</strong>~**下，然后直接运行py文件。</p>
+看了说明，将 <strong>.mozilla</strong>这个目录直接全部打包，然后使用ssh的scp拿到kali上放到**~**下，然后直接运行py文件。</p>
 <pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/writeup/vulnhub/insanity/firefox_decrypt-main]
 └─$ ./firefox_decrypt.py
 Select the Mozilla profile you wish to decrypt
