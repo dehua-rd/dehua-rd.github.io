@@ -1,5 +1,92 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Wed, 27 Aug 2025 07:59:56 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>insanity</title><link>https://dehua-rd.github.io/post/insanity.html</link><description># 靶机信息
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Mon, 01 Sep 2025 07:14:31 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>pwnOS 1.0</title><link>https://dehua-rd.github.io/post/pwnOS%201.0.html</link><description># 靶机信息
+pwnOS1.0是vulnhub中的一台简单难度的渗透测试靶机类型靶机
+
+# 信息收集
+## nmap扫描
+```
+└─$ nmap -sCV -p22,80,139,445,10000,137 -O --min-rate 10000 192.168.218.208 -oA nmapScan/details
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-08-31 20:52 EDT
+Nmap scan report for 192.168.218.208 (192.168.218.208)
+Host is up (0.00029s latency).
+
+PORT      STATE  SERVICE     VERSION
+22/tcp    open   ssh         OpenSSH 4.6p1 Debian 5build1 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 e4:46:40:bf:e6:29:ac:c6:00:e2:b2:a3:e1:50:90:3c (DSA)
+|_  2048 10:cc:35:45:8e:f2:7a:a1:cc:db:a0:e8:bf:c7:73:3d (RSA)
+80/tcp    open   http        Apache httpd 2.2.4 ((Ubuntu) PHP/5.2.3-1ubuntu6)
+|_http-title: Site doesn't have a title (text/html).
+|_http-server-header: Apache/2.2.4 (Ubuntu) PHP/5.2.3-1ubuntu6
+137/tcp   closed netbios-ns
+139/tcp   open   netbios-ssn Samba smbd 3.X - 4.X (workgroup: MSHOME)
+445/tcp   open   netbios-ssn Samba smbd 3.0.26a (workgroup: MSHOME)
+10000/tcp open   http        MiniServ 0.01 (Webmin httpd)
+|_http-title: Site doesn't have a title (text/html; Charset=iso-8859-1).
+MAC Address: 00:0C:29:5E:18:C9 (VMware)
+Device type: general purpose
+Running: Linux 2.6.X
+OS CPE: cpe:/o:linux:linux_kernel:2.6.22
+OS details: Linux 2.6.22, Linux 2.6.22 - 2.6.23
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Host script results:
+|_clock-skew: mean: 2h30m03s, deviation: 3h32m07s, median: 3s
+|_nbstat: NetBIOS name: UBUNTUVM, NetBIOS user: &lt;unknown&gt;, NetBIOS MAC: &lt;unknown&gt; (unknown)
+| smb-os-discovery: 
+|   OS: Unix (Samba 3.0.26a)
+|   Computer name: ubuntuvm
+|   NetBIOS computer name: 
+|   Domain name: nsdlab
+|   FQDN: ubuntuvm.NSDLAB
+|_  System time: 2025-08-31T19:53:11-05:00
+|_smb2-time: Protocol negotiation failed (SMB2)
+| smb-security-mode: 
+|   account_used: &lt;blank&gt;
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+```
+再使用 **dirsearch** 扫一遍
+再使用 vuln 脚本扫描，扫出了一个新的目录 **/icons** 
+
+## gobuster扫描
+```
+└─$ gobuster dir -u http://192.168.218.208 -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x html,php,txt 
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://192.168.218.208
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Extensions:              php,txt,html
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/php                  (Status: 301) [Size: 334] [--&gt; http://192.168.218.208/php/]
+/index                (Status: 200) [Size: 295]
+/index.php            (Status: 200) [Size: 295]
+/index2.php           (Status: 200) [Size: 156]
+/index2               (Status: 200) [Size: 156]
+/server-status        (Status: 403) [Size: 314]
+/index1.php           (Status: 200) [Size: 1104]
+/index1               (Status: 200) [Size: 1104]
+/index.php            (Status: 200) [Size: 295]
+/index                (Status: 200) [Size: 295]
+Progress: 224656 / 224660 (100.00%)
+===============================================================
+Finished
+===============================================================
+```
+
+# web初始枚举
+再 php 目录下发现了phpmyadmin 但是需要登录凭据，简单爆破一下，先看看别的目录。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/pwnOS%201.0.html</guid><pubDate>Mon, 01 Sep 2025 07:12:31 +0000</pubDate></item><item><title>insanity</title><link>https://dehua-rd.github.io/post/insanity.html</link><description># 靶机信息
 insanity是vulnhub中的一台困难难度的渗透测试靶机
 
 # 信息收集
