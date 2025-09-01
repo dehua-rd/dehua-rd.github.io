@@ -95,11 +95,15 @@ Finished
 
 <img width="1919" height="779" alt="Image" src="https://github.com/user-attachments/assets/56c86a46-b2e9-4509-b307-41b03d9f5d95" />
 
-有很多，排除需要身份验证的，以及没法深入的利用，重点看看未授权的RCE利用，以及文件泄露。
+有很多，结合上面vuln的扫描
+
+<img width="1919" height="756" alt="Image" src="https://github.com/user-attachments/assets/0651e09e-b67d-4873-805e-b8e77d1c1d36" />
+
+锁定这个文件读取漏洞。
 
 <img width="1919" height="547" alt="Image" src="https://github.com/user-attachments/assets/65a26509-a1df-4415-bef1-b5333445711d" />
 
-一直在尝试RCE的利用，卡了很久，最后在尝试最后目录穿越的时候出来了，这个漏洞太老了，我甚至都没抱有希望，但是还是他给力。
+可以，出来了。
 
 <img width="1915" height="709" alt="Image" src="https://github.com/user-attachments/assets/127efaec-b08c-4b38-b6b3-470f967b4162" />
 
@@ -108,4 +112,19 @@ Finished
 解密出来一个 **vmware:h4ckm3**
 
 # 提权
-ssh 连上来之后，扒拉了一会
+ssh 连上来之后，扒拉了一会，感觉有内核漏洞
+
+<img width="1919" height="773" alt="Image" src="https://github.com/user-attachments/assets/535d7ead-4b89-412b-b236-ea265cef0ce4" />
+
+有很多
+
+<img width="1912" height="763" alt="Image" src="https://github.com/user-attachments/assets/ac998dcf-06fc-4685-b44f-7b051e3c5a5b" />
+
+这个范围很靠近，先试试他
+
+<img width="1919" height="778" alt="Image" src="https://github.com/user-attachments/assets/bb40c45b-5600-4889-bb97-3599082150c5" />
+
+成功了，一步成功，爽！
+
+# 反思
+感觉靶机还是有难度的，有兔子洞，而且由于版本有点老，可能导致使用google搜不到漏洞，还好提前用vuln扫了一遍，以及爆破凭据的时候，很久很容易放弃，以为有诈，后面看wp原来主页有一个文件包含，我加的 ./ 太少了我就直接跳过了，以后还得记得多尝试两遍。发现登录还有其他手法，如OpenSSl伪随机数生成密钥漏洞碰撞ssh私钥获取初始shell，但是有点复杂，不研究了，提权方法更是多种多样啊，如不安全权限配置加shellshock漏洞提权，还有CGI执行反弹shell提权。这个靶机很有意思，值得深入一波。
