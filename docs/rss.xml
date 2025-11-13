@@ -1,5 +1,80 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Wed, 12 Nov 2025 03:45:18 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>FourandSix2.01</title><link>https://dehua-rd.github.io/post/FourandSix2.01.html</link><description># 靶机信息
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Thu, 13 Nov 2025 04:05:57 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>bossplayersctf</title><link>https://dehua-rd.github.io/post/bossplayersctf.html</link><description># 靶机信息
+bossplayersctf是vulnhub中的一台简单难度的CTF类型的靶机
+
+# 信息收集
+## NMAP扫描
+```
+└─$ nmap -sCV -p22,80 -O --min-rate 10000 192.168.218.212 -oA nmapScan/details
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-11-12 20:42 EST
+Nmap scan report for 192.168.218.212 (192.168.218.212)
+Host is up (0.00049s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.9p1 Debian 10 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 ac:0d:1e:71:40:ef:6e:65:91:95:8d:1c:13:13:8e:3e (RSA)
+|   256 24:9e:27:18:df:a4:78:3b:0d:11:8a:92:72:bd:05:8d (ECDSA)
+|_  256 26:32:8d:73:89:05:29:43:8e:a1:13:ba:4f:83:53:f8 (ED25519)
+80/tcp open  http    Apache httpd 2.4.38 ((Debian))
+|_http-server-header: Apache/2.4.38 (Debian)
+|_http-title: Site doesn't have a title (text/html).
+MAC Address: 00:0C:29:FA:C0:DB (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.14
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+```
+
+后台挂个漏扫
+`nmap --script=vuln --min-rate 10000 -p22,80 192.168.218.212 -oA nmapScan/vuln`
+
+## 初始信息枚举
+
+&lt;img width='1919' height='969' alt='Image' src='https://github.com/user-attachments/assets/f27b0f62-7787-46e0-ae49-7ca23967379d' /&gt;
+
+主页是靶机的基本信息
+
+扫一下目录
+```
+└─$ gobuster dir -u http://192.168.218.212/ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x html,php,txt
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://192.168.218.212/
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Extensions:              php,txt,html
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/logs.php             (Status: 200) [Size: 34093]
+/index.html           (Status: 200) [Size: 575]
+/robots.txt           (Status: 200) [Size: 53]
+/server-status        (Status: 403) [Size: 303]
+/index.html           (Status: 200) [Size: 575]
+Progress: 224656 / 224660 (100.00%)
+===============================================================
+Finished
+===============================================================
+```
+
+在使用dirsearch扫一遍也是这些
+**robots.txt**中是一段话
+&gt;super secret password - bG9sIHRyeSBoYXJkZXIgYnJvCg==
+解码
+&gt;lol try harder bro
+看样子不是有用信息，
+
+然后logs，看不懂给AI说是系统启动日志，没什么用，难道是URL有参数？fuzz了一下好像没有。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/bossplayersctf.html</guid><pubDate>Thu, 13 Nov 2025 04:03:09 +0000</pubDate></item><item><title>FourandSix2.01</title><link>https://dehua-rd.github.io/post/FourandSix2.01.html</link><description># 靶机信息
 FourandSix2.01 是一个简单难度的vulnhub的渗透测试靶机
 
 # 信息收集
