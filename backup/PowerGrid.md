@@ -1,5 +1,5 @@
 # 靶机信息
-PowerGrid是vulnhub中的一台困难难度的渗透测试测试靶机。
+PowerGrid是vulnhub中的一台困难难度的渗透测试测试靶机
 
 # 信息收集
 ## NMAP扫描

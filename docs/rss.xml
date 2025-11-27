@@ -1,6 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Thu, 27 Nov 2025 08:22:52 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>PowerGrid</title><link>https://dehua-rd.github.io/post/PowerGrid.html</link><description># 靶机信息
-PowerGrid是vulnhub中的一台困难难度的渗透测试测试靶机。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/PowerGrid.html</guid><pubDate>Thu, 27 Nov 2025 08:22:16 +0000</pubDate></item><item><title>Tomato</title><link>https://dehua-rd.github.io/post/Tomato.html</link><description># 靶机信息
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Thu, 27 Nov 2025 08:23:36 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>PowerGrid</title><link>https://dehua-rd.github.io/post/PowerGrid.html</link><description># 靶机信息
+PowerGrid是vulnhub中的一台困难难度的渗透测试测试靶机
+
+# 信息收集
+## NMAP扫描
+```
+└─$ cat nmapScan/ports.nmap 
+# Nmap 7.95 scan initiated Mon Nov 24 03:04:14 2025 as: /usr/lib/nmap/nmap --privileged -sT -p- --min-rate 10000 -oA nmapScan/ports 192.168.218.219
+Nmap scan report for 192.168.218.219 (192.168.218.219)
+Host is up (0.00030s latency).
+Not shown: 65532 closed tcp ports (conn-refused)
+PORT    STATE SERVICE
+80/tcp  open  http
+143/tcp open  imap
+993/tcp open  imaps
+MAC Address: 00:0C:29:80:1A:A4 (VMware)
+```
+靶机非常任性，ssh端口干脆不开了，IMAP目前还没有什么信息，先放着。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/PowerGrid.html</guid><pubDate>Thu, 27 Nov 2025 08:22:16 +0000</pubDate></item><item><title>Tomato</title><link>https://dehua-rd.github.io/post/Tomato.html</link><description># 靶机信息
 Tomato是vulnhub中的一台中级难度的渗透测试靶机。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/Tomato.html</guid><pubDate>Tue, 18 Nov 2025 05:06:57 +0000</pubDate></item><item><title>bossplayersctf</title><link>https://dehua-rd.github.io/post/bossplayersctf.html</link><description># 靶机信息
 bossplayersctf是vulnhub中的一台简单难度的CTF类型的靶机
 

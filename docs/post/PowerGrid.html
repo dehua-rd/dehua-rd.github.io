@@ -11,10 +11,42 @@
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
 <meta name="description" content="# 靶机信息
-PowerGrid是vulnhub中的一台困难难度的渗透测试测试靶机。">
+PowerGrid是vulnhub中的一台困难难度的渗透测试测试靶机
+
+# 信息收集
+## NMAP扫描
+```
+└─$ cat nmapScan/ports.nmap 
+# Nmap 7.95 scan initiated Mon Nov 24 03:04:14 2025 as: /usr/lib/nmap/nmap --privileged -sT -p- --min-rate 10000 -oA nmapScan/ports 192.168.218.219
+Nmap scan report for 192.168.218.219 (192.168.218.219)
+Host is up (0.00030s latency).
+Not shown: 65532 closed tcp ports (conn-refused)
+PORT    STATE SERVICE
+80/tcp  open  http
+143/tcp open  imap
+993/tcp open  imaps
+MAC Address: 00:0C:29:80:1A:A4 (VMware)
+```
+靶机非常任性，ssh端口干脆不开了，IMAP目前还没有什么信息，先放着。">
 <meta property="og:title" content="PowerGrid">
 <meta property="og:description" content="# 靶机信息
-PowerGrid是vulnhub中的一台困难难度的渗透测试测试靶机。">
+PowerGrid是vulnhub中的一台困难难度的渗透测试测试靶机
+
+# 信息收集
+## NMAP扫描
+```
+└─$ cat nmapScan/ports.nmap 
+# Nmap 7.95 scan initiated Mon Nov 24 03:04:14 2025 as: /usr/lib/nmap/nmap --privileged -sT -p- --min-rate 10000 -oA nmapScan/ports 192.168.218.219
+Nmap scan report for 192.168.218.219 (192.168.218.219)
+Host is up (0.00030s latency).
+Not shown: 65532 closed tcp ports (conn-refused)
+PORT    STATE SERVICE
+80/tcp  open  http
+143/tcp open  imap
+993/tcp open  imaps
+MAC Address: 00:0C:29:80:1A:A4 (VMware)
+```
+靶机非常任性，ssh端口干脆不开了，IMAP目前还没有什么信息，先放着。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://dehua-rd.github.io/post/PowerGrid.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/154585050?v=4">
@@ -86,7 +118,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><h1>靶机信息</h1>
-<p>PowerGrid是vulnhub中的一台困难难度的渗透测试测试靶机。</p>
+<p>PowerGrid是vulnhub中的一台困难难度的渗透测试测试靶机</p>
 <h1>信息收集</h1>
 <h2>NMAP扫描</h2>
 <pre class="notranslate"><code class="notranslate">└─$ cat nmapScan/ports.nmap 
