@@ -1,5 +1,35 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Thu, 04 Dec 2025 00:59:49 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>Black_Rose</title><link>https://dehua-rd.github.io/post/Black_Rose.html</link><description># 靶机信息
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>dehua</title><link>https://dehua-rd.github.io</link><description>The cloud is just someone else’s computer.</description><copyright>dehua</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/154585050?v=4</url><title>avatar</title><link>https://dehua-rd.github.io</link></image><lastBuildDate>Thu, 11 Dec 2025 07:13:25 +0000</lastBuildDate><managingEditor>dehua</managingEditor><ttl>60</ttl><webMaster>dehua</webMaster><item><title>empire_lupinOne</title><link>https://dehua-rd.github.io/post/empire_lupinOne.html</link><description># 靶机信息
+
+# 信息收集
+## Nmap扫描
+```
+nmap -sCV -p22,80 -O --min-rate 1000 192.168.218.225 -oA nmapScan/details
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-12-10 19:41 EST
+Nmap scan report for 192.168.218.225
+Host is up (0.00051s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.4p1 Debian 5 (protocol 2.0)
+| ssh-hostkey: 
+|   3072 ed:ea:d9:d3:af:19:9c:8e:4e:0f:31:db:f2:5d:12:79 (RSA)
+|   256 bf:9f:a9:93:c5:87:21:a3:6b:6f:9e:e6:87:61:f5:19 (ECDSA)
+|_  256 ac:18:ec:cc:35:c0:51:f5:6f:47:74:c3:01:95:b4:0f (ED25519)
+80/tcp open  http    Apache httpd 2.4.48 ((Debian))
+|_http-title: Site doesn't have a title (text/html).
+| http-robots.txt: 1 disallowed entry 
+|_/~myfiles
+|_http-server-header: Apache/2.4.48 (Debian)
+MAC Address: 00:0C:29:5B:91:CB (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose|router
+Running: Linux 4.X|5.X, MikroTik RouterOS 7.X
+OS CPE: cpe:/o:linux:linux_kernel:4 cpe:/o:linux:linux_kernel:5 cpe:/o:mikrotik:routeros:7 cpe:/o:linux:linux_kernel:5.6.3
+OS details: Linux 4.15 - 5.19, OpenWrt 21.02 (Linux 5.4), MikroTik RouterOS 7.2 - 7.5 (Linux 5.6.3)
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+```
+那大概率就是web的入口了。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/empire_lupinOne.html</guid><pubDate>Thu, 11 Dec 2025 07:12:50 +0000</pubDate></item><item><title>Black_Rose</title><link>https://dehua-rd.github.io/post/Black_Rose.html</link><description># 靶机信息
 这是一个需要打靶经验，并且需要不断试错的vulnhub渗透测试靶机，从黑盒思维判断登录验证逻辑，绕过登录校验，再对加解密的理解，以及RCE的不断试错，再到最后的提权，给个困难难度。</description><guid isPermaLink="true">https://dehua-rd.github.io/post/Black_Rose.html</guid><pubDate>Wed, 03 Dec 2025 02:54:39 +0000</pubDate></item><item><title>PowerGrid</title><link>https://dehua-rd.github.io/post/PowerGrid.html</link><description># 靶机信息
 PowerGrid是vulnhub中的一台困难难度的渗透测试测试靶机
 
