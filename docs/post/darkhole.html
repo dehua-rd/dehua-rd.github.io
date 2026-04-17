@@ -148,16 +148,16 @@ Starting gobuster in directory enumeration mode
 Progress: 224656 / 224660 (100.00%)
 </code></pre>
 <p>功能点一个一个看，尽量别漏测，login表单看一个，挂一个sqlmap，注册功能发现存在admin账户，再挂一个爆破，然后注册两个正常账户可能看。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7e6bf1b0-59b3-4568-89a9-e392f1231359"><img width="1913" height="967" alt="Image" src="https://github.com/user-attachments/assets/7e6bf1b0-59b3-4568-89a9-e392f1231359" style="max-width: 100%; height: auto; max-height: 967px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7e6bf1b0-59b3-4568-89a9-e392f1231359"><img width="1913" height="967" alt="Image" src="https://github.com/user-attachments/assets/7e6bf1b0-59b3-4568-89a9-e392f1231359" style="max-width: 100%; height: auto; max-height: 967px;; aspect-ratio: 1913 / 967; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>URL中存在id字段，测试了一下，好像没有什么漏洞。</p>
 <h1>获取shell</h1>
 <p>接着翻一翻，没啥东西，看主页的几个框，感觉跟sql注入有关系。</p>
 <p>以为是二次注入，抓包改包的时候，发现改密码的数据包有东西</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/72e7f97e-fc91-44ea-9e3d-f81fa4ce1766"><img width="1919" height="764" alt="Image" src="https://github.com/user-attachments/assets/72e7f97e-fc91-44ea-9e3d-f81fa4ce1766" style="max-width: 100%; height: auto; max-height: 764px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/72e7f97e-fc91-44ea-9e3d-f81fa4ce1766"><img width="1919" height="764" alt="Image" src="https://github.com/user-attachments/assets/72e7f97e-fc91-44ea-9e3d-f81fa4ce1766" style="max-width: 100%; height: auto; max-height: 764px;; aspect-ratio: 1919 / 764; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>指定了密码和id字段，那么改成1怎么样。看返回是成功了，然后登录admin账户。成功了</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/5587b817-6171-4e0f-95c1-218592bb14c0"><img width="1918" height="957" alt="Image" src="https://github.com/user-attachments/assets/5587b817-6171-4e0f-95c1-218592bb14c0" style="max-width: 100%; height: auto; max-height: 957px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/5587b817-6171-4e0f-95c1-218592bb14c0"><img width="1918" height="957" alt="Image" src="https://github.com/user-attachments/assets/5587b817-6171-4e0f-95c1-218592bb14c0" style="max-width: 100%; height: auto; max-height: 957px;; aspect-ratio: 1918 / 957; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>文件上传了，然后有黑名单，要求上传图片，直接通杀发现phtml和phar后缀能执行</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/9ee00ea7-d942-4ca7-abfb-6ad70632ecd8"><img width="1915" height="874" alt="Image" src="https://github.com/user-attachments/assets/9ee00ea7-d942-4ca7-abfb-6ad70632ecd8" style="max-width: 100%; height: auto; max-height: 874px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/9ee00ea7-d942-4ca7-abfb-6ad70632ecd8"><img width="1915" height="874" alt="Image" src="https://github.com/user-attachments/assets/9ee00ea7-d942-4ca7-abfb-6ad70632ecd8" style="max-width: 100%; height: auto; max-height: 874px;; aspect-ratio: 1915 / 874; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>直接上shell，反弹回来。</p>
 <pre class="notranslate"><code class="notranslate">└─$ rlwrap -cAr nc -lvnp 4444
 listening on [any] 4444 ...

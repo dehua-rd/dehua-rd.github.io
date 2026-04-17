@@ -221,9 +221,9 @@ WARNING: option --ssl-verify-server-cert is disabled, because of an insecure pas
 ERROR 2002 (HY000): Received error packet before completion of TLS handshake. The authenticity of the following error cannot be verified: 1130 - Host '192.168.218.148' is not allowed to connect to this MySQL server
 </code></pre>
 <p>不行，不继续尝试爆破了，先看 80和8080 端口的 web 服务。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/f46d7c6f-872f-44b2-ac96-56ecb98ca8a6"><img width="1919" height="974" alt="Image" src="https://github.com/user-attachments/assets/f46d7c6f-872f-44b2-ac96-56ecb98ca8a6" style="max-width: 100%; height: auto; max-height: 974px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/f46d7c6f-872f-44b2-ac96-56ecb98ca8a6"><img width="1919" height="974" alt="Image" src="https://github.com/user-attachments/assets/f46d7c6f-872f-44b2-ac96-56ecb98ca8a6" style="max-width: 100%; height: auto; max-height: 974px;; aspect-ratio: 1919 / 974; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>先看 80 端口的，好像是一个E-Vote投票网站。搜了一下好像没看到什么明显能直接打进去的漏洞，先注册登录，不知道为啥注册不了，那先不管了，再扫一下目录，使用gobuster扫，发现全部400，然后再使用dirsearch扫一遍，发现有个admin目录下的是200，看一下。好像没东西。还有8080端口，也先看一下。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/4128c469-343f-4367-9a33-eceee4a54deb"><img width="1919" height="967" alt="Image" src="https://github.com/user-attachments/assets/4128c469-343f-4367-9a33-eceee4a54deb" style="max-width: 100%; height: auto; max-height: 967px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/4128c469-343f-4367-9a33-eceee4a54deb"><img width="1919" height="967" alt="Image" src="https://github.com/user-attachments/assets/4128c469-343f-4367-9a33-eceee4a54deb" style="max-width: 100%; height: auto; max-height: 967px;; aspect-ratio: 1919 / 967; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 是一个 apache 默认页面，扫一下目录
 <pre class="notranslate"><code class="notranslate">[22:07:17] 200 -    3KB - /debug/                                           
 [22:07:17] 200 -  411B  - /development/                                     
@@ -243,7 +243,7 @@ ERROR 2002 (HY000): Received error packet before completion of TLS handshake. Th
 [22:07:38] 200 -    4KB - /wordpress/
 </code></pre>
 <p>东西挺多，一次看一下，先看 debug 吧</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/bbc02a90-6d84-4506-803d-c60cbd3bc177"><img width="1919" height="968" alt="Image" src="https://github.com/user-attachments/assets/bbc02a90-6d84-4506-803d-c60cbd3bc177" style="max-width: 100%; height: auto; max-height: 968px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/bbc02a90-6d84-4506-803d-c60cbd3bc177"><img width="1919" height="968" alt="Image" src="https://github.com/user-attachments/assets/bbc02a90-6d84-4506-803d-c60cbd3bc177" style="max-width: 100%; height: auto; max-height: 968px;; aspect-ratio: 1919 / 968; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>是一个shell，感觉是入口，直接给我 www-data 的权限，扒拉一下</p>
 <pre class="notranslate"><code class="notranslate">p0wny@shell:/home/brexit# sudo -l
 Matching Defaults entries for www-data on localhost:

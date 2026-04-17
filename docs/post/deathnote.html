@@ -155,9 +155,9 @@ Target: http://192.168.218.226/
 [20:40:24] 200 -    6KB - /wordpress/ 
 </code></pre>
 <p>是一个wp站点，先看优先级最高的<strong>robots.txt</strong>，是提示信息</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/20471ff9-5ccc-485d-af1d-42c160f918be"><img width="1391" height="405" alt="Image" src="https://github.com/user-attachments/assets/20471ff9-5ccc-485d-af1d-42c160f918be" style="max-width: 100%; height: auto; max-height: 405px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/20471ff9-5ccc-485d-af1d-42c160f918be"><img width="1391" height="405" alt="Image" src="https://github.com/user-attachments/assets/20471ff9-5ccc-485d-af1d-42c160f918be" style="max-width: 100%; height: auto; max-height: 405px;; aspect-ratio: 1391 / 405; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>图片加载错误，直接看内容，发现是一段话</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/94c7b670-be4c-412b-b5b7-2f470dab07b4"><img width="1898" height="933" alt="Image" src="https://github.com/user-attachments/assets/94c7b670-be4c-412b-b5b7-2f470dab07b4" style="max-width: 100%; height: auto; max-height: 933px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/94c7b670-be4c-412b-b5b7-2f470dab07b4"><img width="1898" height="933" alt="Image" src="https://github.com/user-attachments/assets/94c7b670-be4c-412b-b5b7-2f470dab07b4" style="max-width: 100%; height: auto; max-height: 933px;; aspect-ratio: 1898 / 933; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <blockquote>
 <p>i am Soichiro Yagami, light's father<br>
 i have a doubt if L is true about the assumption that light is kira<br>
@@ -225,7 +225,7 @@ Target: http://192.168.218.226/
 [21:35:58] 405 -   42B  - /wordpress/xmlrpc.php 
 </code></pre>
 <p>都翻一下，最后在<strong>uploads</strong>下找到了两个文本文件，文件名让我确定就是这个了。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/94c0fd32-d004-4507-a79e-2a7ab4ebeab4"><img width="1918" height="965" alt="Image" src="https://github.com/user-attachments/assets/94c0fd32-d004-4507-a79e-2a7ab4ebeab4" style="max-width: 100%; height: auto; max-height: 965px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/94c0fd32-d004-4507-a79e-2a7ab4ebeab4"><img width="1918" height="965" alt="Image" src="https://github.com/user-attachments/assets/94c0fd32-d004-4507-a79e-2a7ab4ebeab4" style="max-width: 100%; height: auto; max-height: 965px;; aspect-ratio: 1918 / 965; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>然后收集起来这两个文件用来爆破ssh，开始以为就是上面说的用户名，但是爆破不出来，索性就把txt里面的都爆破了。</p>
 <pre class="notranslate"><code class="notranslate">hydra -L user.txt -P pass.txt ssh://192.168.218.226
 Hydra v9.5 (c) 2023 by van Hauser/THC &amp; David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
@@ -245,7 +245,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2025-12-11 21:50:
 <h1>登录ssh</h1>
 <p>正常登录了ssh，没有sudo，就上linpeas扫一遍，试了一下困难性最高的内核提权，没有成功。<br>
 然后细细分析一下linpeas的输出，发现了数据库开放了，并且有在wp的配置文件中找到用户名密码，直接登录看看。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/4a0d0e78-45a3-4812-b60d-41e70b8fcd6d"><img width="1898" height="757" alt="Image" src="https://github.com/user-attachments/assets/4a0d0e78-45a3-4812-b60d-41e70b8fcd6d" style="max-width: 100%; height: auto; max-height: 757px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/4a0d0e78-45a3-4812-b60d-41e70b8fcd6d"><img width="1898" height="757" alt="Image" src="https://github.com/user-attachments/assets/4a0d0e78-45a3-4812-b60d-41e70b8fcd6d" style="max-width: 100%; height: auto; max-height: 757px;; aspect-ratio: 1898 / 757; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>直接查询最敏感的信息表，密码被加密了，爆破了一会没有爆破出来，可能不是，再找找。</p>
 
 <p>在kira的ssh认证文件中看到了 <strong>l</strong> 的公钥，那么直接使用自己的私钥登录上去。</p>

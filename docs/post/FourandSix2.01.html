@@ -255,12 +255,12 @@ permit nopass keepenv user as root cmd /usr/bin/less args /var/log/authlog
 permit nopass keepenv root as root
 </code></pre>
 <p>再推荐一个<a href="https://gtfobins.github.io/gtfobins/less/" rel="nofollow">提权工具网址</a>，里面有很多系统程序提权思路。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/665472f0-6406-4323-876b-475eabf2acf4"><img width="1919" height="779" alt="Image" src="https://github.com/user-attachments/assets/665472f0-6406-4323-876b-475eabf2acf4" style="max-width: 100%; height: auto; max-height: 779px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/665472f0-6406-4323-876b-475eabf2acf4"><img width="1919" height="779" alt="Image" src="https://github.com/user-attachments/assets/665472f0-6406-4323-876b-475eabf2acf4" style="max-width: 100%; height: auto; max-height: 779px;; aspect-ratio: 1919 / 779; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <p>进去之后按v，在 less file 中按 v：less 会查找环境变量 $VISUAL（优先）或 $EDITOR（次之），若都没设则通常回退到 vi（或系统默认编辑器）。</p>
 <p>它会把当前正在查看的文件（或若是从标准输入读入的内容，则会把内容写到一个临时文件）交给编辑器打开。</p>
 <p>less 暂停并等待编辑器退出；编辑器退出后，less 会返回并通常会检测该文件是否被修改：若修改了，less 会提示/自动重载显示已变更的内容（具体行为取决 less 版本与设置）。</p>
 <p>然后就进入vi编辑器了，然后使用命令模式输入**:!/bin/sh**</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ee40f603-8039-428a-80b0-0d00a8ee42a1"><img width="1917" height="773" alt="Image" src="https://github.com/user-attachments/assets/ee40f603-8039-428a-80b0-0d00a8ee42a1" style="max-width: 100%; height: auto; max-height: 773px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ee40f603-8039-428a-80b0-0d00a8ee42a1"><img width="1917" height="773" alt="Image" src="https://github.com/user-attachments/assets/ee40f603-8039-428a-80b0-0d00a8ee42a1" style="max-width: 100%; height: auto; max-height: 773px;; aspect-ratio: 1917 / 773; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <h1>反思</h1>
 <p>跟以往web入口不同，很新奇，学习到了新的爆破手法。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
