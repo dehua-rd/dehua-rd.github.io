@@ -138,7 +138,7 @@ Nmap done: 1 IP address (1 host up) scanned in 1.54 seconds
 <p>只扫出来一个80端口，利用向量很少，那就应该很简单了。</p>
 <h1>web枚举</h1>
 <p>访问页面，需要登录</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b07425a5-05bd-48f7-b2e7-c7a94b6a929a"><img width="1919" height="1037" alt="Image" src="https://github.com/user-attachments/assets/b07425a5-05bd-48f7-b2e7-c7a94b6a929a" style="max-width: 100%; height: auto; max-height: 1037px;; aspect-ratio: 1919 / 1037; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b07425a5-05bd-48f7-b2e7-c7a94b6a929a"><img width="1919" height="1037" alt="Image" src="https://github.com/user-attachments/assets/b07425a5-05bd-48f7-b2e7-c7a94b6a929a" style="max-width: 100%; height: auto; max-height: 1037px;; aspect-ratio: 1919 / 1037; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 <p>先扫目录</p>
 <pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/holynix]
 └─$ gobuster dir -u http://192.168.218.192/ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories-lowercase.txt -x php,html,txt
@@ -239,11 +239,11 @@ creds库中有5个库，accounts表中有密码，可以尝试爆破一下。好
 </blockquote>
 <p>使用alamo登录上来，有个上传功能，上传webshell，有报错，说该用户没有在home目录上传文件的权限，暴露了上传文件的地址在/home下。换第二个用户登录，可以上传文件，怎么利用呢，怀疑有文件包含的漏洞，主页上有page参数，试一下不是，找一下这些页面有没有文件包含的线索。<br>
 在安全功能有发现，下面的文章好像是文件包含出来的</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/4de2c55e-6dfe-4d3c-9afb-91d7baee53b7"><img width="1919" height="1036" alt="Image" src="https://github.com/user-attachments/assets/4de2c55e-6dfe-4d3c-9afb-91d7baee53b7" style="max-width: 100%; height: auto; max-height: 1036px;; aspect-ratio: 1919 / 1036; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/4de2c55e-6dfe-4d3c-9afb-91d7baee53b7"><img width="1919" height="1036" alt="Image" src="https://github.com/user-attachments/assets/4de2c55e-6dfe-4d3c-9afb-91d7baee53b7" style="max-width: 100%; height: auto; max-height: 1036px;; aspect-ratio: 1919 / 1036; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 <p>修改下面value的值为/etc/passwd</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/2dd23f44-2f69-481a-8699-ebb7fefeb3c5"><img width="1919" height="1027" alt="Image" src="https://github.com/user-attachments/assets/2dd23f44-2f69-481a-8699-ebb7fefeb3c5" style="max-width: 100%; height: auto; max-height: 1027px;; aspect-ratio: 1919 / 1027; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/2dd23f44-2f69-481a-8699-ebb7fefeb3c5"><img width="1919" height="1027" alt="Image" src="https://github.com/user-attachments/assets/2dd23f44-2f69-481a-8699-ebb7fefeb3c5" style="max-width: 100%; height: auto; max-height: 1027px;; aspect-ratio: 1919 / 1027; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 <p>再尝试包含我们刚刚上传的webshell</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/f7b5be9a-dda6-495f-8e5e-4ed808c11bdb"><img width="1919" height="1033" alt="Image" src="https://github.com/user-attachments/assets/f7b5be9a-dda6-495f-8e5e-4ed808c11bdb" style="max-width: 100%; height: auto; max-height: 1033px;; aspect-ratio: 1919 / 1033; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/f7b5be9a-dda6-495f-8e5e-4ed808c11bdb"><img width="1919" height="1033" alt="Image" src="https://github.com/user-attachments/assets/f7b5be9a-dda6-495f-8e5e-4ed808c11bdb" style="max-width: 100%; height: auto; max-height: 1033px;; aspect-ratio: 1919 / 1033; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 报错了权限不足，上传压缩文件试试，但是没有自动解压，奇怪了，上传文件的时候url上有文件提交的路径transfer.php，文件包含看一下源码
 ```
 ";

